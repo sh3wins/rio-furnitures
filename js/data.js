@@ -35,148 +35,145 @@ RIO.FINISHES = {
   grey:    { name: "Grey",    hex: "#8b8a85" }
 };
 
-/* ---------- Categories ---------- */
+/* ---------- Furniture categories (WHAT the furniture is) ----------
+   `sub` lists the kinds of pieces in each category. To add a product,
+   add it to RIO.PRODUCTS below with cats: ["seating"] etc. */
 RIO.CATEGORIES = [
-  { id: "seating",     name: "Seating",     icon: "chair" },
-  { id: "tables",      name: "Tables",      icon: "table" },
-  { id: "desks",       name: "Desks",       icon: "desk" },
-  { id: "storage",     name: "Storage",     icon: "shelf" },
-  { id: "beds",        name: "Beds",        icon: "bed" },
-  { id: "hospitality", name: "Hospitality", icon: "stool" },
-  { id: "office",      name: "Office",      icon: "taskchair" },
-  { id: "custom",      name: "Custom",      icon: "custom" }
+  { id: "seating",     name: "Seating",     icon: "chair",   sub: ["Chairs", "Bar stools", "Benches", "Pews", "Lounge seating"] },
+  { id: "tables",      name: "Tables",      icon: "table",   sub: ["Dining tables", "Work tables", "Meeting tables", "Side tables", "Counters"] },
+  { id: "workspace",   name: "Workspace",   icon: "desk",    sub: ["Desks", "Workstations", "Reception desks", "Office furniture"] },
+  { id: "storage",     name: "Storage",     icon: "shelf",   sub: ["Cabinets", "Shelving", "Storage units", "Custom storage"] },
+  { id: "hospitality", name: "Hospitality", icon: "bed",     sub: ["Beds", "Bedside tables", "Hospitality furniture"] },
+  { id: "custom",      name: "Custom",      icon: "custom",  sub: ["Made-to-spec furniture", "Project-specific furniture", "One-off designs", "Custom builds"] }
 ];
 
-/* ---------- Spaces (who RIO serves) ---------- */
+/* ---------- Spaces (WHERE the furniture goes) ----------
+   name = singular (used in forms), plural = headings.
+   photo: set to "images/spaces/<id>.jpg" to use a real photograph. */
 RIO.SPACES = [
   { id: "restaurant", name: "Restaurant", plural: "Restaurants",
-    line: "Restaurants, cafés, eateries and food spaces.",
-    needs: ["Dining tables", "Dining chairs", "Bar stools", "Benches", "Booths", "Counters", "Service furniture", "Storage", "Custom furniture"],
+    tagline: "Furniture for places where people gather, eat and stay awhile.",
+    line: "Dining rooms, casual restaurants, larger restaurants and food-service spaces.",
+    needs: ["Dining chairs", "Dining tables", "Bar stools", "Benches", "Booths", "Counters", "Storage", "Custom pieces"],
     icons: ["chair", "table", "stool", "booth"], photo: null },
-  { id: "bar", name: "Bar", plural: "Bars",
-    line: "Bars, lounges, rooftops and nightlife spaces.",
-    needs: ["Bar stools", "Bar counters", "Booths", "High tables", "Benches", "Back-bar shelving", "Lounge seating", "Custom furniture"],
+  { id: "bar", name: "Bar & Café", plural: "Bars & Cafés",
+    tagline: "For long evenings, quick coffees and everything in between.",
+    line: "Bars, coffee shops, lounges and casual hospitality spaces.",
+    needs: ["Bar stools", "Counters", "Booths", "High tables", "Benches", "Lounge seating", "Custom pieces"],
     icons: ["stool", "counter", "booth", "table"], photo: null },
   { id: "office", name: "Office", plural: "Offices",
-    line: "Startups, agencies, companies and growing teams.",
-    needs: ["Desks", "Workstations", "Meeting tables", "Reception desks", "Office chairs", "Storage", "Cabinets", "Shelving", "Custom furniture"],
-    icons: ["desk", "taskchair", "table", "cabinet"] },
+    tagline: "Furniture for the way teams actually work.",
+    line: "Workspaces, startups, corporate offices, meeting rooms, reception areas and shared spaces.",
+    needs: ["Desks", "Workstations", "Office chairs", "Meeting tables", "Reception desks", "Cabinets", "Shelving", "Custom pieces"],
+    icons: ["desk", "taskchair", "table", "cabinet"], photo: null },
   { id: "school", name: "School", plural: "Schools",
-    line: "Schools, learning centres and educational facilities.",
-    needs: ["Student desks", "Student chairs", "Teacher desks", "Storage", "Shelving", "Tables", "Reception furniture", "Custom institutional furniture"],
-    icons: ["studentdesk", "chair", "shelf", "desk"] },
+    tagline: "Built for full classrooms and busy school days.",
+    line: "Classrooms, learning environments, libraries, staff areas and institutional spaces.",
+    needs: ["Student desks", "Student chairs", "Teacher desks", "Shelving", "Storage", "Tables", "Custom pieces"],
+    icons: ["studentdesk", "chair", "shelf", "desk"], photo: null },
   { id: "church", name: "Church", plural: "Churches",
-    line: "Churches, ministries and religious facilities.",
-    needs: ["Seating", "Pulpits", "Reception desks", "Office furniture", "Tables", "Storage", "Platform / stage furniture", "Custom furniture"],
-    icons: ["pew", "pulpit", "counter", "chair"] },
-  { id: "outdoor", name: "Outdoor", plural: "Outdoor spaces",
-    line: "Terraces, gardens, poolsides, rooftops and courtyards.",
-    needs: ["Loungers", "Outdoor tables", "Outdoor chairs", "Benches", "Planters", "Custom furniture"],
+    tagline: "For worship, gathering and everything that happens around it.",
+    line: "Worship spaces, offices, meeting rooms and gathering spaces.",
+    needs: ["Pews", "Seating", "Pulpits", "Tables", "Office furniture", "Storage", "Custom pieces"],
+    icons: ["pew", "pulpit", "counter", "chair"], photo: null },
+  { id: "hospitality", name: "Hospitality", plural: "Hospitality",
+    tagline: "Rooms guests remember for the right reasons.",
+    line: "Hotels, lodges, Airbnbs, serviced apartments, guest rooms and short-stay spaces.",
+    needs: ["Beds", "Bedside tables", "Wardrobes", "Storage units", "Side tables", "Lounge seating", "Custom pieces"],
+    icons: ["bed", "bedside", "wardrobe", "lowtable"], photo: null },
+  { id: "outdoor", name: "Outdoor", plural: "Outdoor",
+    tagline: "Furniture for fresh air.",
+    line: "Patios, terraces, outdoor dining, gardens and outdoor commercial spaces.",
+    needs: ["Loungers", "Outdoor tables", "Outdoor chairs", "Benches", "Custom pieces"],
     icons: ["lounger", "table", "bench", "chair"], photo: null },
   { id: "other", name: "Other", plural: "Other spaces",
-    line: "Retail, salons, studios, clinics, co-working, guest rooms, event spaces and corporate facilities.",
-    needs: ["Counters", "Seating", "Shelving", "Reception", "Tables", "Beds", "Wardrobes", "Storage", "Custom furniture"],
-    icons: ["counter", "shelf", "chair", "custom"] }
+    tagline: "For spaces that don't fit neatly into a box.",
+    line: "Tell us what you're building and we'll work out what goes in it.",
+    needs: ["Seating", "Tables", "Counters", "Reception", "Shelving", "Storage", "Custom pieces"],
+    icons: ["counter", "shelf", "chair", "custom"], photo: null }
 ];
 
 /* ---------- Products ----------
-   cats:   category ids (a product can live in several)
-   spaces: space ids it suits
-   finishes: finish ids offered for this product
-   price:  null = "Request quote". Add a number (KES) if you want to show a standard unit price.
+   type:   what kind of piece it is (shown under the name)
+   cats:   furniture categories · spaces: where it suits
+   finishes: finish ids offered
+   dims / materials / lead / price: null = "confirmed with your quote"
+   image: "images/products/<id>.jpg" to use a real photo
+   photos: { front, side, rear, detail, material } for extra views
 */
+const P = (id, name, icon, type, cats, spaces, desc, finishes) =>
+  ({ id, name, icon, type, cats, spaces, desc, finishes, dims: null, materials: null, lead: null, price: null });
+
 RIO.PRODUCTS = [
-  { id: "chair-04", name: "RIO Chair 04", icon: "chair", cats: ["seating", "hospitality"], spaces: ["restaurant", "bar", "church", "outdoor", "other"],
-    desc: "A clean dining chair built to be ordered by the room. Stacks visually in rows, works in cafés, dining rooms and event spaces.",
-    finishes: ["black", "white", "orange", "natural"], dims: null, materials: null, lead: null, price: null },
-  { id: "stool-02", name: "RIO Bar Stool 02", icon: "stool", cats: ["seating", "hospitality"], spaces: ["restaurant", "bar", "other"],
-    desc: "Counter-height stool with a footrest. Made for bars, kitchen counters and quick-service spaces.",
-    finishes: ["black", "orange", "natural", "walnut"], dims: null, materials: null, lead: null, price: null },
-  { id: "bench-01", name: "RIO Bench 01", icon: "bench", cats: ["seating", "hospitality"], spaces: ["restaurant", "bar", "school", "outdoor", "other"],
-    desc: "A straight, sturdy bench for long tables, waiting areas and communal seating.",
-    finishes: ["black", "natural", "walnut"], dims: null, materials: null, lead: null, price: null },
-  { id: "booth-01", name: "RIO Booth 01", icon: "booth", cats: ["seating", "hospitality"], spaces: ["restaurant", "bar"],
-    desc: "Built-in style booth seating for restaurants and cafés. Length and upholstery made to your layout.",
-    finishes: ["black", "orange", "grey", "walnut"], dims: null, materials: null, lead: null, price: null },
-  { id: "pew-03", name: "RIO Pew 03", icon: "pew", cats: ["seating"], spaces: ["church"],
-    desc: "Institutional bench seating with a backrest for sanctuaries, halls and auditoriums.",
-    finishes: ["natural", "walnut", "black"], dims: null, materials: null, lead: null, price: null },
-  { id: "student-chair-01", name: "RIO Student Chair 01", icon: "chair", cats: ["seating"], spaces: ["school"],
-    desc: "A durable classroom chair designed to be ordered in full-class quantities.",
-    finishes: ["black", "orange", "grey", "natural"], dims: null, materials: null, lead: null, price: null },
-  { id: "task-chair-05", name: "RIO Task Chair 05", icon: "taskchair", cats: ["seating", "office"], spaces: ["office"],
-    desc: "Everyday office chair for workstations, meeting rooms and front desks.",
-    finishes: ["black", "grey", "orange"], dims: null, materials: null, lead: null, price: null },
+  P("chair-04", "RIO Chair 04", "chair", "Dining chair", ["seating"], ["restaurant", "bar", "church", "outdoor", "other"],
+    "A clean dining chair built to be ordered by the room. At home in cafés, dining rooms and event spaces.", ["black", "white", "orange", "natural"]),
+  P("stool-02", "RIO Bar Stool 02", "stool", "Bar stool", ["seating"], ["bar", "restaurant", "other"],
+    "Counter-height stool with a footrest. Made for bars, kitchen counters and quick-service spaces.", ["black", "orange", "natural", "walnut"]),
+  P("bench-01", "RIO Bench 01", "bench", "Bench", ["seating"], ["restaurant", "bar", "school", "outdoor", "other"],
+    "A straight, sturdy bench for long tables, waiting areas and communal seating.", ["black", "natural", "walnut"]),
+  P("booth-01", "RIO Booth 01", "booth", "Lounge seating", ["seating"], ["restaurant", "bar", "hospitality"],
+    "Built-in style booth seating. Length and upholstery made to your layout.", ["black", "orange", "grey", "walnut"]),
+  P("pew-03", "RIO Pew 03", "pew", "Pew", ["seating"], ["church"],
+    "Bench seating with a backrest for sanctuaries, halls and auditoriums.", ["natural", "walnut", "black"]),
+  P("student-chair-01", "RIO Student Chair 01", "chair", "Classroom chair", ["seating"], ["school"],
+    "A durable classroom chair designed to be ordered in full-class quantities.", ["black", "orange", "grey", "natural"]),
+  P("task-chair-05", "RIO Task Chair 05", "taskchair", "Office chair", ["seating", "workspace"], ["office"],
+    "Everyday office chair for workstations, meeting rooms and front desks.", ["black", "grey", "orange"]),
+  P("lounger-01", "RIO Lounger 01", "lounger", "Lounge seating", ["seating"], ["outdoor", "hospitality", "bar"],
+    "Outdoor lounger for terraces, pools, gardens and rooftops.", ["natural", "black", "white"]),
 
-  { id: "table-08", name: "RIO Table 08", icon: "table", cats: ["tables", "hospitality"], spaces: ["restaurant", "bar", "outdoor", "other"],
-    desc: "A dining table sized for two, four or six. Mix sizes across one restaurant order.",
-    finishes: ["natural", "black", "white", "walnut"], dims: null, materials: null, lead: null, price: null },
-  { id: "coffee-table-02", name: "RIO Coffee Table 02", icon: "lowtable", cats: ["tables"], spaces: ["office", "other"],
-    desc: "Low table with a lower shelf for living rooms, lounges and reception areas.",
-    finishes: ["natural", "walnut", "black", "white"], dims: null, materials: null, lead: null, price: null },
-  { id: "meeting-table-06", name: "RIO Meeting Table 06", icon: "table", cats: ["tables", "office"], spaces: ["office", "church", "school"],
-    desc: "Meeting and boardroom table. Length made to the room and the number of seats.",
-    finishes: ["walnut", "natural", "white", "black"], dims: null, materials: null, lead: null, price: null },
+  P("table-08", "RIO Table 08", "table", "Dining table", ["tables"], ["restaurant", "bar", "outdoor", "hospitality", "other"],
+    "A dining table sized for two, four or six. Mix sizes across one order.", ["natural", "black", "white", "walnut"]),
+  P("coffee-table-02", "RIO Side Table 02", "lowtable", "Side table", ["tables"], ["hospitality", "office", "other"],
+    "Low table with a lower shelf for lounges, guest rooms and reception areas.", ["natural", "walnut", "black", "white"]),
+  P("meeting-table-06", "RIO Meeting Table 06", "table", "Meeting table", ["tables", "workspace"], ["office", "church", "school"],
+    "Meeting and boardroom table. Length made to the room and the number of seats.", ["walnut", "natural", "white", "black"]),
+  P("counter-01", "RIO Counter 01", "counter", "Counter", ["tables"], ["bar", "restaurant", "other"],
+    "Bar and service counter for restaurants, cafés and shops. Built to your layout.", ["black", "walnut", "natural", "orange"]),
 
-  { id: "desk-03", name: "RIO Desk 03", icon: "desk", cats: ["desks", "office"], spaces: ["office", "school", "church"],
-    desc: "Workstation desk with a drawer pedestal. Order by the team, arrange by the floor.",
-    finishes: ["white", "natural", "black", "walnut"], dims: null, materials: null, lead: null, price: null },
-  { id: "student-desk-01", name: "RIO Student Desk 01", icon: "studentdesk", cats: ["desks"], spaces: ["school"],
-    desc: "Classroom desk with a book tray. Made for full classrooms and full schools.",
-    finishes: ["natural", "grey", "orange"], dims: null, materials: null, lead: null, price: null },
-  { id: "reception-01", name: "RIO Reception 01", icon: "counter", cats: ["desks", "office", "hospitality"], spaces: ["office", "church", "school", "other"],
-    desc: "Front desk and counter. The first thing people see — made to your space and brand.",
-    finishes: ["white", "black", "walnut", "orange"], dims: null, materials: null, lead: null, price: null },
-  { id: "counter-01", name: "RIO Counter 01", icon: "counter", cats: ["hospitality"], spaces: ["restaurant", "bar", "other"],
-    desc: "Bar and service counter for restaurants, cafés and retail. Built to your layout.",
-    finishes: ["black", "walnut", "natural", "orange"], dims: null, materials: null, lead: null, price: null },
-  { id: "pulpit-01", name: "RIO Pulpit 01", icon: "pulpit", cats: ["custom"], spaces: ["church"],
-    desc: "Pulpit and lectern for sanctuaries and stages. Size and detailing made to order.",
-    finishes: ["walnut", "natural", "white", "black"], dims: null, materials: null, lead: null, price: null },
+  P("desk-03", "RIO Desk 03", "desk", "Desk", ["workspace"], ["office", "school", "church"],
+    "Workstation desk with a drawer pedestal. Order by the team, arrange by the floor.", ["white", "natural", "black", "walnut"]),
+  P("student-desk-01", "RIO Student Desk 01", "studentdesk", "Student desk", ["workspace"], ["school"],
+    "Classroom desk with a book tray. Made for full classrooms and full schools.", ["natural", "grey", "orange"]),
+  P("reception-01", "RIO Reception 01", "counter", "Reception desk", ["workspace"], ["office", "hospitality", "church", "school", "other"],
+    "Front desk and counter — the first thing people see, made to your space.", ["white", "black", "walnut", "orange"]),
 
-  { id: "shelf-02", name: "RIO Shelf 02", icon: "shelf", cats: ["storage", "office"], spaces: ["office", "school", "other"],
-    desc: "Open shelving for libraries, stockrooms, studios and retail walls.",
-    finishes: ["black", "natural", "white"], dims: null, materials: null, lead: null, price: null },
-  { id: "cabinet-04", name: "RIO Cabinet 04", icon: "cabinet", cats: ["storage", "office"], spaces: ["office", "school", "church", "restaurant", "bar"],
-    desc: "Two-door storage cabinet for offices, classrooms and back-of-house.",
-    finishes: ["white", "grey", "walnut", "black"], dims: null, materials: null, lead: null, price: null },
-  { id: "wardrobe-01", name: "RIO Wardrobe 01", icon: "wardrobe", cats: ["storage"], spaces: ["other"],
-    desc: "Full-height wardrobe for bedrooms and guest rooms.",
-    finishes: ["white", "natural", "walnut"], dims: null, materials: null, lead: null, price: null },
-  { id: "tv-unit-01", name: "RIO TV Unit 01", icon: "tvunit", cats: ["storage"], spaces: ["other"],
-    desc: "Low media unit for living rooms and apartment units.",
-    finishes: ["walnut", "black", "white", "natural"], dims: null, materials: null, lead: null, price: null },
+  P("shelf-02", "RIO Shelf 02", "shelf", "Shelving", ["storage"], ["office", "school", "other"],
+    "Open shelving for libraries, stockrooms and retail walls.", ["black", "natural", "white"]),
+  P("cabinet-04", "RIO Cabinet 04", "cabinet", "Cabinet", ["storage"], ["office", "school", "church", "restaurant", "bar"],
+    "Two-door storage cabinet for offices, classrooms and back-of-house.", ["white", "grey", "walnut", "black"]),
+  P("tv-unit-01", "RIO Media Unit 01", "tvunit", "Storage unit", ["storage", "hospitality"], ["hospitality"],
+    "Low media and storage unit for guest rooms and apartments.", ["walnut", "black", "white", "natural"]),
 
-  { id: "bed-01", name: "RIO Bed 01", icon: "bed", cats: ["beds"], spaces: ["other"],
-    desc: "Bed frame with headboard. Available in the sizes your units need.",
-    finishes: ["natural", "walnut", "grey", "black"], dims: null, materials: null, lead: null, price: null },
-  { id: "bedside-01", name: "RIO Bedside 01", icon: "bedside", cats: ["beds", "storage"], spaces: ["other"],
-    desc: "Bedside table with a drawer. Usually ordered in pairs, per unit.",
-    finishes: ["natural", "walnut", "white", "black"], dims: null, materials: null, lead: null, price: null },
-  { id: "lounger-01", name: "RIO Outdoor Lounger 01", icon: "lounger", cats: ["hospitality"], spaces: ["outdoor", "restaurant", "bar"],
-    desc: "Outdoor lounger for terraces, pools, gardens and rooftop spaces.",
-    finishes: ["natural", "black", "white"], dims: null, materials: null, lead: null, price: null }
+  P("bed-01", "RIO Bed 01", "bed", "Bed", ["hospitality"], ["hospitality"],
+    "Bed frame with headboard, in the sizes your rooms need.", ["natural", "walnut", "grey", "black"]),
+  P("bedside-01", "RIO Bedside 01", "bedside", "Bedside table", ["hospitality"], ["hospitality"],
+    "Bedside table with a drawer. Usually ordered in pairs, per room.", ["natural", "walnut", "white", "black"]),
+  P("wardrobe-01", "RIO Wardrobe 01", "wardrobe", "Hospitality furniture", ["hospitality", "storage"], ["hospitality"],
+    "Full-height wardrobe for guest rooms and apartments.", ["white", "natural", "walnut"]),
+
+  P("pulpit-01", "RIO Pulpit 01", "pulpit", "Made to spec", ["custom"], ["church"],
+    "Pulpit and lectern for sanctuaries and stages. Size and detailing made to order.", ["walnut", "natural", "white", "black"])
 ];
 
 /* ---------- Portfolio (REAL SPACES. REAL PROJECTS.) ----------
-   These are PLACEHOLDERS. Replace with real completed projects.
-   Tell the story first, then the numbers. Example:
+   PLACEHOLDERS — replace with real completed projects. Story first:
      headline: "A 42-seat restaurant in Westlands",
      building: "A new neighbourhood restaurant with a bar",
      supplied: ["Chair 04 — 42 (black, natural)", "Table 08 — 14", "Custom counter"],
-     materials: "…", finishes: "Black, natural oak",
-     story: "Short paragraph about the space.",
-     photos: ["images/projects/001-a.jpg", "images/projects/001-b.jpg", "images/projects/001-c.jpg"],
-     placeholder: false
+     materials: "…", finishes: "Black, natural", custom: "Curved counter",
+     story: "Short paragraph.", photos: ["images/projects/001-a.jpg", …], placeholder: false
 */
+const PF = (no, space, title) => ({ no, space, title, headline: null, building: null, supplied: [], materials: null, finishes: null, custom: null, story: null, photos: [], placeholder: true });
 RIO.PORTFOLIO = [
-  { no: "001", space: "restaurant", title: "Restaurant project", headline: null, building: null, supplied: [], materials: null, finishes: null, story: null, photos: [], placeholder: true },
-  { no: "002", space: "bar",        title: "Bar project",     headline: null, building: null, supplied: [], materials: null, finishes: null, story: null, photos: [], placeholder: true },
-  { no: "003", space: "office",     title: "Office project",     headline: null, building: null, supplied: [], materials: null, finishes: null, story: null, photos: [], placeholder: true },
-  { no: "004", space: "school",     title: "School project",     headline: null, building: null, supplied: [], materials: null, finishes: null, story: null, photos: [], placeholder: true },
-  { no: "005", space: "church",     title: "Church project",     headline: null, building: null, supplied: [], materials: null, finishes: null, story: null, photos: [], placeholder: true },
-  { no: "006", space: "other",      title: "Commercial project", headline: null, building: null, supplied: [], materials: null, finishes: null, story: null, photos: [], placeholder: true },
-  { no: "007", space: "outdoor",    title: "Outdoor project",    headline: null, building: null, supplied: [], materials: null, finishes: null, story: null, photos: [], placeholder: true }
+  PF("001", "restaurant", "Restaurant project"),
+  PF("002", "bar", "Bar & café project"),
+  PF("003", "office", "Office project"),
+  PF("004", "school", "School project"),
+  PF("005", "church", "Church project"),
+  PF("006", "hospitality", "Hospitality project"),
+  PF("007", "outdoor", "Outdoor project"),
+  PF("008", "other", "Commercial project")
 ];
 
 /* ---------- Helpers ---------- */

@@ -2,10 +2,10 @@
 (function () {
   const C = RIO.CONTACT;
   const MAKE = [
-    ["Workshop", "Where every RIO piece starts."],
     ["Materials", "Timber, steel, boards and fabrics, chosen for how your space will be used."],
     ["Cutting", "Parts cut for the full quantity of your order."],
-    ["Assembly", "Frames joined and built."],
+    ["Fabrication", "Frames and components made in the workshop."],
+    ["Assembly", "Pieces put together and checked for fit."],
     ["Finishing", "The finishes you chose — several colours in one order."],
     ["Quality control", "Each piece checked before it's packed."],
     ["Packaging", "Protected for transport."],

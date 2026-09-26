@@ -11,7 +11,7 @@
 
   // which room shows this piece?
   const roomId = Object.keys(RIO.ROOMS).find((k) => RIO.ROOMS[k].objects.some((o) => o.pid === p.id)) || p.spaces[0];
-  const VIEWS = [["object", "Object"], ["room", "In a room"], ["front", "Front"], ["side", "Side"], ["back", "Back"], ["detail", "Detail"], ["material", "Material"]];
+  const VIEWS = [["object", "Object"], ["room", "In a room"], ["front", "Front"], ["side", "Side"], ["rear", "Rear"], ["detail", "Detail"], ["material", "Material"]];
   const tbc = `<span class="tbc">confirmed with your quote</span>`;
 
   document.getElementById("prod").innerHTML = `
@@ -23,11 +23,12 @@
     <div class="p-info">
       <span class="mono muted">${RIO.code(p)}</span>
       <h1 class="serif s-l">${RIO.shortName(p)}</h1>
+      <p class="p-type">${p.type || ""}</p>
       <p class="lead">${p.desc}</p>
 
       <div class="p-block">
         <span class="mono muted">Finish — <span class="ink" id="fin-name">${F[fin].name}</span></span>
-        <div class="finishes" id="fins">${p.finishes.map((f) => `<button type="button" class="fin ${f === fin ? "on" : ""}" data-fin="${f}" aria-label="${F[f].name}" aria-pressed="${f === fin}"><span class="c" style="background:${F[f].hex}"></span><span class="mono">${F[f].name}</span></button>`).join("")}</div>
+        <div class="finishes" id="fins">${p.finishes.map((f) => `<button type="button" class="fin ${f === fin ? "on" : ""}" data-fin="${f}" aria-label="${F[f].name}" aria-pressed="${f === fin}"><span class="c" data-f="${f}" style="background-color:${F[f].hex}"></span><span class="mono">${F[f].name}</span></button>`).join("")}</div>
       </div>
 
       <dl class="specs-q p-block">

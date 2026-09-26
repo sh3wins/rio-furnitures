@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RIO Furnitures — Furniture for spaces worth staying in</title>
-  <meta name="description" content="A furniture showroom for restaurants, bars, offices, schools, churches and outdoor spaces. Explore the spaces, choose your pieces, mix finishes and build your project. Nairobi.">
+  <meta name="description" content="RIO Furnitures — a furniture showroom for restaurants, bars and cafés, hospitality, offices, schools, churches and outdoor spaces in Nairobi, Kenya. Explore the rooms, choose your pieces and build your project.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23ff5a1f%27/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=2">
-  <link rel="stylesheet" href="css/pages.css?v=2">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/pages.css?v=3">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
@@ -24,42 +24,32 @@
         <h1 class="serif s-xxl reveal" data-d="1">What are you<br><em>building?</em></h1>
       </div>
       <div class="hero-side reveal" data-d="2">
-        <p class="lead">Furniture for restaurants, bars, offices, schools, churches, outdoor spaces and everything in between.</p>
+        <p class="lead">Furniture for restaurants, hospitality, offices, schools, churches and the spaces in between.</p>
         <div class="row mt-m">
           <a class="btn" href="#rooms">Explore spaces <span class="arr">↓</span></a>
           <a class="link" href="start.html">Start a project <span class="arr">→</span></a>
         </div>
       </div>
     </div>
-
-    <div class="showroom" id="rooms">
-      <div class="stage" id="stage" data-manual></div>
-      <div class="wrap stage-bar">
-        <ol class="room-index" id="room-index" aria-label="Rooms"></ol>
-        <div class="stage-actions">
-          <a class="link" id="explore-room" href="spaces.html">Explore this space <span class="arr">→</span></a>
-          <a class="btn btn-sm" id="furnish-room" href="start.html">Furnish this space</a>
-        </div>
-      </div>
-    </div>
+    <div id="hero-room"></div>
   </section>
 
   <!-- STATEMENT -->
   <section class="section">
     <div class="wrap statement">
       <h2 class="serif s-xl reveal">Furniture for spaces<br><em>worth staying in.</em></h2>
-      <div class="reveal" data-d="1">
-        <p class="lead">Chairs, tables, beds, desks, counters, pews, storage — one piece or a whole room. Made in our Nairobi workshop, in the finishes your space needs.</p>
-        <p class="mono muted mt-m">Tip — hover the furniture in any room.</p>
-      </div>
+      <p class="lead reveal" data-d="1">Chairs, tables, counters, desks, pews, beds and storage — one piece or a whole room, in the finishes your space needs.</p>
     </div>
   </section>
 
+  <!-- THE ROOMS -->
+  <div id="rooms" class="rooms-walk"></div>
+
   <!-- SELECTED PIECES -->
-  <section class="section-s">
+  <section class="section">
     <div class="wrap">
       <div class="head-row">
-        <div><p class="mono muted">Selected pieces</p><h2 class="serif s-l">Pieces that belong <em>in a room.</em></h2></div>
+        <div><p class="mono muted">Furniture</p><h2 class="serif s-l">Pieces that belong <em>in a room.</em></h2></div>
         <a class="link" href="furniture.html">All furniture <span class="arr">→</span></a>
       </div>
       <div class="pieces" id="pieces"></div>
@@ -72,7 +62,7 @@
       <div class="reveal">
         <p class="mono muted">Build your order</p>
         <h2 class="serif s-l">One chair.<br><em>Or seventy-five,</em><br>in four finishes.</h2>
-        <p class="lead mt-s">Pick a piece, set a quantity for each colour, and keep it all as one order. Then add it to your project.</p>
+        <p class="lead mt-s">Pick a piece, set a quantity for each finish, and keep it as one order. Then add it to your project.</p>
         <a class="link mt-m" href="product.html?id=chair-04">Try it on Chair 04 <span class="arr">→</span></a>
       </div>
       <div class="demo reveal" data-d="1" id="demo" aria-hidden="true">
@@ -114,24 +104,24 @@
     <div class="strip-wrap"><div class="strip" id="strip"></div></div>
   </section>
 
-
   <!-- CLOSING -->
   <section class="section closing">
     <div class="wrap">
       <h2 class="serif s-xxl reveal">Got a space?<br><em>Let's furnish it.</em></h2>
-      <div class="row mt-l reveal" data-d="1">
+      <p class="lead mt-m reveal" data-d="1">Tell us what you're building. We'll help you figure out what goes in it.</p>
+      <div class="row mt-l reveal" data-d="2">
         <a class="btn btn-o" href="start.html">Start a project <span class="arr">→</span></a>
-        <a class="link" href="project.html">Open my project <span class="arr">→</span></a>
+        <a class="link" href="furniture.html">Explore furniture <span class="arr">→</span></a>
       </div>
     </div>
   </section>
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=2"></script>
-<script src="js/store.js?v=2"></script>
-<script src="js/main.js?v=2"></script>
-<script src="js/scenes.js?v=2"></script>
-<script src="js/home.js?v=2"></script>
+<script src="js/data.js?v=3"></script>
+<script src="js/store.js?v=3"></script>
+<script src="js/main.js?v=3"></script>
+<script src="js/scenes.js?v=3"></script>
+<script src="js/home.js?v=3"></script>
 </body>
 </html>

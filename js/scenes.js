@@ -184,6 +184,19 @@
         { pid: "pew-03", x: 1180, foot: 800, s: 3.1, f: "natural" }
       ]
     },
+    hospitality: {
+      wall: ["#e9e6e0", "#e0dcd3"], floor: ["#cbbba3", "#b7a58a"], boards: true,
+      back: () => H_.art(420, 170, 230, 170, "#d7c3a3") + H_.window(1110, 80, 340, 300, 2) + H_.light(1110, 1450, -180) + H_.rug(360, 420, 800, 34, "#e2d8c6") + H_.rug(1080, 360, 820, 30, "#d9cdb8"),
+      objects: [
+        { pid: "bedside-01", x: 275, foot: 740, s: 1.9, f: "walnut" },
+        { pid: "bed-01", x: 540, foot: 800, s: 3.3, f: "natural" },
+        { pid: "wardrobe-01", x: 900, foot: 690, s: 4.1, f: "white" },
+        { pid: "tv-unit-01", x: 1300, foot: 700, s: 2.8, f: "walnut" },
+        { pid: "coffee-table-02", x: 1260, foot: 830, s: 2.2, f: "natural" }
+      ],
+      extra: (o) => (o.pid === "bedside-01" ? H_.lamp(o.x, o.foot - (104 - 44) * o.s) : ""),
+      front: () => H_.plant(1520, 850, 1.1)
+    },
     outdoor: {
       wall: ["#eef0ea", "#e4e8de"], floor: ["#b99d7c", "#a0856a"], boards: true,
       back: () => H_.hedge(380) + H_.pergola() + H_.umbrella(1160, 300, 700),
@@ -199,7 +212,7 @@
     },
     other: {
       wall: ["#ebe8e2", "#e1ddd5"], floor: ["#cec5b6", "#b9ae9c"], boards: false,
-      back: () => H_.mirror(800, 250, 110) + H_.sign(800, 440) + H_.art(1130, 180, 140, 190, "#e1c9b1") + H_.linear(620, 360, 90),
+      back: () => H_.mirror(800, 270, 120) + H_.art(1130, 180, 140, 190, "#e1c9b1") + H_.art(560, 210, 120, 150, "#cfd3c4") + H_.linear(620, 360, 90),
       objects: [
         { pid: "shelf-02", x: 170, foot: 680, s: 3.0, f: "natural" },
         { pid: "shelf-02", x: 390, foot: 680, s: 3.0, f: "natural" },

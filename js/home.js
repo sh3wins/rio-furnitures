@@ -1,75 +1,49 @@
-/* RIO — homepage: the showroom */
+/* RIO — homepage: the showroom walk */
 (function () {
   const $ = (s) => document.querySelector(s);
   const F = RIO.FINISHES;
 
-  /* ---------- Room viewer ---------- */
-  const stage = $("#stage"), idx = $("#room-index");
-  stage.innerHTML = RIO.SPACES.map((s, i) => `<div class="slide ${i === 0 ? "on" : ""}" data-s="${s.id}" ${i ? 'aria-hidden="true"' : ""}>${RIO.room(s.id)}</div>`).join("") +
-    `<p class="stage-hint mono" aria-hidden="true"><span class="dot-o"></span> Hover or tap the furniture</p>`;
-  idx.innerHTML = RIO.SPACES.map((s, i) => `<li><button type="button" class="${i === 0 ? "on" : ""}" data-s="${s.id}" aria-pressed="${i === 0}"><span class="mono">0${i + 1}</span>${s.name}</button></li>`).join("");
-  RIO.bindRooms(stage);
+  /* ---------- The rooms: hero room + a walk through the rest ---------- */
+  const roomBlock = (s, i, hero) => `
+    <section class="walk-home ${hero ? "is-hero" : ""}" id="room-${s.id}" aria-label="${RIO.esc(s.plural)}">
+      ${hero ? "" : `
+      <div class="wrap walk-home-head">
+        <div><p class="mono muted">Room ${String(i + 1).padStart(2, "0")}</p><h2 class="serif s-l reveal">${s.plural}</h2></div>
+        <p class="lead reveal" data-d="1"><em class="serif-i">${s.tagline}</em></p>
+      </div>`}
+      ${RIO.room(s.id)}
+      <div class="wrap walk-home-foot">
+        ${hero ? `<span class="mono muted">Room 01 — ${s.plural} · <em class="serif-i">${s.tagline}</em></span>` : `<span class="mono muted">${s.line}</span>`}
+        <span class="row" style="gap:22px">
+          <a class="link" href="spaces.html?space=${s.id}">Explore ${s.plural.toLowerCase()} <span class="arr">→</span></a>
+          <a class="btn btn-sm" href="start.html?space=${s.id}">Furnish this space</a>
+        </span>
+      </div>
+    </section>`;
 
-  let cur = RIO.SPACES[0].id, started = false;
-  function show(id) {
-    const next = stage.querySelector(`.slide[data-s="${id}"]`);
-    const prev = stage.querySelector(".slide.on");
-    if (prev && prev !== next) {
-      prev.classList.remove("on"); prev.setAttribute("aria-hidden", "true");
-      setTimeout(() => prev.querySelector(".room").classList.remove("shown"), 900);
-    }
-    next.classList.add("on"); next.removeAttribute("aria-hidden");
-    const room = next.querySelector(".room");
-    room.classList.remove("shown");
-    setTimeout(() => room.classList.add("shown"), 250);
-    cur = id;
-    idx.querySelectorAll("button").forEach((b) => { const on = b.dataset.s === id; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
-    const sp = RIO.space(id);
-    $("#explore-room").href = "spaces.html?space=" + id;
-    $("#explore-room").innerHTML = `Explore the ${sp.name.toLowerCase()} <span class="arr">→</span>`;
-    $("#furnish-room").href = "start.html?space=" + id;
-  }
-  idx.addEventListener("click", (e) => { const b = e.target.closest("[data-s]"); if (b && b.dataset.s !== cur) show(b.dataset.s); });
+  const S = RIO.SPACES;
+  $("#hero-room").innerHTML = roomBlock(S[0], 0, true);
+  $("#rooms").innerHTML = S.slice(1).map((s, i) => roomBlock(s, i + 1, false)).join("");
+  RIO.bindRooms(document);
 
-  // first entrance + a brief hint that the furniture is interactive
-  const io = new IntersectionObserver((en) => {
-    if (en[0].isIntersecting && !started) {
-      started = true; io.disconnect(); show(cur);
-      const r = stage.querySelector(".slide.on .room");
-      setTimeout(() => r.classList.add("hint"), 2200);
-      setTimeout(() => r.classList.remove("hint"), 5200);
-    }
-  }, { threshold: 0.3 });
-  io.observe(stage);
+  // a single, quiet hint on the first room that the furniture is alive
+  const hero = document.querySelector("#hero-room .room");
+  const hio = new IntersectionObserver((en) => {
+    if (!en[0].isIntersecting) return; hio.disconnect();
+    setTimeout(() => hero.classList.add("hint"), 2400);
+    setTimeout(() => hero.classList.remove("hint"), 5000);
+  }, { threshold: 0.4 });
+  hio.observe(hero);
 
   /* ---------- Selected pieces ---------- */
   const PICK = ["chair-04", "stool-02", "bed-01", "desk-03"];
-  $("#pieces").innerHTML = PICK.map((id, i) => {
-    const p = RIO.product(id);
-    return `
-      <article class="piece reveal" data-d="${i % 4}" data-id="${id}">
-        <a class="plinth" href="product.html?id=${id}" aria-label="${RIO.esc(p.name)}">${RIO.visual(p, p.finishes[0])}</a>
-        <div class="piece-meta">
-          <div><span class="mono muted">${RIO.code(p)}</span><h3 class="title t-m"><a href="product.html?id=${id}">${RIO.shortName(p)}</a></h3></div>
-          <div class="dots">${p.finishes.map((f, k) => `<button type="button" class="${k ? "" : "on"}" data-f="${f}" style="background:${F[f].hex}" aria-label="${F[f].name}"></button>`).join("")}</div>
-        </div>
-      </article>`;
-  }).join("");
-  $("#pieces").addEventListener("mouseover", (e) => swap(e));
-  $("#pieces").addEventListener("click", (e) => swap(e));
-  function swap(e) {
-    const b = e.target.closest(".dots button"); if (!b) return;
-    const card = b.closest(".piece"), p = RIO.product(card.dataset.id);
-    if (b.classList.contains("on") || p.image) return;
-    card.querySelectorAll(".dots button").forEach((x) => x.classList.toggle("on", x === b));
-    const svg = card.querySelector(".plinth svg");
-    svg.style.opacity = 0;
-    setTimeout(() => { svg.outerHTML = RIO.icon(p.icon, F[b.dataset.f].hex); card.querySelector(".plinth svg").style.opacity = 1; }, 220);
-  }
+  const pieces = $("#pieces");
+  pieces.innerHTML = PICK.map((id, i) => RIO.piece(RIO.product(id), i)).join("");
+  RIO.bindPieces(pieces);
 
   /* ---------- Ordering demo ---------- */
   const DEMO = [["black", 40], ["white", 20], ["orange", 10], ["natural", 5]];
-  $("#demo-rows").innerHTML = DEMO.map(([f]) => `<div class="demo-row"><span><span class="sw" style="background:${F[f].hex}"></span> ${F[f].name}</span><span class="mono ink" data-n>000</span></div>`).join("");
+  $("#demo-rows").innerHTML = DEMO.map(([f]) => `<div class="demo-row"><span><span class="sw" data-f="${f}" style="background-color:${F[f].hex}"></span> ${F[f].name}</span><span class="mono ink" data-n>000</span></div>`).join("");
   const dio = new IntersectionObserver((en) => {
     if (!en[0].isIntersecting) return; dio.disconnect();
     const rows = $("#demo-rows").querySelectorAll("[data-n]");
@@ -83,26 +57,24 @@
   }, { threshold: 0.5 });
   dio.observe($("#demo"));
 
-  /* ---------- Gallery ---------- */
-  const G = RIO.PORTFOLIO.slice(0, 3);
-  $("#gallery").innerHTML = G.map((p, i) => {
+  /* ---------- Projects ---------- */
+  $("#gallery").innerHTML = RIO.PORTFOLIO.slice(0, 3).map((p, i) => {
     const s = RIO.space(p.space), photo = p.photos[0];
     return `
       <a class="g-item g${i}" href="projects.html#p${p.no}">
-        <div class="ph img-reveal ${photo ? "has-img" : ""}" data-label="${s.name} — project photograph">${photo ? `<img src="${photo}" alt="${RIO.esc(p.title)}" loading="lazy">` : ""}</div>
-        <div class="g-cap"><span class="mono muted">Project ${p.no} · ${s.name}</span><span class="serif s-s">${p.headline ? RIO.esc(p.headline) : `<em>Story coming soon</em>`}</span></div>
+        <div class="ph img-reveal ${photo ? "has-img" : ""}" data-label="${s.plural} — project photograph">${photo ? `<img src="${photo}" alt="${RIO.esc(p.headline || p.title)}" loading="lazy">` : ""}</div>
+        <div class="g-cap"><span class="mono muted">Project ${p.no} · ${s.plural}</span><span class="serif s-s">${p.headline ? RIO.esc(p.headline) : `<em>Story coming soon</em>`}</span></div>
       </a>`;
   }).join("");
 
   /* ---------- Workshop strip ---------- */
-  const MAKE = [["Workshop", "Where every piece starts."], ["Materials", "Chosen for how the space is used."], ["Cutting", "Parts cut for your full quantity."], ["Assembly", "Frames joined by hand."],
+  const MAKE = [["Materials", "Chosen for how the space is used."], ["Cutting", "Parts cut for your full quantity."], ["Fabrication", "Frames and components made."], ["Assembly", "Put together by hand."],
     ["Finishing", "The finishes you picked, mixed in one order."], ["Quality control", "Every piece checked."], ["Packaging", "Protected for the trip."], ["Delivery", "To your space, ready to open."]];
   $("#strip").innerHTML = MAKE.map((m, i) => `
     <figure class="step">
       <div class="ph" data-label="Photograph — ${m[0].toLowerCase()}"></div>
       <figcaption><span class="mono muted">0${i + 1}</span><span class="title">${m[0]}</span><span class="muted small">${m[1]}</span></figcaption>
     </figure>`).join("");
-  // gentle horizontal drift with scroll (desktop only)
   const strip = $("#strip"), sec = strip.closest("section");
   const mq = window.matchMedia("(min-width: 900px) and (prefers-reduced-motion: no-preference)");
   function drift() {

@@ -3,7 +3,7 @@
   let f = "all";
   const nav = document.getElementById("pf"), box = document.getElementById("stories");
   const tbc = `<span class="tbc">to be added</span>`;
-  const label = (s) => (s.id === "other" ? "Commercial" : s.name);
+  const label = (s) => s.plural;
 
   nav.innerHTML = [["all", "All"]].concat(RIO.SPACES.map((s) => [s.id, label(s)])).map(([id, n]) => `<button type="button" data-f="${id}" class="${id === f ? "on" : ""}">${n}</button>`).join("");
   function render() {

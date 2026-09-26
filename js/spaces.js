@@ -4,7 +4,7 @@
   const nav = document.getElementById("room-nav");
   const F = RIO.FINISHES;
 
-  nav.innerHTML = RIO.SPACES.map((s) => `<a href="#${s.id}" data-s="${s.id}">${s.name}</a>`).join("");
+  nav.innerHTML = RIO.SPACES.map((s) => `<a href="#${s.id}" data-s="${s.id}">${s.plural}</a>`).join("");
 
   walk.innerHTML = RIO.SPACES.map((s, i) => {
     const inRoom = [];
@@ -16,7 +16,8 @@
         <div class="wrap walk-head">
           <div>
             <p class="mono muted">Room 0${i + 1}</p>
-            <h2 class="serif s-xl reveal">${s.name}</h2>
+            <h2 class="serif s-xl reveal">${s.plural}</h2>
+            <p class="lead mt-s"><em class="serif-i">${s.tagline}</em></p>
           </div>
           <div class="reveal" data-d="1">
             <p class="lead">${s.line}</p>

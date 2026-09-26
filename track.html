@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta name="robots" content="noindex">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Projects — RIO Furnitures</title>
-  <meta name="description" content="Real spaces furnished by RIO — restaurants, bars and cafés, offices, schools, churches, hospitality, outdoor and commercial spaces.">
+  <title>Track your order — RIO Furnitures</title>
+  <meta name="description" content="Track your RIO Furnitures order — from quote to delivery.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23ff5a1f%27/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,30 +13,31 @@
   <link rel="stylesheet" href="css/style.css?v=3">
   <link rel="stylesheet" href="css/pages.css?v=3">
 </head>
-<body data-page="projects">
+<body data-page="track">
 <header id="site-header"></header>
 
 <main>
   <section class="intro">
-    <div class="wrap">
-      <p class="mono muted">Projects</p>
-      <h1 class="serif s-xl reveal">Real spaces.<br><em>Real projects.</em></h1>
-      <p class="lead reveal" data-d="1">What people were building, and what we made for it.</p>
+    <div class="wrap narrow">
+      <p class="mono muted">Track your order</p>
+      <h1 class="serif s-xl reveal">Where's my<br><em>furniture?</em></h1>
+      <p class="lead reveal" data-d="1">Enter the order code we sent you on WhatsApp or email.</p>
+      <form class="track-form mt-m" id="track-form" autocomplete="off">
+        <label class="sr" for="track-code">Order code</label>
+        <input class="input track-input" id="track-code" placeholder="e.g. RIO-7K3Q" spellcheck="false">
+        <button class="btn btn-o" type="submit">Track <span class="arr">→</span></button>
+      </form>
+      <p class="track-msg" id="track-msg" role="status"></p>
     </div>
   </section>
-  <nav class="sticky-nav" aria-label="Filter projects"><div class="wrap quiet-nav" id="pf"></div></nav>
-  <div class="wrap" id="stories"></div>
-  <section class="section closing">
-    <div class="wrap"><h2 class="serif s-xl">Your space<br><em>could be next.</em></h2>
-      <a class="btn btn-o mt-m" href="start.html">Start a project <span class="arr">→</span></a></div>
-  </section>
+  <div class="wrap narrow" id="track-result"></div>
 </main>
 
 <footer id="site-footer"></footer>
 <script src="js/data.js?v=3"></script>
 <script src="js/store.js?v=3"></script>
 <script src="js/main.js?v=3"></script>
-<script src="js/scenes.js?v=3"></script>
-<script src="js/projects.js?v=3"></script>
+<script src="js/orders.js?v=3"></script>
+<script src="js/track.js?v=3"></script>
 </body>
 </html>

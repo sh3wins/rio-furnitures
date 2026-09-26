@@ -40,6 +40,7 @@
         if (y < lastY - 2 || y < 300) header.classList.remove("hide"); else if (h) header.classList.add("hide");
         document.body.classList.toggle("nav-hidden", header.classList.contains("hide"));
       }
+      header.classList.toggle("scrolled", y > 24);
       lastY = y;
     }, { passive: true });
   }
@@ -67,7 +68,7 @@
           <div><h4>Showroom</h4><ul>
             <li><a href="spaces.html">Spaces</a></li><li><a href="furniture.html">Furniture</a></li>
             <li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li>
-            <li><a href="start.html?mode=custom">Custom furniture</a></li><li><a href="project.html">My project</a></li></ul></div>
+            <li><a href="start.html?mode=custom">Custom furniture</a></li><li><a href="project.html">My project</a></li><li><a href="track.html">Track an order</a></li></ul></div>
           <div><h4>Talk to us</h4><ul>
             <li><a href="https://wa.me/${C.whatsapp}" target="_blank" rel="noopener">WhatsApp ${C.phoneDisplay}</a></li>
             <li><a href="tel:+${C.whatsapp}">Call ${C.phoneDisplay}</a></li>
@@ -134,7 +135,7 @@
         <div class="order-head"><span class="title t-m">Build your order</span><span class="mono muted">Mix finishes · one order</span></div>
         ${p.finishes.map((f) => `
           <div class="o-row" data-f="${f}">
-            <span class="sw" style="background:${F[f].hex}"></span>
+            <span class="sw" data-f="${f}" style="background-color:${F[f].hex}"></span>
             <span class="nm">${F[f].name}<small>QTY <span data-q>000</span></small></span>
             <span class="qty">
               <button type="button" data-step="-1" aria-label="Fewer ${F[f].name}">−</button>
@@ -217,7 +218,7 @@
   RIO.openFocus = function (pid, ctx) {
     const p = RIO.product(pid); if (!p) return;
     ctx = ctx || {};
-    lastFocus = document.activeElement;
+    if (!focusEl || !focusEl.classList.contains("open")) lastFocus = document.activeElement;
     if (!focusEl) {
       focusEl = document.createElement("div");
       focusEl.className = "focus";
@@ -226,35 +227,61 @@
       focusEl.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) RIO.closeFocus(); });
       document.addEventListener("keydown", (e) => { if (e.key === "Escape" && focusEl.classList.contains("open")) RIO.closeFocus(); });
     }
+    if (focusEl._pid && focusEl._pid !== p.id && RIO.tintRooms) RIO.tintRooms(focusEl._pid, null);
+    // pieces in this room, for "continue exploring"
+    const room = ctx.room && RIO.ROOMS && RIO.ROOMS[ctx.room];
+    const list = room ? room.objects.slice().sort((x, y) => x.x - y.x).map((o) => o.pid).filter((v, i, a) => a.indexOf(v) === i) : [];
+    const idx = list.indexOf(p.id);
+    const prev = idx > 0 ? RIO.product(list[idx - 1]) : null;
+    const next = idx > -1 && idx < list.length - 1 ? RIO.product(list[idx + 1]) : (list.length > 1 ? RIO.product(list[0]) : null);
     const tbc = `<span class="tbc">confirmed with your quote</span>`;
     const panel = focusEl.querySelector(".focus-panel");
     let cur = p.finishes[0];
     panel.innerHTML = `
-      <div class="focus-top"><span class="mono muted">${ctx.room ? "In the " + RIO.space(ctx.room).name.toLowerCase() : "Furniture"}</span><button class="focus-close" data-close aria-label="Close">×</button></div>
+      <div class="focus-top">
+        <span class="mono muted">${ctx.room ? "In the room · " + RIO.space(ctx.room).plural : "Furniture"}${list.length ? ` · ${String(idx + 1).padStart(2, "0")}/${String(list.length).padStart(2, "0")}` : ""}</span>
+        <span class="focus-nav">
+          ${list.length > 1 ? `<button class="focus-step" data-go="${(prev || RIO.product(list[list.length - 1])).id}" aria-label="Previous piece in this room">‹</button><button class="focus-step" data-go="${next.id}" aria-label="Next piece in this room">›</button>` : ""}
+          <button class="focus-close" data-close aria-label="Back to the room">×</button>
+        </span>
+      </div>
       <div class="focus-stage" data-stage>${RIO.visual(p, cur)}<span class="mono muted" data-fname>${F[cur].name}</span></div>
       <div class="focus-body">
         <span class="mono muted">${RIO.code(p)}</span>
         <h2 class="serif s-m">${RIO.shortName(p)}</h2>
+        <p class="focus-type">${p.type || ""}</p>
         <p class="desc">${p.desc}</p>
-        <div class="finishes" data-fins>${p.finishes.map((f) => `<button type="button" class="fin ${f === cur ? "on" : ""}" data-fin="${f}" aria-label="${F[f].name}"><span class="c" style="background:${F[f].hex}"></span><span class="mono">${F[f].name}</span></button>`).join("")}</div>
+        <div class="finishes" data-fins>${p.finishes.map((f) => `<button type="button" class="fin ${f === cur ? "on" : ""}" data-fin="${f}" aria-label="${F[f].name}" aria-pressed="${f === cur}"><span class="c" data-f="${f}" style="background-color:${F[f].hex}"></span><span class="mono">${F[f].name}</span></button>`).join("")}</div>
         <dl class="specs-q mt-m">
+          <div><dt class="mono muted">Material</dt><dd>${p.materials || tbc}</dd></div>
           <div><dt class="mono muted">Dimensions</dt><dd>${p.dims || tbc}</dd></div>
-          <div><dt class="mono muted">Materials</dt><dd>${p.materials || tbc}</dd></div>
           <div><dt class="mono muted">Price</dt><dd>${p.price ? "From KES " + p.price.toLocaleString() : "Project quote"}</dd></div>
         </dl>
-        <div class="mt-m" data-builder></div>
-        <div class="focus-more"><a class="link" href="product.html?id=${p.id}">See the full piece <span class="arr">→</span></a></div>
+        <div class="focus-actions">
+          <a class="btn" href="product.html?id=${p.id}">View product <span class="arr">→</span></a>
+          <button type="button" class="btn btn-o" data-open-builder>Add to project</button>
+        </div>
+        <div class="focus-builder" data-builder hidden></div>
+        ${next && list.length > 1 ? `<button type="button" class="focus-next" data-go="${next.id}"><span class="mono muted">Next in this room</span><span class="title t-m">${RIO.shortName(next)} <span class="arr">→</span></span></button>` : ""}
       </div>`;
     const show = (f) => {
       if (f === cur) return; cur = f;
-      if (!p.image) { const st = panel.querySelector("[data-stage] svg"); st.outerHTML = RIO.icon(p.icon, F[f].hex); }
+      if (!p.image) { const st = panel.querySelector("[data-stage] svg"); st.style.opacity = 0; setTimeout(() => { panel.querySelector("[data-stage] svg").outerHTML = RIO.icon(p.icon, F[f].hex); }, 180); }
       panel.querySelector("[data-fname]").textContent = F[f].name;
-      panel.querySelectorAll("[data-fin]").forEach((b) => b.classList.toggle("on", b.dataset.fin === f));
+      panel.querySelectorAll("[data-fin]").forEach((b) => { const on = b.dataset.fin === f; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
       if (RIO.tintRooms) RIO.tintRooms(p.id, f);
     };
     panel.querySelector("[data-fins]").addEventListener("click", (e) => { const b = e.target.closest("[data-fin]"); if (b) show(b.dataset.fin); });
-    RIO.builder(panel.querySelector("[data-builder]"), p, { onFinish: show, space: ctx.room });
+    const bEl = panel.querySelector("[data-builder]");
+    panel.querySelector("[data-open-builder]").addEventListener("click", (e) => {
+      if (bEl.hidden) { RIO.builder(bEl, p, { onFinish: show, space: ctx.room, startWith: cur }); bEl.hidden = false; }
+      e.currentTarget.classList.add("hide");
+      bEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    panel.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => RIO.openFocus(b.dataset.go, ctx)));
     focusEl._pid = p.id;
+    document.querySelectorAll(".room .obj.sel, .room .marker.sel").forEach((e) => e.classList.remove("sel"));
+    document.querySelectorAll(`.room[data-room="${ctx.room}"] [data-pid="${p.id}"]`).forEach((e) => e.classList.add("sel"));
     requestAnimationFrame(() => { focusEl.classList.add("open"); panel.scrollTop = 0; panel.querySelector(".focus-close").focus({ preventScroll: true }); });
     document.body.style.overflow = "hidden";
   };
@@ -263,6 +290,8 @@
     focusEl.classList.remove("open");
     document.body.style.overflow = "";
     if (RIO.tintRooms && focusEl._pid) RIO.tintRooms(focusEl._pid, null);
+    document.querySelectorAll(".room .sel").forEach((e) => e.classList.remove("sel"));
+    focusEl._pid = null;
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   };
 
@@ -323,8 +352,8 @@
       <article class="piece reveal" data-d="${d || 0}" data-id="${p.id}">
         <a class="plinth" href="product.html?id=${p.id}" aria-label="${RIO.esc(p.name)}">${RIO.visual(p, p.finishes[0])}</a>
         <div class="piece-meta">
-          <div><span class="mono muted">${RIO.code(p)}</span><h3 class="title t-m"><a href="product.html?id=${p.id}">${RIO.shortName(p)}</a></h3></div>
-          <div class="dots">${p.finishes.map((f, k) => `<button type="button" class="${k ? "" : "on"}" data-f="${f}" style="background:${F[f].hex}" aria-label="Show in ${F[f].name}"></button>`).join("")}</div>
+          <div><span class="mono muted">${RIO.code(p)}</span><h3 class="title t-m"><a href="product.html?id=${p.id}">${RIO.shortName(p)}</a></h3><span class="piece-type">${p.type || ""}</span></div>
+          <div class="dots">${p.finishes.map((f, k) => `<button type="button" class="${k ? "" : "on"}" data-f="${f}" data-f="${f}" style="background-color:${F[f].hex}" aria-label="Show in ${F[f].name}"></button>`).join("")}</div>
         </div>
       </article>`;
   };

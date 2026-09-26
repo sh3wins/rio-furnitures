@@ -2,10 +2,10 @@
 (function () {
   const $ = (s) => document.querySelector(s);
   const custom = RIO.qs("mode") === "custom";
-  const STEPS = ["What are you building?", "What do you need?", "How much?", "Tell us about the space", "Send to RIO"];
-  const NEEDS = ["Seating", "Tables", "Beds", "Desks", "Storage", "Hospitality", "Custom furniture", "Other"];
+  const STEPS = ["What are you building?", "What do you need?", "How much?", "Tell us about it", "Send to RIO"];
+  const NEEDS = ["Seating", "Tables", "Workspace", "Storage", "Beds", "Counters", "Custom", "Other"];
   const QTY = [["1–9", "A few pieces"], ["10–49", "Bulk"], ["50–99", "A project"], ["100+", "Large-scale"]];
-  const st = { space: RIO.space(RIO.qs("space")) ? RIO.qs("space") : "", needs: custom ? ["Custom furniture"] : [], qty: "", files: [], text: {} };
+  const st = { space: RIO.space(RIO.qs("space")) ? RIO.qs("space") : "", needs: custom ? ["Custom"] : [], qty: "", files: [], text: {} };
   let step = 0;
 
   if (custom) {
@@ -32,7 +32,7 @@
       <p class="muted" style="margin:-20px 0 24px">Roughly, across the whole space.</p>
       <ul class="choices">${QTY.map(([q, a]) => choice("qty", q, q + " pcs", a, false, true)).join("")}</ul>
       <p class="f-hint ${st.qty === "50–99" || st.qty === "100+" ? "" : "hide"}" id="qhint">A project-scale order. We'll plan production around your space and quote on your exact quantities and finishes.</p>`;
-    if (step === 3) return `<p class="mono muted">Step 04</p><h2 class="serif s-l">Tell us about <em>the space.</em></h2>
+    if (step === 3) return `<p class="mono muted">Step 04</p><h2 class="serif s-l">Tell us <em>about it.</em></h2>
       <div style="display:grid;gap:36px">
         <div class="field"><label for="t-about">${custom ? "Describe the piece — size, use, look" : "The space, the look, the timeline"}</label>
           <textarea class="textarea" id="t-about" placeholder="${custom ? "A curved reception counter, about 3m long, walnut front with a black top…" : "Opening a 40-seat café in Kilimani in March. Black and natural finishes, a few orange chairs, a long counter by the window…"}">${RIO.esc(st.text["t-about"])}</textarea></div>
