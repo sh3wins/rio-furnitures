@@ -354,3 +354,10 @@ main { padding-top: var(--nav-h); }
 }
 
 .btn-o[disabled] { background: transparent; border-color: var(--line-2); color: var(--muted); opacity: 1; }
+
+/* Mobile menu fix: the header's blur effect was trapping the menu panel inside
+   the 64px header, so the menu text spilled over the page with no background. */
+body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--paper); }
+body.menu-open .nav { height: calc(100vh - var(--nav-h)); height: calc(100dvh - var(--nav-h)); overflow-y: auto; z-index: 70; }
+.proj-link { white-space: nowrap; }
+@media (max-width: 420px) { .proj-link .pl-t { display: none; } }

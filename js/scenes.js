@@ -96,6 +96,18 @@
     platform(x, w, h) { return `<rect x="${x}" y="${FLOOR + 40 - h}" width="${w}" height="${h}" fill="#b8a98f"/><line x1="${x}" y1="${FLOOR + 40 - h}" x2="${x + w}" y2="${FLOOR + 40 - h}" stroke="#2a2926" stroke-width="1.5"/>`; },
     tv(x, y) { return `<rect x="${x - 110}" y="${y}" width="220" height="124" fill="#1d1c1a"/>`; },
     mirror(x, y, r) { return `<circle cx="${x}" cy="${y}" r="${r}" fill="#e3ddd1" stroke="#2a2926" stroke-width="1.5"/><circle cx="${x - r * 0.3}" cy="${y - r * 0.3}" r="${r * 0.25}" fill="#fff" opacity=".4"/>`; },
+    neon(x, y, t) { return `<text x="${x}" y="${y}" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="96" fill="#ff7a45" opacity=".95">${t}</text><ellipse cx="${x}" cy="${y - 30}" rx="170" ry="80" fill="#ff5a1f" opacity=".08"/>`; },
+    hedge(y) {
+      let b = `<rect x="0" y="${y}" width="1600" height="${FLOOR - y}" fill="#6f7c62"/>`;
+      for (let i = 0; i <= 1600; i += 70) b += `<circle cx="${i}" cy="${y + 6}" r="44" fill="${i % 140 ? "#6f7c62" : "#65725a"}"/>`;
+      return b + `<rect x="0" y="${FLOOR - 70}" width="1600" height="70" fill="#5f6b54" opacity=".5"/>`;
+    },
+    pergola() { let b = `<rect x="0" y="40" width="1600" height="14" fill="#8a7358"/>`; for (let i = 60; i < 1600; i += 150) b += `<rect x="${i}" y="20" width="12" height="54" fill="#7a6449"/>`; return b; },
+    umbrella(x, top, foot) {
+      return `<line x1="${x}" y1="${top}" x2="${x}" y2="${foot}" stroke="#2a2926" stroke-width="4"/>
+        <path d="M${x - 230} ${top + 70} Q${x} ${top - 40} ${x + 230} ${top + 70} Z" fill="#efe6d4" stroke="#2a2926" stroke-width="1.5"/>
+        <path d="M${x - 230} ${top + 70} L${x + 230} ${top + 70}" stroke="#ff5a1f" stroke-width="4"/>`;
+    },
     sign(x, y) { return `<text x="${x}" y="${y}" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-size="64" fill="#2a2926" letter-spacing="4">studio</text><circle cx="${x + 104}" cy="${y - 6}" r="6" fill="#ff5a1f"/>`; }
   };
 
@@ -119,18 +131,20 @@
       ],
       front: () => H_.plant(70, 860, 1.25)
     },
-    airbnb: {
-      wall: ["#e9e6e0", "#e0dcd3"], floor: ["#cbbba3", "#b7a58a"], boards: true,
-      back: () => H_.art(420, 170, 230, 170, "#d7c3a3") + H_.window(1110, 80, 340, 300, 2) + H_.light(1110, 1450, -180) + H_.rug(360, 420, 800, 34, "#e2d8c6") + H_.rug(1080, 360, 820, 30, "#d9cdb8"),
+    bar: {
+      wall: ["#35302a", "#2a2621"], floor: ["#6e5c48", "#58493a"], boards: true,
+      back: () => H_.neon(800, 190, "bar") + H_.bottles(560, 250, 14) + H_.pendant(480, 150, 60) + H_.pendant(1120, 150, 60),
       objects: [
-        { pid: "bedside-01", x: 275, foot: 740, s: 1.9, f: "walnut" },
-        { pid: "bed-01", x: 540, foot: 800, s: 3.3, f: "natural" },
-        { pid: "wardrobe-01", x: 900, foot: 690, s: 4.1, f: "white" },
-        { pid: "tv-unit-01", x: 1300, foot: 700, s: 2.8, f: "walnut" },
-        { pid: "coffee-table-02", x: 1260, foot: 830, s: 2.2, f: "natural" }
+        { pid: "booth-01", x: 200, foot: 760, s: 2.35, f: "orange" },
+        { pid: "counter-01", x: 690, foot: 690, s: 3.0, f: "walnut" },
+        { pid: "counter-01", x: 1000, foot: 690, s: 3.0, f: "walnut" },
+        { pid: "stool-02", x: 600, foot: 790, s: 2.25, f: "black" },
+        { pid: "stool-02", x: 770, foot: 790, s: 2.25, f: "orange" },
+        { pid: "stool-02", x: 940, foot: 790, s: 2.25, f: "black" },
+        { pid: "stool-02", x: 1110, foot: 790, s: 2.25, f: "black" },
+        { pid: "table-08", x: 1390, foot: 770, s: 2.1, f: "black" }
       ],
-      extra: (o) => (o.pid === "bedside-01" ? H_.lamp(o.x, o.foot - (104 - 44) * o.s) : ""),
-      front: () => H_.plant(1520, 850, 1.1)
+      front: () => H_.plant(1540, 860, 1.1)
     },
     office: {
       wall: ["#e8e6e1", "#dedbd4"], floor: ["#c4bcae", "#aea596"], boards: false,
@@ -169,6 +183,19 @@
         { pid: "pew-03", x: 420, foot: 800, s: 3.1, f: "natural" },
         { pid: "pew-03", x: 1180, foot: 800, s: 3.1, f: "natural" }
       ]
+    },
+    outdoor: {
+      wall: ["#eef0ea", "#e4e8de"], floor: ["#b99d7c", "#a0856a"], boards: true,
+      back: () => H_.hedge(380) + H_.pergola() + H_.umbrella(1160, 300, 700),
+      objects: [
+        { pid: "bench-01", x: 780, foot: 690, s: 2.4, f: "walnut" },
+        { pid: "lounger-01", x: 250, foot: 800, s: 2.6, f: "white" },
+        { pid: "lounger-01", x: 560, foot: 810, s: 2.6, f: "natural" },
+        { pid: "chair-04", x: 1010, foot: 790, s: 2.1, f: "black" },
+        { pid: "table-08", x: 1160, foot: 790, s: 2.3, f: "natural" },
+        { pid: "chair-04", x: 1310, foot: 790, s: 2.1, f: "orange", flip: true }
+      ],
+      front: () => H_.plant(1520, 860, 1.2)
     },
     other: {
       wall: ["#ebe8e2", "#e1ddd5"], floor: ["#cec5b6", "#b9ae9c"], boards: false,

@@ -3,7 +3,7 @@
   const F = RIO.FINISHES, S = RIO.store;
   const sw = document.getElementById("pj-switch"), view = document.getElementById("pj-view");
   let proj = S.active();
-  const SUGGEST = ["My Restaurant — Westlands", "New Airbnb", "Church Renovation", "Office Setup", "School Furniture"];
+  const SUGGEST = ["My Restaurant — Westlands", "Rooftop Bar", "Church Renovation", "Office Setup", "School Furniture"];
 
   function renderSwitch(creating) {
     const all = S.all();
