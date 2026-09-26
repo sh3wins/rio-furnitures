@@ -267,8 +267,18 @@
     });
 
     const photo = sp && sp.photo;
+    // Real photo: place markers from sp.hotspots [{ pid, x, y }] (percent of the frame)
+    if (photo && sp.hotspots) {
+      markers = sp.hotspots.map((h, i) => {
+        const hp = RIO.product(h.pid); if (!hp) return "";
+        return `
+          <button class="marker" data-pid="${hp.id}" data-i="${i}" style="left:${h.x}%;top:${h.y}%;--i:${i}" aria-label="${RIO.esc(hp.name)} — open">
+            <span class="dot"></span><span class="tip"><span class="mono">${RIO.code(hp)}</span></span>
+          </button>`;
+      }).join("");
+    }
     const art = photo
-      ? `<img class="room-photo" src="${photo}" alt="${RIO.esc(sp.name)} furnished by RIO">`
+      ? `<img class="room-photo" src="${photo}" alt="${RIO.esc(sp.plural || sp.name)} furnished by RIO" style="object-position:${sp.photoPos || "50% 50%"}" loading="lazy">`
       : `<svg class="room-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${RIO.esc(sp ? sp.name : "")} room illustration with RIO furniture">
           <defs>
             <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${R.wall[0]}"/><stop offset="1" stop-color="${R.wall[1]}"/></linearGradient>
