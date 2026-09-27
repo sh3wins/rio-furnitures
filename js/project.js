@@ -162,7 +162,7 @@
     document.getElementById("pj-save").addEventListener("click", () => { persist("Project saved"); RIO.toast(`<span><b>${RIO.esc(proj.name)}</b> is saved in this browser.</span>`); });
     document.getElementById("pj-quote").addEventListener("click", () => {
       if (!S.total(proj) && !proj.notes) { RIO.toast(`<span>Add some furniture or a note first.</span><a href="spaces.html">Explore →</a>`); return; }
-      RIO.openSend(RIO.projectSummary(proj), "Project quote — " + proj.name, (proj.files || []).length > 0);
+      RIO.openSend(RIO.projectSummary(proj), "Project quote — " + proj.name, (proj.files || []).length > 0, RIO.quoteFromProject ? RIO.quoteFromProject(proj) : null);
     });
     document.getElementById("pj-dl").addEventListener("click", () => {
       const a = document.createElement("a");

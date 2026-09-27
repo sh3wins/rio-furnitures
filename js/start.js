@@ -146,7 +146,13 @@
       RIO.store.save(p);
       $("#save-row").innerHTML = `<span class="dot-o"></span> Saved as <a class="link" href="project.html">${RIO.esc(name)}</a> — add exact pieces and finishes any time.`;
     }
-    RIO.openSend(summary(), (custom ? "Custom project" : "Project request") + (RIO.space(st.space) ? " — " + RIO.space(st.space).name : ""), st.files.length > 0);
+    const T = st.text;
+    const row = {
+      source: custom ? "custom" : "start", project_name: T["t-proj"] || "", space: st.space, needs: st.needs, qty_range: st.qty,
+      notes: T["t-about"] || "", files: st.files.slice(), timeline: T["t-when"] && T["t-when"] !== "Not sure yet" ? T["t-when"] : "",
+      contact_name: T["t-name"] || "", contact_phone: T["t-phone"] || "", contact_email: T["t-email"] || "", location: T["t-loc"] || ""
+    };
+    RIO.openSend(summary(), (custom ? "Custom project" : "Project request") + (RIO.space(st.space) ? " — " + RIO.space(st.space).name : ""), st.files.length > 0, row);
   }
 
   if (st.space) step = 1;

@@ -8,10 +8,13 @@
   const norm = (s) => String(s || "").trim().toUpperCase().replace(/\s+/g, "");
   const fmt = (d) => { const x = new Date(d + "T00:00:00"); return isNaN(x) ? d : x.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }); };
 
-  function show(code) {
-    const o = RIO.ORDERS.find((x) => norm(x.code) === norm(code));
+  async function show(code) {
     out.innerHTML = "";
     if (!code) { msg.textContent = ""; return; }
+    msg.textContent = "Looking up your order…";
+    // Live database first; fall back to js/orders.js if the database isn't set up
+    let o = RIO.trackOrder ? await RIO.trackOrder(code) : undefined;
+    if (!o) o = (RIO.ORDERS || []).find((x) => norm(x.code) === norm(code)) || null;
     if (!o) {
       msg.innerHTML = `We couldn't find <b>${RIO.esc(code)}</b>. Check the code, or <a class="link" href="https://wa.me/${C.whatsapp}" target="_blank" rel="noopener">ask us on WhatsApp</a>.`;
       return;

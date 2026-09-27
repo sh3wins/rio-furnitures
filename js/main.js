@@ -319,29 +319,60 @@
   };
 
   /* ---------- Send to RIO (WhatsApp / email, static-site friendly) ---------- */
-  RIO.openSend = function (text, subject, hasFiles) {
+  RIO.openSend = function (text, subject, hasFiles, row) {
     let m = document.getElementById("send-modal");
     if (!m) { m = document.createElement("div"); m.id = "send-modal"; m.className = "modal"; m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true"); document.body.appendChild(m); }
-    const wa = "https://wa.me/" + C.whatsapp + "?text=" + encodeURIComponent(text);
-    const mail = "mailto:" + C.email + "?subject=" + encodeURIComponent(subject || "Project request") + "&body=" + encodeURIComponent(text);
+    const online = !!(RIO.db && row);
+    const links = (t) => ({
+      wa: "https://wa.me/" + C.whatsapp + "?text=" + encodeURIComponent(t),
+      mail: "mailto:" + C.email + "?subject=" + encodeURIComponent(subject || "Project request") + "&body=" + encodeURIComponent(t)
+    });
+    const L = links(text);
     m.innerHTML = `
       <div class="modal-bg" data-close></div>
       <div class="modal-card">
         <button class="modal-close" data-close aria-label="Close">×</button>
-        <span class="mono muted">Send to RIO</span>
-        <h2 class="serif s-m" style="margin:12px 0 8px">Your project is ready.</h2>
-        <p class="muted" style="margin:0">Choose how to send it — everything below is filled in for you.</p>
-        <div class="summary">${RIO.esc(text)}</div>
-        ${hasFiles ? `<p class="small" style="margin:0 0 18px">Attach your drawings, photos or PDFs in the chat or email once it opens.</p>` : ""}
-        <div class="row">
-          <a class="btn btn-o" href="${wa}" target="_blank" rel="noopener">Send on WhatsApp <span class="arr">→</span></a>
-          <a class="btn" href="${mail}">Send by email</a>
-          <button class="link" data-copy>Copy</button>
+        <div data-stage="ready">
+          <span class="mono muted">Send to RIO</span>
+          <h2 class="serif s-m" style="margin:12px 0 8px">Your project is ready.</h2>
+          <p class="muted" style="margin:0">${online ? "Send it straight to our team — we'll reply on WhatsApp or email." : "Choose how to send it — everything below is filled in for you."}</p>
+          <div class="summary">${RIO.esc(text)}</div>
+          ${hasFiles ? `<p class="small" style="margin:0 0 18px">Your drawings, photos or PDFs: attach them in WhatsApp or email${online ? " after sending" : " once it opens"}.</p>` : ""}
+          <div class="row">
+            ${online ? `<button class="btn btn-o" data-send>Send to RIO <span class="arr">→</span></button>
+              <a class="btn" href="${L.wa}" target="_blank" rel="noopener">WhatsApp instead</a>`
+            : `<a class="btn btn-o" href="${L.wa}" target="_blank" rel="noopener">Send on WhatsApp <span class="arr">→</span></a>
+              <a class="btn" href="${L.mail}">Send by email</a>`}
+            <button class="link" data-copy>Copy</button>
+          </div>
+          <p class="send-err small" data-err role="alert"></p>
+        </div>
+        <div data-stage="done" hidden>
+          <span class="mono muted">Sent</span>
+          <h2 class="serif s-m" style="margin:12px 0 8px">Thank you. <em>We've got it.</em></h2>
+          <p style="margin:0">Your reference is <b class="mono ink" data-ref style="font-size:15px"></b>. Our team will be in touch soon.</p>
+          ${hasFiles ? `<p class="small mt-s" style="margin-bottom:0">Send your drawings or photos on WhatsApp and mention your reference.</p>` : ""}
+          <div class="row mt-m"><a class="btn" data-wa2 target="_blank" rel="noopener">Follow up on WhatsApp</a><button class="link" data-close>Close</button></div>
         </div>
       </div>`;
     m.classList.add("open");
     m.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", () => m.classList.remove("open")));
     m.querySelector("[data-copy]").addEventListener("click", (e) => { try { navigator.clipboard.writeText(text); e.target.textContent = "Copied"; } catch (x) {} });
+    const sendBtn = m.querySelector("[data-send]");
+    if (sendBtn) sendBtn.addEventListener("click", async () => {
+      sendBtn.disabled = true; sendBtn.innerHTML = "Sending…";
+      const res = await RIO.submitQuote(row);
+      if (res.ok) {
+        m.querySelector('[data-stage="ready"]').hidden = true;
+        m.querySelector('[data-stage="done"]').hidden = false;
+        m.querySelector("[data-ref]").textContent = res.ref;
+        m.querySelector("[data-wa2]").href = links("Hi RIO, my project reference is " + res.ref + ".").wa;
+        document.dispatchEvent(new CustomEvent("rio:quoteSent", { detail: res }));
+      } else {
+        sendBtn.disabled = false; sendBtn.innerHTML = `Send to RIO <span class="arr">→</span>`;
+        m.querySelector("[data-err]").innerHTML = `We couldn't send it just now. Please use <a class="link" href="${L.wa}" target="_blank" rel="noopener">WhatsApp</a> or <a class="link" href="${L.mail}">email</a> instead.`;
+      }
+    });
     m.querySelector(".modal-close").focus();
     document.addEventListener("keydown", function esc(e) { if (e.key === "Escape") { m.classList.remove("open"); document.removeEventListener("keydown", esc); } });
   };
