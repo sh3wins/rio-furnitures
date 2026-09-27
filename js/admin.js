@@ -379,10 +379,27 @@
     o.items = o.items || []; o.updates = o.updates || [];
     if (!o._new) history.replaceState(null, "", "#orders/" + o.code);
     let dirty = false;
+    let notify = false; // show "tell the customer" box after a stage change
+    const stageMsg = () => {
+      const hi = "Hi" + (o.customer_name ? " " + o.customer_name.split(" ")[0] : "") + ", ";
+      const link = "\n\nTrack it here: " + trackUrl(o.code) + "\n\n— RIO Furnitures";
+      const n = o.stage;
+      let t;
+      if (n === 9) t = "your RIO order " + o.code + " has been delivered. Thank you for choosing RIO! We'd love to hear how everything looks.";
+      else if (n === 8) t = "good news! Your RIO order " + o.code + " is out for delivery.";
+      else if (n === 7) t = "your RIO order " + o.code + " is finished and being packed for delivery.";
+      else if (n === 0) t = "your RIO order " + o.code + " is confirmed. We'll keep you updated as it moves through the workshop.";
+      else t = "an update on your RIO order " + o.code + ": it's now at \"" + STAGES[n] + "\".";
+      if (o.expected && n < 9) t += " " + o.expected + ".";
+      return hi + t + link;
+    };
     const render = () => {
       openDrawer(`
         <div class="d-top"><span class="mono muted">${o._new ? "New order" : "Order"} · ${esc(o.code)}</span><button class="x" data-x aria-label="Close">×</button></div>
         <div class="d-body">
+          ${notify && (o.customer_phone || o.customer_email) ? `<div class="notify"><div><b>Let ${esc(o.customer_name || "the customer")} know?</b><span>Stage is now “${STAGES[o.stage]}”. Opens a ready-written message — you just press send.</span></div>
+            <div class="notify-btns">${o.customer_phone ? `<a class="btn btn-sm btn-o" target="_blank" rel="noopener" href="${waLink(o.customer_phone, stageMsg())}">WhatsApp</a>` : ""}${o.customer_email ? `<a class="btn btn-sm" href="mailto:${esc(o.customer_email)}?subject=${encodeURIComponent("Your RIO order " + o.code + " — " + STAGES[o.stage])}&body=${encodeURIComponent(stageMsg())}">Email</a>` : ""}<button type="button" class="link" id="nskip">Not now</button></div></div>` : ""}
+          ${notify && !o.customer_phone && !o.customer_email ? `<div class="notify"><div><b>Stage changed to “${STAGES[o.stage]}”.</b><span>Add the customer's phone or email below to message them.</span></div></div>` : ""}
           ${o._new ? "" : `<div class="linkbox"><span>${esc(trackUrl(o.code))}</span><button class="link" id="copy">Copy</button>${o.customer_phone ? `<a class="link" target="_blank" rel="noopener" href="${waLink(o.customer_phone, "Hi " + (o.customer_name || "") + ", you can follow your RIO order here: " + trackUrl(o.code))}">Send on WhatsApp</a>` : ""}</div>`}
 
           <div class="d-sec"><span class="mono muted">Stage — now: <span class="ink">${STAGES[o.stage]}</span></span>
@@ -447,6 +464,7 @@
       document.getElementById("addupd").onclick = () => { const t = document.getElementById("o-upd").value.trim(); if (!t) return; collect(); o.updates.unshift({ date: today(), text: t }); dirty = true; render(); };
       document.getElementById("o-upd").onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); document.getElementById("addupd").click(); } };
       p.querySelectorAll("[data-rmu]").forEach((b) => (b.onclick = () => { collect(); o.updates.splice(+b.dataset.rmu, 1); dirty = true; render(); }));
+      const ns = document.getElementById("nskip"); if (ns) ns.onclick = () => { notify = false; render(); };
       const cp = document.getElementById("copy");
       if (cp) cp.onclick = () => { try { navigator.clipboard.writeText(trackUrl(o.code)); cp.textContent = "Copied"; } catch (x) {} };
       document.getElementById("osave").onclick = save;
@@ -464,6 +482,7 @@
       else res = await sb.from("orders").update(row).eq("id", o.id).select().single();
       if (res.error) { s.className = "saved err"; s.textContent = /duplicate|unique/i.test(res.error.message) ? "That order code is taken" : "Couldn't save"; return; }
       const saved = res.data;
+      const stageChanged = o._new || saved.stage !== src.stage;
       const i = O.findIndex((x) => x.id === saved.id);
       if (i === -1) O.unshift(saved); else O[i] = saved;
       if (o._new && o.quote_id) {
@@ -471,6 +490,7 @@
         if (q && q.status !== "won") { await sb.from("quotes").update({ status: "won" }).eq("id", q.id); q.status = "won"; }
       }
       Object.assign(o, saved); delete o._new; dirty = false;
+      if (stageChanged) { notify = true; src.stage = saved.stage; }
       history.replaceState(null, "", "#orders/" + saved.code);
       render();
       const s2 = document.getElementById("osaved"); s2.className = "saved ok"; s2.textContent = "Saved — tracking page updated";
