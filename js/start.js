@@ -5,7 +5,7 @@
   const STEPS = ["What are you building?", "What do you need?", "How much?", "Tell us about it", "Send to RIO"];
   const NEEDS = ["Seating", "Tables", "Workspace", "Storage", "Beds", "Counters", "Custom", "Other"];
   const QTY = [["1–9", "A few pieces"], ["10–49", "Bulk"], ["50–99", "A project"], ["100+", "Large-scale"]];
-  const st = { space: RIO.space(RIO.qs("space")) ? RIO.qs("space") : "", needs: custom ? ["Custom"] : [], qty: "", files: [], text: {} };
+  const st = { space: RIO.space(RIO.qs("space")) ? RIO.qs("space") : "", needs: custom ? ["Custom"] : [], qty: "", files: [], fileObjs: {}, text: {} };
   let step = 0;
 
   if (custom) {
@@ -81,8 +81,8 @@
     next.innerHTML = step === 4 ? `Send project to RIO <span class="arr">→</span>` : `Continue <span class="arr">→</span>`;
     $("#s-msg").textContent = "";
     if (step === 3) {
-      RIO.fileDrop($("#t-drop"), $("#t-files"), (l) => { Array.from(l).forEach((f) => { if (!st.files.includes(f.name)) st.files.push(f.name); }); files(); });
-      $("#t-list").addEventListener("click", (e) => { const b = e.target.closest("[data-rm]"); if (b) { st.files.splice(+b.dataset.rm, 1); files(); } });
+      RIO.fileDrop($("#t-drop"), $("#t-files"), (l) => { Array.from(l).forEach((f) => { if (f.size > (RIO.MAX_FILE || 2e7)) { alert(f.name + " is over 20 MB — please send it on WhatsApp instead."); return; } if (!st.files.includes(f.name)) st.files.push(f.name); st.fileObjs[f.name] = f; }); files(); });
+      $("#t-list").addEventListener("click", (e) => { const b = e.target.closest("[data-rm]"); if (b) { delete st.fileObjs[st.files[+b.dataset.rm]]; st.files.splice(+b.dataset.rm, 1); files(); } });
       files();
     }
   }
@@ -149,7 +149,7 @@
     const T = st.text;
     const row = {
       source: custom ? "custom" : "start", project_name: T["t-proj"] || "", space: st.space, needs: st.needs, qty_range: st.qty,
-      notes: T["t-about"] || "", files: st.files.slice(), timeline: T["t-when"] && T["t-when"] !== "Not sure yet" ? T["t-when"] : "",
+      notes: T["t-about"] || "", files: st.files.slice(), _files: st.files.map((n) => st.fileObjs[n]), timeline: T["t-when"] && T["t-when"] !== "Not sure yet" ? T["t-when"] : "",
       contact_name: T["t-name"] || "", contact_phone: T["t-phone"] || "", contact_email: T["t-email"] || "", location: T["t-loc"] || ""
     };
     RIO.openSend(summary(), (custom ? "Custom project" : "Project request") + (RIO.space(st.space) ? " — " + RIO.space(st.space).name : ""), st.files.length > 0, row);

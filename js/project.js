@@ -82,7 +82,7 @@
               <label class="dropzone" id="pj-drop">Drop photos, sketches, floor plans, PDFs or measurements<span class="mono muted">or click to choose</span>
                 <input type="file" multiple id="pj-files" accept="image/*,.pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx"></label>
               <ul class="files" id="pj-file-list"></ul>
-              <span class="small muted">Files stay on your device — you'll attach them when you send.</span></div>
+              <span class="small muted">Files are sent to RIO with your quote request. Added on an earlier visit? Add them again before sending.</span></div>
             <div class="f-grid2">
               <div class="field"><label for="c-name">Name</label><input class="input" id="c-name" data-c="name" value="${RIO.esc(c.name)}" autocomplete="name"></div>
               <div class="field"><label for="c-phone">Phone / WhatsApp</label><input class="input" id="c-phone" data-c="phone" value="${RIO.esc(c.phone)}" autocomplete="tel"></div>
@@ -156,13 +156,16 @@
     document.getElementById("pj-notes").addEventListener("input", (e) => { proj.notes = e.target.value; persist(); });
     document.querySelectorAll("[data-c]").forEach((i) => i.addEventListener("input", () => { proj.contact = proj.contact || {}; proj.contact[i.dataset.c] = i.value.trim(); persist(); }));
     RIO.fileDrop(document.getElementById("pj-drop"), document.getElementById("pj-files"), (list) => {
-      proj.files = proj.files || []; Array.from(list).forEach((f) => { if (!proj.files.includes(f.name)) proj.files.push(f.name); }); files(); persist();
+      proj.files = proj.files || []; RIO._fileObjs = RIO._fileObjs || {};
+      Array.from(list).forEach((f) => { if (f.size > (RIO.MAX_FILE || 2e7)) { alert(f.name + " is over 20 MB — please send it on WhatsApp instead."); return; } if (!proj.files.includes(f.name)) proj.files.push(f.name); RIO._fileObjs[proj.id + "/" + f.name] = f; }); files(); persist();
     });
     document.getElementById("pj-file-list").addEventListener("click", (e) => { const b = e.target.closest("[data-rm]"); if (b) { proj.files.splice(+b.dataset.rm, 1); files(); persist(); } });
     document.getElementById("pj-save").addEventListener("click", () => { persist("Project saved"); RIO.toast(`<span><b>${RIO.esc(proj.name)}</b> is saved in this browser.</span>`); });
     document.getElementById("pj-quote").addEventListener("click", () => {
       if (!S.total(proj) && !proj.notes) { RIO.toast(`<span>Add some furniture or a note first.</span><a href="spaces.html">Explore →</a>`); return; }
-      RIO.openSend(RIO.projectSummary(proj), "Project quote — " + proj.name, (proj.files || []).length > 0, RIO.quoteFromProject ? RIO.quoteFromProject(proj) : null);
+      const qrow = RIO.quoteFromProject ? RIO.quoteFromProject(proj) : null;
+      if (qrow) qrow._files = (proj.files || []).map((n) => (RIO._fileObjs || {})[proj.id + "/" + n]).filter(Boolean);
+      RIO.openSend(RIO.projectSummary(proj), "Project quote — " + proj.name, (proj.files || []).length > 0, qrow);
     });
     document.getElementById("pj-dl").addEventListener("click", () => {
       const a = document.createElement("a");

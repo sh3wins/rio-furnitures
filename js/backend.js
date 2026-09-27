@@ -39,15 +39,44 @@
   };
 
   /* Save a quote request. Resolves { ok, ref } — never throws. */
-  RIO.submitQuote = async function (row) {
+  RIO.MAX_FILE = 20 * 1024 * 1024; // 20 MB, matches the storage bucket
+  RIO.submitQuote = async function (row, onProgress) {
     if (!RIO.db) return { ok: false, reason: "offline" };
     const ref = RIO.makeCode("Q", 5);
+    const fileObjs = (row._files || []).filter(Boolean);
     const clean = Object.assign({ status: "new" }, row, { ref });
+    delete clean._files;
+    // Upload the actual files first, into the private "quote-files" bucket
+    const uploaded = [], failed = [];
+    for (let i = 0; i < fileObjs.length; i++) {
+      const f = fileObjs[i];
+      if (onProgress) onProgress(i + 1, fileObjs.length, f.name);
+      if (f.size > RIO.MAX_FILE) { failed.push(f.name); continue; }
+      const safe = f.name.replace(/[^\w.\-]+/g, "_").slice(-80);
+      const path = ref + "/" + Date.now().toString(36) + "-" + safe;
+      try {
+        const { error } = await RIO.db.storage.from("quote-files").upload(path, f, { contentType: f.type || undefined, upsert: false });
+        if (error) failed.push(f.name); else uploaded.push(path);
+      } catch (e) { failed.push(f.name); }
+    }
+    const sentNames = new Set(fileObjs.map((f) => f.name));
+    const notAttached = (clean.files || []).filter((n) => !sentNames.has(n)); // names from an earlier visit
+    clean.files = uploaded.concat(failed.concat(notAttached).map((n) => "not uploaded: " + n));
     try {
       const { error } = await RIO.db.from("quotes").insert(clean);
       if (error) return { ok: false, reason: error.message };
-      return { ok: true, ref };
+      return { ok: true, ref, uploaded: uploaded.length, failed: failed.concat(notAttached) };
     } catch (e) { return { ok: false, reason: String(e) }; }
+  };
+
+  /* Public quote lookup by reference (Q-XXXXX). */
+  RIO.trackQuote = async function (ref) {
+    if (!RIO.db) return undefined;
+    try {
+      const { data, error } = await RIO.db.rpc("track_quote", { p_ref: ref });
+      if (error) return undefined;
+      return (data && data[0]) || null;
+    } catch (e) { return undefined; }
   };
 
   /* Public order lookup. Resolves an order object, null (not found) or undefined (no database). */

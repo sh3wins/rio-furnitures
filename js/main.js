@@ -337,7 +337,7 @@
           <h2 class="serif s-m" style="margin:12px 0 8px">Your project is ready.</h2>
           <p class="muted" style="margin:0">${online ? "Send it straight to our team — we'll reply on WhatsApp or email." : "Choose how to send it — everything below is filled in for you."}</p>
           <div class="summary">${RIO.esc(text)}</div>
-          ${hasFiles ? `<p class="small" style="margin:0 0 18px">Your drawings, photos or PDFs: attach them in WhatsApp or email${online ? " after sending" : " once it opens"}.</p>` : ""}
+          ${hasFiles ? `<p class="small" style="margin:0 0 18px">${online ? "Your files will be sent to RIO with your request." : "Your drawings, photos or PDFs: attach them in WhatsApp or email once it opens."}</p>` : ""}
           <div class="row">
             ${online ? `<button class="btn btn-o" data-send>Send to RIO <span class="arr">→</span></button>
               <a class="btn" href="${L.wa}" target="_blank" rel="noopener">WhatsApp instead</a>`
@@ -351,7 +351,8 @@
           <span class="mono muted">Sent</span>
           <h2 class="serif s-m" style="margin:12px 0 8px">Thank you. <em>We've got it.</em></h2>
           <p style="margin:0">Your reference is <b class="mono ink" data-ref style="font-size:15px"></b>. Our team will be in touch soon.</p>
-          ${hasFiles ? `<p class="small mt-s" style="margin-bottom:0">Send your drawings or photos on WhatsApp and mention your reference.</p>` : ""}
+          <p class="small mt-s" style="margin-bottom:0" data-files-note></p>
+          <p class="small mt-s" style="margin-bottom:0"><a class="link" data-track>Track your request <span class="arr">→</span></a></p>
           <div class="row mt-m"><a class="btn" data-wa2 target="_blank" rel="noopener">Follow up on WhatsApp</a><button class="link" data-close>Close</button></div>
         </div>
       </div>`;
@@ -361,12 +362,16 @@
     const sendBtn = m.querySelector("[data-send]");
     if (sendBtn) sendBtn.addEventListener("click", async () => {
       sendBtn.disabled = true; sendBtn.innerHTML = "Sending…";
-      const res = await RIO.submitQuote(row);
+      const res = await RIO.submitQuote(row, (i, n) => { sendBtn.innerHTML = `Uploading file ${i} of ${n}…`; });
       if (res.ok) {
         m.querySelector('[data-stage="ready"]').hidden = true;
         m.querySelector('[data-stage="done"]').hidden = false;
         m.querySelector("[data-ref]").textContent = res.ref;
         m.querySelector("[data-wa2]").href = links("Hi RIO, my project reference is " + res.ref + ".").wa;
+        m.querySelector("[data-track]").href = "track.html?order=" + encodeURIComponent(res.ref);
+        const fn = m.querySelector("[data-files-note]");
+        if (res.uploaded) fn.textContent = res.uploaded + (res.uploaded === 1 ? " file" : " files") + " sent with your request.";
+        if (res.failed && res.failed.length) fn.textContent += (fn.textContent ? " " : "") + "Please send these on WhatsApp with your reference: " + res.failed.join(", ") + ".";
         document.dispatchEvent(new CustomEvent("rio:quoteSent", { detail: res }));
       } else {
         sendBtn.disabled = false; sendBtn.innerHTML = `Send to RIO <span class="arr">→</span>`;

@@ -288,7 +288,11 @@
         ${items.length ? `<div class="d-sec"><span class="mono muted">Furniture</span><ul class="items">${items.map((i) => `<li><span>${esc(i.name)}</span><span class="f">${esc(finText(i.finishes))}</span><span class="q">${pad(i.qty)}</span></li>`).join("")}</ul></div>` : ""}
         ${q.needs && q.needs.length ? `<div class="d-sec"><span class="mono muted">Needs</span><p style="margin:0">${q.needs.map(esc).join(", ")}${q.qty_range ? ` · ${esc(q.qty_range)} pieces` : ""}</p></div>` : ""}
         ${q.notes ? `<div class="d-sec"><span class="mono muted">Their notes</span><p style="margin:0;white-space:pre-wrap">${esc(q.notes)}</p></div>` : ""}
-        ${q.files && q.files.length ? `<div class="d-sec"><span class="mono muted">Files they'll send</span><p style="margin:0">${q.files.map(esc).join(", ")}</p><p class="small muted">Files come by WhatsApp or email — ask for them if they haven't arrived.</p></div>` : ""}
+        ${q.files && q.files.length ? `<div class="d-sec"><span class="mono muted">Files</span><ul class="files" id="qfiles">${q.files.map((f) => {
+          const stored = f.includes("/") && !f.startsWith("not uploaded");
+          const name = stored ? f.split("/").pop().replace(/^[a-z0-9]+-/, "") : f.replace(/^not uploaded: /, "");
+          return `<li><span>${esc(name)}</span>${stored ? `<button type="button" class="link" data-file="${esc(f)}">Open ↗</button>` : `<span class="muted small">not uploaded — ask on WhatsApp</span>`}</li>`;
+        }).join("")}</ul></div>` : ""}
 
         <div class="d-sec"><div class="field"><label for="qnote">Internal note (staff only)</label><textarea class="textarea" id="qnote" style="min-height:90px" placeholder="Call notes, pricing, next step…">${esc(q.internal_note || "")}</textarea></div></div>
         ${linked ? `<div class="d-sec"><span class="mono muted">Order</span><p style="margin:0"><button class="link" id="goorder">${esc(linked.code)} — ${STAGES[linked.stage]} <span class="arr">→</span></button></p></div>` : ""}
@@ -313,6 +317,16 @@
       }
     };
     document.getElementById("qsave").onclick = () => upd({ internal_note: document.getElementById("qnote").value });
+    const qf = document.getElementById("qfiles");
+    if (qf) qf.addEventListener("click", async (e) => {
+      const b = e.target.closest("[data-file]"); if (!b) return;
+      const w = window.open("", "_blank"); // open now so pop-up blockers allow it
+      b.textContent = "Opening…";
+      const { data, error } = await sb.storage.from("quote-files").createSignedUrl(b.dataset.file, 600);
+      b.textContent = "Open ↗";
+      if (error || !data) { if (w) w.close(); alert("Couldn't open that file. Has update-1 SQL been run in Supabase?"); return; }
+      if (w) w.location = data.signedUrl; else location.href = data.signedUrl;
+    });
     const mk = document.getElementById("mkorder");
     if (mk) mk.onclick = () => orderDrawer(draftFromQuote(q));
     const go = document.getElementById("goorder");
