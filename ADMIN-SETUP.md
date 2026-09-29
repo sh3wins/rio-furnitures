@@ -54,5 +54,7 @@ Then open **riofurniturekenya.com/admin.html** and sign in.
 - **Create order**: from a quote, press *Create order*. It gets a code like `RIO-7K3Q`.
 - **Orders**: click a stage to move it, add updates, press *Save*. The customer's tracking page updates instantly. Use *Send on WhatsApp* to give them their tracking link.
 - **Public vs private**: the project label, expected date, furniture list and updates are shown on the tracking page. Customer name, phone, email and private notes are staff-only.
-- **Files** customers upload are *named* in the request; the files themselves still come by WhatsApp/email (photo uploads into the admin are phase 2).
+- **Files** customers attach arrive with their request. Open the quote → *Files* → **Open ↗** (links work for 10 minutes; click again for a fresh one).
+- **Telling the customer**: when you move an order to a new stage and press *Save*, an orange box appears at the top with **WhatsApp** / **Email** buttons and a ready-written message. Press it, then press send.
+- **Tracking**: customers can track with their quote reference (`Q-…`) or order code (`RIO-…`).
 - `js/orders.js` is now only a fallback — once the database is connected, manage orders in the admin.

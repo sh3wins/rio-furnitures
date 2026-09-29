@@ -7,17 +7,17 @@ Quiet surface, powerful underneath:
 1. Calm: rooms, type, whitespace.
 2. Discover: hover furniture in a room → orange marker → click → the piece opens.
 3. Powerful: mix finishes in one order (e.g. Black 40 + White 20 + Orange 10 + Natural 5 = 75), add to My Project, save, upload refs, request a quote.
-4. Trust: workshop, real projects, Kartech connection.
+4. Trust: workshop and real projects.
 
 ## Pages
-- index.html — the showroom (room viewer, pieces, ordering, projects, custom, workshop, Kartech)
+- index.html — the showroom (room viewer, pieces, ordering, projects, custom, workshop)
 - spaces.html — walk through all six rooms (spaces.html?space=church jumps to one)
 - furniture.html — all pieces, grouped by category (?cat=seating, ?space=school)
 - product.html?id=chair-04 — examine a piece, views, finishes, build your order
 - project.html — My Project workspace
 - start.html — Start a Project, 5 steps (start.html?mode=custom for custom work)
 - projects.html — project stories (placeholders)
-- about.html — how we build, how ordering works, Kartech, visit
+- about.html — how we build, how ordering works, visit
 
 ## Fonts
 Instrument Serif (statements) · Inter Tight (everything you read and click) · IBM Plex Mono (codes, quantities, labels)
