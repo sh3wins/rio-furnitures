@@ -12,17 +12,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=6">
   <link rel="stylesheet" href="css/pages.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=14">
+  <link rel="stylesheet" href="css/theme.css?v=15">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
 
 <main>
-  <!-- HERO: walk into the showroom (full screen) -->
+  <!-- HERO: featured piece (premium, product first).
+       TODO: replace "The Rope Sofa" with the piece's real name. -->
+  <section class="feature-hero">
+    <div class="fh-text">
+      <p class="mono">New from the workshop</p>
+      <h1 class="serif s-xxl">The Rope Sofa</h1>
+      <p class="lead">Rope-woven arms on a slim black steel frame, with a soft cushioned seat. Designed and made in Nairobi.</p>
+      <div class="row mt-m">
+        <a class="btn fh-btn" href="start.html">Enquire <span class="arr">→</span></a>
+        <a class="link" href="furniture.html">Explore furniture <span class="arr">→</span></a>
+      </div>
+    </div>
+    <figure class="fh-img"><img src="images/real/featured-sofa.jpg" alt="RIO rope sofa with a black steel frame, rope-woven arms and striped cushions" fetchpriority="high"></figure>
+  </section>
+
+  <!-- THE SHOWROOM: walk into the showroom (full screen) -->
   <section class="showroom-intro hero-full">
     <div class="wrap hero-over">
       <p class="mono muted">RIO Furnitures — The showroom</p>
-      <h1 class="serif s-xl">Walk the rooms.<br><em>Tap any piece.</em></h1>
+      <h2 class="serif s-xl">Walk the rooms.<br><em>Tap any piece.</em></h2>
       <div class="row mt-m">
         <a class="btn btn-o" href="start.html">Start a project <span class="arr">→</span></a>
         <a class="link" href="spaces.html">All spaces <span class="arr">→</span></a>
