@@ -4,3 +4,6 @@ preview.html
 
 # Raw photos/videos from the phone (the site uses the small copies in images/real)
 new-photos/
+
+# Files the Claude app saves here
+Claude outputs/

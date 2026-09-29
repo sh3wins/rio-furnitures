@@ -142,3 +142,18 @@ body.menu-open[data-page="home"] .site-header .menu-btn span { background: var(-
 .custom-clip video { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 16px; background: var(--paper-2); display: block; }
 .custom-clip figcaption { margin-top: 12px; }
 @media (max-width: 760px) { .custom-grid { grid-template-columns: 1fr; } .custom-clip { max-width: 360px; } }
+
+/* ---------- Product photos: front / back ---------- */
+.p-stage.is-photo { aspect-ratio: 4 / 5; }
+.p-stage .ph.has-img img { object-fit: contain; background: var(--paper-2); }
+.p-stage .turn-in { animation: turnIn .55s var(--ease); }
+@keyframes turnIn { from { opacity: 0; transform: perspective(900px) rotateY(-60deg) scale(.96); } }
+.turn-btn {
+  position: absolute; right: 16px; bottom: 16px; z-index: 3; display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 999px; background: var(--night); color: var(--on-night); font-size: 14px; font-weight: 500;
+  box-shadow: 0 4px 18px rgba(0,0,0,.25); transition: background .3s, color .3s;
+}
+.turn-btn:hover { background: var(--orange); color: var(--on-accent); }
+.turn-btn span { font-size: 17px; line-height: 1; }
+.p-stage .view-tag { position: absolute; left: 16px; top: 14px; bottom: auto; z-index: 3; background: rgba(0,0,0,.45); color: #f6f4ef; padding: 4px 9px; border-radius: 99px; }
+@media (prefers-reduced-motion: reduce) { .p-stage .turn-in { animation: none; } }
