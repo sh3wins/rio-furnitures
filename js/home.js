@@ -70,9 +70,14 @@
   /* ---------- Workshop strip ---------- */
   const MAKE = [["Materials", "Chosen for how the space is used."], ["Cutting", "Parts cut for your full quantity."], ["Fabrication", "Frames and components made."], ["Assembly", "Put together by hand."],
     ["Finishing", "The finishes you picked, mixed in one order."], ["Quality control", "Every piece checked."], ["Packaging", "Protected for the trip."], ["Delivery", "To your space, ready to open."]];
+  const PHOTO = { Cutting: "images/real/workshop-cutting.jpg", Delivery: "images/real/rope-dining.jpg" };
+  const CLIP = { Fabrication: "images/real/clip-welding", Assembly: "images/real/clip-assembly", Finishing: "images/real/clip-grinding" };
+  const media = (m) => CLIP[m[0]]
+    ? `<video src="${CLIP[m[0]]}.mp4" poster="${CLIP[m[0]]}.jpg" autoplay muted loop playsinline preload="metadata" aria-label="RIO workshop — ${m[0].toLowerCase()}"></video>`
+    : PHOTO[m[0]] ? `<img src="${PHOTO[m[0]]}" alt="RIO workshop — ${m[0].toLowerCase()}" loading="lazy">` : "";
   $("#strip").innerHTML = MAKE.map((m, i) => `
     <figure class="step">
-      <div class="ph" data-label="Photograph — ${m[0].toLowerCase()}"></div>
+      <div class="ph ${media(m) ? "has-img" : ""}" data-label="Photograph — ${m[0].toLowerCase()}">${media(m)}</div>
       <figcaption><span class="mono muted">0${i + 1}</span><span class="title">${m[0]}</span><span class="muted small">${m[1]}</span></figcaption>
     </figure>`).join("");
   const strip = $("#strip"), sec = strip.closest("section");

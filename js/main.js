@@ -77,7 +77,7 @@
       <div class="wrap">
         <div class="foot-top">
           <div>
-            <p class="serif s-l" style="color:var(--paper);margin:0 0 28px">Make room for<br><em>something good.</em></p>
+            <p class="serif s-l" style="color:var(--on-night);margin:0 0 28px">Make room for<br><em>something good.</em></p>
             <a class="btn btn-o" href="start.html">Start a project <span class="arr">→</span></a>
           </div>
           <div><h4>Showroom</h4><ul>
@@ -429,4 +429,10 @@
   };
 
   document.addEventListener("DOMContentLoaded", () => RIO.observeReveal());
+})();
+/* reduce-motion-video: people who turn off motion get still frames instead of looping clips */
+(function () {
+  if (!window.matchMedia || !matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const stop = () => document.querySelectorAll("video[autoplay]").forEach((v) => { v.removeAttribute("autoplay"); v.pause(); });
+  document.addEventListener("DOMContentLoaded", stop); setTimeout(stop, 800);
 })();

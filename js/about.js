@@ -11,10 +11,15 @@
     ["Packaging", "Protected for transport."],
     ["Delivery", "To your site, ready for opening day."]
   ];
+  const PHOTO = { Cutting: "images/real/workshop-cutting.jpg", Delivery: "images/real/rope-dining.jpg" };
+  const CLIP = { Fabrication: "images/real/clip-welding", Assembly: "images/real/clip-assembly", Finishing: "images/real/clip-grinding" };
+  const media = (m) => CLIP[m[0]]
+    ? `<video src="${CLIP[m[0]]}.mp4" poster="${CLIP[m[0]]}.jpg" autoplay muted loop playsinline preload="metadata" aria-label="RIO workshop — ${m[0].toLowerCase()}"></video>`
+    : PHOTO[m[0]] ? `<img src="${PHOTO[m[0]]}" alt="RIO workshop — ${m[0].toLowerCase()}" loading="lazy">` : "";
   document.getElementById("proc").innerHTML = MAKE.map((m, i) => `
     <figure class="reveal">
-      <div class="ph img-reveal" data-label="Photograph — ${m[0].toLowerCase()}"></div>
-      <figcaption><span class="mono muted">0${i + 1}</span><span class="title" style="color:var(--paper)">${m[0]}</span><p>${m[1]}</p></figcaption>
+      <div class="ph img-reveal ${media(m) ? "has-img" : ""}" data-label="Photograph — ${m[0].toLowerCase()}">${media(m)}</div>
+      <figcaption><span class="mono muted">0${i + 1}</span><span class="title" style="color:var(--on-night)">${m[0]}</span><p>${m[1]}</p></figcaption>
     </figure>`).join("");
 
   const FLOW = [["Tell us what you're building", 1], ["Explore the spaces", 0], ["Choose your pieces", 0], ["Pick finishes — mix them", 0], ["Set quantities", 0], ["Add to your project", 1],
