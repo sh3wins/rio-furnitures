@@ -23,10 +23,25 @@
           <a class="btn btn-sm" href="start.html"><span class="dot-o"></span> Start a project</a>
         </nav>
         <div class="header-right">
+          <button class="theme-btn" type="button" aria-label="Switch light or dark mode">
+            <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+            <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+          </button>
           <a class="proj-link" href="project.html" aria-label="My project"><span class="pl-t">My project</span><span class="qty" id="proj-count">0</span></a>
           <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
         </div>
       </div>`;
+    // Light / dark switch (dark is the default; the choice is remembered)
+    const root = document.documentElement;
+    if (!root.dataset.theme) root.dataset.theme = "dark";
+    const tb = header.querySelector(".theme-btn");
+    const label = () => tb.setAttribute("aria-label", root.dataset.theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+    label();
+    tb.addEventListener("click", () => {
+      root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+      try { localStorage.setItem("rio-theme", root.dataset.theme); } catch (e) {}
+      label();
+    });
     const mb = header.querySelector(".menu-btn");
     mb.addEventListener("click", () => {
       const o = document.body.classList.toggle("menu-open");

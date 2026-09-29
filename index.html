@@ -2,44 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RIO Furnitures — Furniture for spaces worth staying in</title>
+  <title>RIO Furnitures — Furniture for bars, lounges &amp; restaurants in Nairobi</title>
   <meta name="description" content="RIO Furnitures — a furniture showroom for restaurants, bars and cafés, hospitality, offices, schools, churches and outdoor spaces in Nairobi, Kenya. Explore the rooms, choose your pieces and build your project.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23ff5a1f%27/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23cf8646%27/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=5">
-  <link rel="stylesheet" href="css/pages.css?v=5">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/pages.css?v=6">
+  <link rel="stylesheet" href="css/theme.css?v=6">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
 
 <main>
-  <!-- ENTER THE SHOWROOM -->
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <p class="mono muted hero-kicker reveal">RIO / Showroom — Nairobi</p>
-        <h1 class="serif s-xxl reveal" data-d="1">What are you<br><em>building?</em></h1>
+  <!-- HERO: a real RIO venue -->
+  <section class="hero-photo">
+    <img src="images/real/lounge.jpg" alt="Rope-weave lounge sofas and coffee tables made by RIO, in a Nairobi bar" fetchpriority="high">
+    <div class="wrap">
+      <p class="mono hero-kicker reveal">RIO Furnitures — Nairobi</p>
+      <h1 class="serif s-xxl reveal" data-d="1">Furniture for bars, lounges <em>&amp;</em> restaurants.</h1>
+      <p class="lead reveal" data-d="2">Designed and built in Nairobi. Order by the dozen, pick your finishes, and we build it for your venue.</p>
+      <div class="row mt-m reveal" data-d="2">
+        <a class="btn btn-o" href="start.html">Start a project <span class="arr">→</span></a>
+        <a class="btn" href="#signature">See our work <span class="arr">↓</span></a>
       </div>
-      <div class="hero-side reveal" data-d="2">
-        <p class="lead">Furniture for restaurants, hospitality, offices, schools, churches and the spaces in between.</p>
-        <div class="row mt-m">
-          <a class="btn" href="#rooms">Explore spaces <span class="arr">↓</span></a>
-          <a class="link" href="start.html">Start a project <span class="arr">→</span></a>
-        </div>
+      <div class="hero-facts reveal" data-d="3">
+        <div><b>Built in Nairobi</b>Our own workshop</div>
+        <div><b>Bulk orders</b>One piece or a whole venue</div>
+        <div><b>Your finishes</b>Mix colours in one order</div>
+        <div><b>Track online</b>Follow every stage</div>
       </div>
     </div>
-    <div id="hero-room"></div>
   </section>
 
-  <!-- STATEMENT -->
-  <section class="section">
-    <div class="wrap statement">
-      <h2 class="serif s-xl reveal">Furniture for spaces<br><em>worth staying in.</em></h2>
-      <p class="lead reveal" data-d="1">Chairs, tables, counters, desks, pews, beds and storage — one piece or a whole room, in the finishes your space needs.</p>
+  <!-- SIGNATURE PIECES: real photos -->
+  <section class="section" id="signature">
+    <div class="wrap">
+      <div class="head-row">
+        <div><p class="mono muted">Signature pieces</p><h2 class="serif s-l">Made for <em>busy venues.</em></h2></div>
+        <p class="lead" style="max-width:36ch">Rope-woven frames, resin tops, solid wood and powder-coated steel. Built to take a full house every night.</p>
+      </div>
+      <div class="sig">
+        <a class="sig-card c1 reveal" href="spaces.html?space=bar"><img src="images/real/lounge.jpg" alt="RIO rope-weave lounge set" loading="lazy"><div class="sig-cap"><span class="tag">Lounge</span><h3>Rope-weave lounge sets</h3><p>Sofas, armchairs and coffee tables with outdoor-grade cushions</p></div></a>
+        <a class="sig-card c2 reveal" data-d="1" href="spaces.html?space=bar"><img src="images/real/barrel-table.jpg" alt="RIO barrel table with resin top and bar stools" loading="lazy"><div class="sig-cap"><span class="tag">Bar</span><h3>Barrel tables &amp; bar stools</h3><p>Resin-top barrel tables with leather-seat stools</p></div></a>
+        <a class="sig-card c3 reveal" href="spaces.html?space=outdoor"><img src="images/real/terrace-stools.jpg" alt="RIO high tables and bar stools on a terrace" loading="lazy"><div class="sig-cap"><span class="tag">Terrace</span><h3>High tables &amp; stools</h3><p>Solid wood tops on steel bases, rope-back stools</p></div></a>
+        <a class="sig-card c4 reveal" data-d="1" href="spaces.html?space=restaurant"><img src="images/real/rope-dining.jpg" alt="RIO rope dining chairs and black resin tables" loading="lazy"><div class="sig-cap"><span class="tag">Dining</span><h3>Rope chairs &amp; resin tables</h3><p>Woven dining chairs with glossy round tops</p></div></a>
+      </div>
     </div>
+  </section>
+
+  <!-- ENTER THE SHOWROOM -->
+  <section class="showroom-intro">
+    <div class="wrap head-row">
+      <div><p class="mono muted">The showroom</p><h2 class="serif s-l">Walk the rooms. <em>Tap any piece.</em></h2></div>
+      <a class="link" href="spaces.html">All spaces <span class="arr">→</span></a>
+    </div>
+    <div id="hero-room"></div>
   </section>
 
   <!-- THE ROOMS -->
@@ -118,10 +139,10 @@
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=5"></script>
-<script src="js/store.js?v=5"></script>
-<script src="js/main.js?v=5"></script>
-<script src="js/scenes.js?v=5"></script>
-<script src="js/home.js?v=5"></script>
+<script src="js/data.js?v=6"></script>
+<script src="js/store.js?v=6"></script>
+<script src="js/main.js?v=6"></script>
+<script src="js/scenes.js?v=6"></script>
+<script src="js/home.js?v=6"></script>
 </body>
 </html>
