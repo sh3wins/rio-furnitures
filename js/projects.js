@@ -12,7 +12,7 @@
       const ph = (i, cls, lbl) => p.photos[i] ? `<div class="ph has-img ${cls}"><img src="${p.photos[i]}" alt="${RIO.esc(p.headline || p.title)}" loading="lazy"></div>` : `<div class="ph ${cls}" data-label="${lbl}"></div>`;
       return `
         <article class="story" id="p${p.no}">
-          <div class="img-reveal">${ph(0, "hero-ph", label(s) + " — the finished space")}</div>
+          <div class="img-reveal">${p.video ? `<div class="ph has-img hero-ph"><video src="${p.video}" poster="${p.photos[0]}" autoplay muted loop playsinline preload="metadata" aria-label="${RIO.esc(p.headline)}"></video></div>` : ph(0, "hero-ph", label(s) + " — the finished space")}</div>
           <div class="story-body">
             <div class="reveal">
               <span class="mono muted">Project ${p.no} · ${label(s)}</span>

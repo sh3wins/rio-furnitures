@@ -62,7 +62,7 @@
     const s = RIO.space(p.space), photo = p.photos[0];
     return `
       <a class="g-item g${i}" href="projects.html#p${p.no}">
-        <div class="ph img-reveal ${photo ? "has-img" : ""}" data-label="${s.plural} — project photograph">${photo ? `<img src="${photo}" alt="${RIO.esc(p.headline || p.title)}" loading="lazy">` : ""}</div>
+        <div class="ph img-reveal ${photo ? "has-img" : ""}" data-label="${s.plural} — project photograph">${p.video ? `<video src="${p.video}" poster="${photo}" autoplay muted loop playsinline preload="metadata" aria-label="${RIO.esc(p.headline)}"></video>` : photo ? `<img src="${photo}" alt="${RIO.esc(p.headline || p.title)}" loading="lazy">` : ""}</div>
         <div class="g-cap"><span class="mono muted">Project ${p.no} · ${s.plural}</span><span class="serif s-s">${p.headline ? RIO.esc(p.headline) : `<em>Story coming soon</em>`}</span></div>
       </a>`;
   }).join("");

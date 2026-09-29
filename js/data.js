@@ -165,15 +165,24 @@ RIO.PRODUCTS = [
      story: "Short paragraph.", photos: ["images/projects/001-a.jpg", …], placeholder: false
 */
 const PF = (no, space, title) => ({ no, space, title, headline: null, building: null, supplied: [], materials: null, finishes: null, custom: null, story: null, photos: [], placeholder: true });
+/* Real project: same fields as PF, filled in. Add building / supplied / materials / finishes when known. */
+const RP = (no, space, headline, story, photos, video) => ({ ...PF(no, space, headline), headline, story, photos, video: video || null, placeholder: false });
 RIO.PORTFOLIO = [
-  PF("001", "restaurant", "Restaurant project"),
-  PF("002", "bar", "Bar & café project"),
-  PF("003", "office", "Office project"),
-  PF("004", "school", "School project"),
-  PF("005", "church", "Church project"),
-  PF("006", "hospitality", "Hospitality project"),
-  PF("007", "outdoor", "Outdoor project"),
-  PF("008", "other", "Commercial project")
+  RP("001", "outdoor", "Rope dining sets on a rooftop terrace",
+    "Rope-woven armchairs with cushioned seats around round glass-top tables, built for an open-air rooftop.",
+    ["images/real/rooftop-dining.jpg", "images/real/terrace-stools.jpg"]),
+  RP("002", "hospitality", "A strap-weave lounge for long evenings",
+    "Woven-strap sofas and armchairs with patterned cushions, paired with low coffee tables.",
+    ["images/real/lounge-set.jpg", "images/real/lounge-set-poster.jpg"], "images/real/lounge-set.mp4"),
+  RP("003", "bar", "Rope-weave lounge sets for a bar",
+    "Lounge sofas, armchairs and coffee tables with outdoor-grade cushions.",
+    ["images/real/lounge.jpg", "images/real/barrel-table.jpg"]),
+  RP("004", "restaurant", "Rope chairs and resin tables for a dining room",
+    "Woven dining chairs with glossy round resin tops.",
+    ["images/real/rope-dining.jpg"]),
+  PF("005", "office", "Office project"),
+  PF("006", "school", "School project"),
+  PF("007", "church", "Church project")
 ];
 
 /* ---------- Helpers ---------- */
