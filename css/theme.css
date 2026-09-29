@@ -100,18 +100,8 @@ body.menu-open .nav a.nl { font-weight: 700; letter-spacing: -0.02em; }
 .hero-facts div { font-size: 14px; color: #b9b1a6; }
 .hero-facts b { display: block; font-family: var(--serif); font-size: 21px; font-weight: 700; color: #f6f4ef; letter-spacing: -0.01em; }
 
-/* Header sits on the photo: keep it light until you scroll */
-body[data-page="home"] .site-header:not(.scrolled) .logo,
-body[data-page="home"] .site-header:not(.scrolled) .nav a.nl,
-body[data-page="home"] .site-header:not(.scrolled) .proj-link,
-body[data-page="home"] .site-header:not(.scrolled) .theme-btn { color: #f6f4ef; }
-body[data-page="home"] .site-header:not(.scrolled) .nav .btn { color: #f6f4ef; border-color: rgba(246, 244, 239, .5); }
-body[data-page="home"] .site-header:not(.scrolled) .theme-btn,
-body[data-page="home"] .site-header:not(.scrolled) .proj-link .qty:not(.has) { border-color: rgba(246, 244, 239, .4); color: #f6f4ef; }
-body[data-page="home"] .site-header:not(.scrolled) .menu-btn span { background: #f6f4ef; }
-body[data-page="home"] .site-header:not(.scrolled) .logo-sub { color: rgba(246, 244, 239, .6); }
-body.menu-open[data-page="home"] .site-header .nav a.nl { color: var(--ink); }
-body.menu-open[data-page="home"] .site-header .menu-btn span { background: var(--ink); }
+/* Home now opens on the showroom: clear the fixed header */
+body[data-page="home"] main > .showroom-intro:first-child { padding-top: calc(var(--nav-h) + clamp(40px, 7vw, 88px)); }
 
 /* ---------- Home: signature pieces (real photos) ---------- */
 .sig { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
