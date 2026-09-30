@@ -116,6 +116,9 @@
       show("seat", v); show("bg", v);
       hero.style.setProperty("--fh-bg", t.bg); hero.style.setProperty("--fh-ink", t.ink); hero.style.setProperty("--fh-on", t.on);
       pick.querySelector('[data-name="seat"]').textContent = t.name;
+    } else if (g === "rope") {
+      show("rope", v);
+      pick.querySelector('[data-name="rope"]').textContent = THEME[v].name;
     } else {
       show("frame", v);
       pick.querySelector('[data-name="frame"]').textContent = FRAME[v];
