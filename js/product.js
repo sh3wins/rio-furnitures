@@ -1,7 +1,10 @@
 /* RIO — a piece, examined in the showroom */
 (function () {
   const F = RIO.FINISHES;
-  const p = RIO.product(RIO.qs("id")) || RIO.PRODUCTS[0];
+  let p = RIO.product(RIO.qs("id")) || RIO.PRODUCTS[0];
+  // frame variants (hidden) open on their main product with that frame chosen
+  if (p.hidden) p = RIO.PRODUCTS.find((x) => x.variants && Object.values(x.variants).includes(p.id)) || p;
+  let frame = (RIO.product(RIO.qs("id")) || p).frame || p.frame;
   document.title = RIO.shortName(p) + " — RIO Furnitures";
   // Real photos: photos: { front, back, side, detail, material } in data.js ("rear" also works for back)
   const PH = Object.assign({}, p.photos || {});
@@ -16,7 +19,7 @@
 
   // which room shows this piece?
   const roomId = Object.keys(RIO.ROOMS).find((k) => RIO.ROOMS[k].objects.some((o) => o.pid === p.id)) || p.spaces[0];
-  const VIEWS = [...PHOTO_VIEWS, ["object", p.image ? "Photo" : "Drawing"], ["room", "In a room"]];
+  const VIEWS = p.layers ? [["object", "Photo"]] : [...PHOTO_VIEWS, ["object", p.image ? "Photo" : "Drawing"], ["room", "In a room"]];
   const tbc = `<span class="tbc">confirmed with your quote</span>`;
 
   document.getElementById("prod").innerHTML = `
@@ -32,9 +35,15 @@
       <p class="lead">${p.desc}</p>
 
       <div class="p-block">
-        <span class="mono muted">Finish — <span class="ink" id="fin-name">${F[fin].name}</span></span>
+        <span class="mono muted">${p.finishLabel || "Finish"} — <span class="ink" id="fin-name">${F[fin].name}</span></span>
         <div class="finishes" id="fins">${p.finishes.map((f) => `<button type="button" class="fin ${f === fin ? "on" : ""}" data-fin="${f}" aria-label="${F[f].name}" aria-pressed="${f === fin}"><span class="c" data-f="${f}" style="background-color:${F[f].hex}"></span><span class="mono">${F[f].name}</span></button>`).join("")}</div>
       </div>
+
+      ${p.variants ? `<div class="p-block">
+        <span class="mono muted">Frame — <span class="ink" id="frame-name">${RIO.FRAMES[frame]}</span></span>
+        <div class="finishes" id="frames">${Object.keys(p.variants).map((f) => `<button type="button" class="fin ${f === frame ? "on" : ""}" data-frame="${f}" aria-label="${RIO.FRAMES[f]}" aria-pressed="${f === frame}"><span class="c" style="background-color:${{ black: "#1b1a19", white: "#e9e8e4", grey: "#85878a" }[f]}"></span><span class="mono">${RIO.FRAMES[f]}</span></button>`).join("")}</div>
+        <p class="mono muted" style="font-size:10.5px;margin-top:10px">Colour preview · final finishes may vary slightly</p>
+      </div>` : ""}
 
       <dl class="specs-q p-block">
         <div><dt class="mono muted">Dimensions</dt><dd>${p.dims || tbc}</dd></div>
@@ -54,7 +63,10 @@
 
   const stage = document.getElementById("stage");
   function paint() {
-    if (view === "object" && p.image) {
+    if (view === "object" && p.layers) {
+      const L = p.layers, lyr = (g, v) => Object.keys(L[g]).map((k) => `<img class="lyr ${k === v ? "on" : ""}" data-g="${g}" data-v="${k}" src="${L[g][k]}" alt="">`).join("");
+      stage.innerHTML = `<div class="ph has-img layered"><img src="${p.image}" alt="${RIO.esc(p.name)}">${lyr("seat", fin)}${lyr("frame", frame)}</div>`;
+    } else if (view === "object" && p.image) {
       stage.innerHTML = `<div class="ph has-img"><img src="${p.image}" alt="${RIO.esc(p.name)}"></div>`;
     } else if (view === "object") {
       stage.innerHTML = RIO.visual(p, fin) + `<span class="mono muted cap">${F[fin].name} · drawing</span>`;
@@ -99,16 +111,28 @@
     if (f === fin) return; fin = f;
     document.getElementById("fin-name").textContent = F[f].name;
     document.querySelectorAll("#fins .fin").forEach((b) => { const on = b.dataset.fin === f; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
-    if (view === "object" && !p.image) {
+    if (p.layers) showLayer("seat", f);
+    else if (view === "object" && !p.image) {
       const svg = stage.querySelector("svg"); svg.style.opacity = 0;
       setTimeout(() => paint(), 200);
     } else if (view === "room") RIO.tintRooms(p.id, f);
   }
   document.getElementById("fins").addEventListener("click", (e) => { const b = e.target.closest("[data-fin]"); if (b) setFin(b.dataset.fin); });
-  RIO.builder(document.getElementById("builder"), p, { onFinish: setFin });
+  const showLayer = (g, v) => stage.querySelectorAll(`.lyr[data-g="${g}"]`).forEach((l) => l.classList.toggle("on", l.dataset.v === v));
+  const orderProduct = () => (p.variants ? RIO.product(p.variants[frame]) : p);
+  RIO.builder(document.getElementById("builder"), orderProduct(), { onFinish: setFin });
+  const framesEl = document.getElementById("frames");
+  if (framesEl) framesEl.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-frame]"); if (!b || b.dataset.frame === frame) return;
+    frame = b.dataset.frame;
+    framesEl.querySelectorAll(".fin").forEach((x) => { const on = x.dataset.frame === frame; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on); });
+    document.getElementById("frame-name").textContent = RIO.FRAMES[frame];
+    showLayer("frame", frame);
+    RIO.builder(document.getElementById("builder"), orderProduct(), { onFinish: setFin, startWith: fin });
+  });
   paint();
 
-  const rel = RIO.PRODUCTS.filter((x) => x.id !== p.id && x.spaces.some((s) => p.spaces.includes(s))).slice(0, 4);
+  const rel = RIO.PRODUCTS.filter((x) => !x.hidden && x.id !== p.id && x.spaces.some((s) => p.spaces.includes(s))).slice(0, 4);
   const relEl = document.getElementById("related");
   relEl.innerHTML = rel.map((x, i) => RIO.piece(x, i)).join("");
   RIO.bindPieces(relEl);

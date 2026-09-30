@@ -9,7 +9,7 @@
   walk.innerHTML = RIO.SPACES.map((s, i) => {
     const inRoom = [];
     (RIO.ROOMS[s.id] || RIO.ROOMS.other).objects.forEach((o) => { if (!inRoom.includes(o.pid)) inRoom.push(o.pid); });
-    const more = RIO.PRODUCTS.filter((p) => p.spaces.includes(s.id) && !inRoom.includes(p.id)).map((p) => p.id);
+    const more = RIO.PRODUCTS.filter((p) => !p.hidden && p.spaces.includes(s.id) && !inRoom.includes(p.id)).map((p) => p.id);
     const list = inRoom.concat(more).slice(0, 8);
     return `
       <section class="walk-room" id="${s.id}" data-s="${s.id}">

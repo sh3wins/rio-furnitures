@@ -20,7 +20,7 @@
   function render() {
     const match = (p) => space === "all" || p.spaces.includes(space);
     const groups = (cat === "all" ? CATS : CATS.filter((c) => c.id === cat))
-      .map((c) => ({ c, items: RIO.PRODUCTS.filter((p) => p.cats.includes(c.id) && match(p)) }))
+      .map((c) => ({ c, items: RIO.PRODUCTS.filter((p) => !p.hidden && p.cats.includes(c.id) && match(p)) }))
       .filter((g) => g.items.length);
     // in "Everything", show each product once, under its first category
     const seen = new Set();

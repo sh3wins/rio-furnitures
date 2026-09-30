@@ -32,7 +32,9 @@ RIO.FINISHES = {
   orange:  { name: "Orange",  hex: "#ff5a1f" },
   natural: { name: "Natural", hex: "#c99a66" },
   walnut:  { name: "Walnut",  hex: "#6e4a30" },
-  grey:    { name: "Grey",    hex: "#8b8a85" }
+  grey:    { name: "Grey",    hex: "#8b8a85" },
+  beige:   { name: "Beige",   hex: "#c9a37a" },
+  red:     { name: "Red",     hex: "#9c2f27" }
 };
 
 /* ---------- Furniture categories (WHAT the furniture is) ----------
@@ -105,6 +107,15 @@ const P = (id, name, icon, type, cats, spaces, desc, finishes) =>
   ({ id, name, icon, type, cats, spaces, desc, finishes, dims: null, materials: null, lead: null, price: null });
 
 RIO.PRODUCTS = [
+  /* The Rope Sofa — real photo with colour preview layers.
+     TODO: replace the name when the real one is confirmed.
+     finishes = seat colours; frame colour is chosen separately (see FRAMES below). */
+  Object.assign(P("rope-sofa", "RIO Rope Sofa", "lounger", "Sofa · lounge seating", ["seating"], ["hospitality", "outdoor", "bar", "restaurant"],
+    "Rope-woven arms on a slim steel frame, with a soft cushioned seat. Designed and made in Nairobi.", ["beige", "white", "black", "red"]),
+    { image: "images/real/featured-sofa.jpg", finishLabel: "Seat", frame: "black",
+      layers: { seat: { white: "images/real/sofa/seat-white.webp", black: "images/real/sofa/seat-black.webp", red: "images/real/sofa/seat-red.webp" },
+                frame: { white: "images/real/sofa/frame-white.webp", grey: "images/real/sofa/frame-grey.webp" } } }),
+
   P("chair-04", "RIO Chair 04", "chair", "Dining chair", ["seating"], ["restaurant", "bar", "church", "outdoor", "other"],
     "A clean dining chair built to be ordered by the room. At home in cafés, dining rooms and event spaces.", ["black", "white", "orange", "natural"]),
   P("stool-02", "RIO Bar Stool 02", "stool", "Bar stool", ["seating"], ["bar", "restaurant", "other"],
@@ -184,6 +195,15 @@ RIO.PORTFOLIO = [
   PF("006", "school", "School project"),
   PF("007", "church", "Church project")
 ];
+
+/* Frame variants of the Rope Sofa (hidden from listings; used so a project remembers the frame colour) */
+RIO.FRAMES = { black: "Black coated", white: "White coated", grey: "Grey coated" };
+(function () {
+  const base = RIO.PRODUCTS.find((p) => p.id === "rope-sofa");
+  base.variants = { black: "rope-sofa", white: "rope-sofa-wf", grey: "rope-sofa-gf" };
+  [["white", "rope-sofa-wf"], ["grey", "rope-sofa-gf"]].forEach(([f, id]) =>
+    RIO.PRODUCTS.push(Object.assign({}, base, { id, name: base.name + " — " + RIO.FRAMES[f].toLowerCase() + " frame", frame: f, hidden: true })));
+})();
 
 /* ---------- Helpers ---------- */
 RIO.product = (id) => RIO.PRODUCTS.find((p) => p.id === id);
