@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=6">
   <link rel="stylesheet" href="css/pages.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=15">
+  <link rel="stylesheet" href="css/theme.css?v=16">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
@@ -24,13 +24,39 @@
     <div class="fh-text">
       <p class="mono">New from the workshop</p>
       <h1 class="serif s-xxl">The Rope Sofa</h1>
-      <p class="lead">Rope-woven arms on a slim black steel frame, with a soft cushioned seat. Designed and made in Nairobi.</p>
+      <p class="lead">Rope-woven arms on a slim steel frame, with a soft cushioned seat. Designed and made in Nairobi.</p>
+      <div class="fh-pick" id="sofa-pick">
+        <div class="fh-row"><span class="mono">Seat</span>
+          <div class="fh-sw" data-g="seat" role="radiogroup" aria-label="Seat colour">
+            <button type="button" role="radio" data-v="beige" aria-label="Beige" style="--c:#c9a37a" class="on"></button>
+            <button type="button" role="radio" data-v="white" aria-label="White" style="--c:#ece6dc"></button>
+            <button type="button" role="radio" data-v="black" aria-label="Black" style="--c:#2a2826"></button>
+            <button type="button" role="radio" data-v="red" aria-label="Red" style="--c:#9c2f27"></button>
+          </div><span class="fh-name" data-name="seat">Beige</span></div>
+        <div class="fh-row"><span class="mono">Frame</span>
+          <div class="fh-sw" data-g="frame" role="radiogroup" aria-label="Frame colour">
+            <button type="button" role="radio" data-v="black" aria-label="Black coated" style="--c:#1b1a19" class="on"></button>
+            <button type="button" role="radio" data-v="white" aria-label="White coated" style="--c:#e9e8e4"></button>
+            <button type="button" role="radio" data-v="grey" aria-label="Grey coated" style="--c:#85878a"></button>
+          </div><span class="fh-name" data-name="frame">Black coated</span></div>
+        <p class="fh-note mono">Colour preview · final finishes may vary slightly</p>
+      </div>
       <div class="row mt-m">
         <a class="btn fh-btn" href="start.html">Enquire <span class="arr">→</span></a>
         <a class="link" href="furniture.html">Explore furniture <span class="arr">→</span></a>
       </div>
     </div>
-    <figure class="fh-img"><img src="images/real/featured-sofa.jpg" alt="RIO rope sofa with a black steel frame, rope-woven arms and striped cushions" fetchpriority="high"></figure>
+    <figure class="fh-img" id="sofa-stage">
+      <img src="images/real/featured-sofa.jpg" alt="RIO rope sofa with a steel frame, rope-woven arms and striped cushions" fetchpriority="high">
+      <img class="lyr" data-g="bg" data-v="white" src="images/real/sofa/bg-white.webp" alt="" loading="lazy">
+      <img class="lyr" data-g="bg" data-v="black" src="images/real/sofa/bg-black.webp" alt="" loading="lazy">
+      <img class="lyr" data-g="bg" data-v="red" src="images/real/sofa/bg-red.webp" alt="" loading="lazy">
+      <img class="lyr" data-g="seat" data-v="white" src="images/real/sofa/seat-white.webp" alt="" loading="lazy">
+      <img class="lyr" data-g="seat" data-v="black" src="images/real/sofa/seat-black.webp" alt="" loading="lazy">
+      <img class="lyr" data-g="seat" data-v="red" src="images/real/sofa/seat-red.webp" alt="" loading="lazy">
+      <img class="lyr" data-g="frame" data-v="white" src="images/real/sofa/frame-white.webp" alt="" loading="lazy">
+      <img class="lyr" data-g="frame" data-v="grey" src="images/real/sofa/frame-grey.webp" alt="" loading="lazy">
+    </figure>
   </section>
 
   <!-- THE SHOWROOM: walk into the showroom (full screen) -->
@@ -132,6 +158,6 @@
 <script src="js/store.js?v=6"></script>
 <script src="js/main.js?v=8"></script>
 <script src="js/scenes.js?v=6"></script>
-<script src="js/home.js?v=9"></script>
+<script src="js/home.js?v=10"></script>
 </body>
 </html>

@@ -94,3 +94,31 @@
 
   RIO.observeReveal();
 })();
+
+/* ---------- Featured sofa: colour preview (seat sets the backdrop too) ---------- */
+(function () {
+  const hero = document.querySelector(".feature-hero"), pick = document.getElementById("sofa-pick");
+  if (!hero || !pick) return;
+  const THEME = {
+    beige: { bg: "#aa7045", ink: "#1b1410", on: "#f6f4ef", name: "Beige" },
+    white: { bg: "#d6d0c6", ink: "#1b1410", on: "#f6f4ef", name: "White" },
+    black: { bg: "#625e5a", ink: "#f6f4ef", on: "#1b1410", name: "Black" },
+    red:   { bg: "#ab584d", ink: "#f6f4ef", on: "#1b1410", name: "Red" }
+  };
+  const FRAME = { black: "Black coated", white: "White coated", grey: "Grey coated" };
+  const show = (g, v) => hero.querySelectorAll(`.lyr[data-g="${g}"]`).forEach((l) => l.classList.toggle("on", l.dataset.v === v));
+  pick.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-v]"); if (!b) return;
+    const g = b.parentElement.dataset.g, v = b.dataset.v;
+    b.parentElement.querySelectorAll("button").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-checked", x === b); });
+    if (g === "seat") {
+      const t = THEME[v];
+      show("seat", v); show("bg", v);
+      hero.style.setProperty("--fh-bg", t.bg); hero.style.setProperty("--fh-ink", t.ink); hero.style.setProperty("--fh-on", t.on);
+      pick.querySelector('[data-name="seat"]').textContent = t.name;
+    } else {
+      show("frame", v);
+      pick.querySelector('[data-name="frame"]').textContent = FRAME[v];
+    }
+  });
+})();
