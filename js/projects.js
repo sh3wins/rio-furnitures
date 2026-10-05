@@ -1,5 +1,5 @@
 /* RIO — Projects: real RIO work. The photographs do the talking. */
-(function () {
+RIO.whenReady(function () {
   let f = "all";
   const nav = document.getElementById("pf"), box = document.getElementById("stories");
   const all = RIO.projects();
@@ -40,4 +40,4 @@
   });
   render();
   if (location.hash) setTimeout(() => { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }, 60);
-})();
+});

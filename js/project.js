@@ -1,5 +1,5 @@
 /* RIO — My project: the pieces, colours and quantities you've chosen */
-(function () {
+RIO.whenReady(function () {
   const F = RIO.FINISHES, S = RIO.store, ARR = RIO.ARR;
   const sw = document.getElementById("pj-switch"), view = document.getElementById("pj-view");
   let proj = S.active();
@@ -44,7 +44,7 @@
       <div class="pj-item" data-i="${i}">
         <div class="pj-item-head">
           <a class="th ${p.image ? "" : "is-drawing"}" href="product.html?id=${p.id}" aria-label="${RIO.esc(p.name)}">${RIO.visual(p, firstF)}</a>
-          <div><div class="h-s">${RIO.shortName(p)}</div><span class="meta">${p.type || ""}</span></div>
+          <div><div class="h-s">${RIO.esc(RIO.shortName(p))}</div><span class="meta">${RIO.esc(p.type || "")}</span></div>
           <div class="t"><span class="n" data-lt>${S.lineTotal(it)}</span><span class="meta">pieces</span></div>
         </div>
         <div class="pj-rows">${fins.map((f) => `
@@ -115,7 +115,7 @@
   function totals() {
     const t = S.total(proj);
     document.getElementById("pj-total").textContent = t;
-    document.getElementById("pj-br").innerHTML = proj.items.map((it) => { const p = RIO.product(it.pid); return p ? `<li><span>${RIO.shortName(p)}</span><span>${S.lineTotal(it)}</span></li>` : ""; }).join("") || `<li><span class="muted">No furniture yet</span><span>0</span></li>`;
+    document.getElementById("pj-br").innerHTML = proj.items.map((it) => { const p = RIO.product(it.pid); return p ? `<li><span>${RIO.esc(RIO.shortName(p))}</span><span>${S.lineTotal(it)}</span></li>` : ""; }).join("") || `<li><span class="muted">No furniture yet</span><span>0</span></li>`;
     const tier = RIO.TIERS[RIO.tierFor(t)];
     document.getElementById("pj-tier").textContent = t ? `${tier.name} order (${tier.range} pieces)` : "";
     document.querySelectorAll(".pj-item").forEach((el) => {
@@ -186,4 +186,4 @@
     if (e.target.closest("[data-new]")) render(true);
   });
   render();
-})();
+});

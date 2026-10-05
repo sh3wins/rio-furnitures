@@ -24,6 +24,7 @@ order it in the quantity they need.
   variables at the top; light and dark themes are both defined there.
 - `js/data.js` — everything you edit: contact details, photos, colours, spaces, products, projects.
 - `js/main.js` — header, footer, photo frames, furniture cards, the order builder.
+- `js/live.js` — adds projects and furniture that staff posted from the dashboard (see `ADMIN-SETUP.md`).
 - `js/<page>.js` — one small file per page.
 - `fonts/` — Instrument Sans (open licence), served from the site.
 

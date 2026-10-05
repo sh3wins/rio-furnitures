@@ -1,6 +1,6 @@
 /* =========================================================
    RIO — Admin dashboard
-   Overview · Quote requests · Orders · Customers · Staff
+   Overview · Quote requests · Orders · Customers · Website (projects, furniture) · Staff
    Data lives in Supabase (see supabase/schema.sql).
    ========================================================= */
 (function () {
@@ -36,6 +36,7 @@
   const logo = `<a class="logo" href="index.html"><span class="logo-mark">RIO<i>.</i></span><span class="logo-sub">Admin</span></a>`;
 
   let sb = null, user = null, me = null, Q = [], O = [], S = [];
+  let WP = [], WF = [], siteReady = true; // website projects, website furniture, are the tables there?
   const ui = { quoteFilter: "new", orderFilter: "active", search: "" };
 
   /* ================= Boot ================= */
@@ -98,21 +99,28 @@
   }
 
   async function load() {
-    const [q, o, s] = await Promise.all([
+    const [q, o, s, wp, wf] = await Promise.all([
       sb.from("quotes").select("*").order("created_at", { ascending: false }),
       sb.from("orders").select("*").order("updated_at", { ascending: false }),
-      sb.from("staff").select("*")
+      sb.from("staff").select("*"),
+      sb.from("site_projects").select("*").order("created_at", { ascending: false }),
+      sb.from("site_products").select("*").order("created_at", { ascending: false })
     ]);
     Q = (q && q.data) || []; O = (o && o.data) || []; S = (s && s.data) || [];
+    WP = (wp && wp.data) || []; WF = (wf && wf.data) || [];
+    siteReady = !(wp && wp.error) && !(wf && wf.error);
   }
 
   /* ================= Shell ================= */
   const PAGES = [["overview", "Overview"], ["quotes", "Quote requests"], ["orders", "Orders"], ["customers", "Customers"]];
+  const SITE_PAGES = [["projects", "Projects"], ["furniture", "Furniture"]];
   function navHTML(active) {
     const newQ = Q.filter((q) => q.status === "new").length;
     return `${logo}
           <span class="grp">Workspace</span>
           ${PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span>${k === "quotes" && newQ ? `<span class="count">${newQ}</span>` : ""}</a>`).join("")}
+          <span class="grp">Website</span>
+          ${SITE_PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span></a>`).join("")}
           <span class="grp">Settings</span>
           <a class="snav ${active === "staff" ? "on" : ""}" href="#staff"><span class="t">Staff</span></a>
           <div class="foot">
@@ -138,6 +146,8 @@
           ${logo}
           <span class="grp">Workspace</span>
           ${PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span>${k === "quotes" && newQ ? `<span class="count">${newQ}</span>` : ""}</a>`).join("")}
+          <span class="grp">Website</span>
+          ${SITE_PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span></a>`).join("")}
           <span class="grp">Settings</span>
           <a class="snav ${active === "staff" ? "on" : ""}" href="#staff"><span class="t">Staff</span></a>
           <div class="foot">
@@ -174,11 +184,13 @@
   function route(keep) {
     const h = (location.hash || "#overview").slice(1);
     const [page, id] = h.split("/");
-    ({ overview, quotes, orders, customers, staff }[page] || overview)();
+    ({ overview, quotes, orders, customers, projects, furniture, staff }[page] || overview)();
     bindRefresh();
     if (id && !keep) {
       if (page === "quotes") { const q = Q.find((x) => x.ref === id || x.id === id); if (q) quoteDrawer(q); }
       if (page === "orders") { const o = O.find((x) => x.code === id || x.id === id); if (o) orderDrawer(o); }
+      if (page === "projects") { const r = WP.find((x) => x.id === id); if (r) postDrawer("project", r); }
+      if (page === "furniture") { const r = WF.find((x) => x.id === id); if (r) postDrawer("piece", r); }
     }
   }
 
@@ -502,7 +514,7 @@
   // re-draw the page behind the drawer without closing it
   function refreshBehind() {
     const page = (location.hash || "#overview").slice(1).split("/")[0];
-    ({ overview, quotes, orders, customers, staff }[page] || overview)();
+    ({ overview, quotes, orders, customers, projects, furniture, staff }[page] || overview)();
     bindRefresh();
   }
 
@@ -532,6 +544,214 @@
       </tbody></table>` : `<p class="empty">Customers appear here from quote requests and orders.</p>`}`);
     const cs = document.getElementById("cs");
     cs.oninput = () => { ui.search = cs.value; const pos = cs.selectionStart; customers(); bindRefresh(); const n = document.getElementById("cs"); n.focus(); n.setSelectionRange(pos, pos); };
+  }
+
+
+  /* =========================================================
+     WEBSITE — post projects and furniture, with photos
+     Photos go to the public "site-photos" storage bucket; the
+     details go to site_projects / site_products. Whatever is
+     marked "Show on the website" is live straight away.
+     ========================================================= */
+  const BUCKET = "site-photos";
+  const photoUrl = (path) => cfg.url + "/storage/v1/object/public/" + BUCKET + "/" + String(path).split("/").map(encodeURIComponent).join("/");
+  const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)));
+  const slugify = (t) => String(t).toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "piece";
+  // The public site keeps a one-minute copy of posted content; clear it here so staff see their change at once
+  const clearSiteCopy = () => { try { localStorage.removeItem("rio.live.v1"); } catch (e) {} };
+
+  /* Shrink a phone photo before uploading: longest side 1800px, saved as JPEG.
+     A 6 MB photo becomes roughly 300–500 KB, so the website stays fast. */
+  async function shrink(file) {
+    const MAX = 1800;
+    let bmp;
+    try { bmp = await createImageBitmap(file, { imageOrientation: "from-image" }); }
+    catch (e) {
+      bmp = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error("unreadable")); im.src = URL.createObjectURL(file); });
+    }
+    const k = Math.min(1, MAX / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    const blob = await new Promise((res) => c.toBlob(res, "image/jpeg", 0.82));
+    if (!blob) throw new Error("unreadable");
+    return blob;
+  }
+
+  const KIND = {
+    project: { table: "site_projects", page: "projects", list: () => WP, one: "project", folder: "projects", link: (r) => "projects.html#p" + String(r.id).slice(0, 8) },
+    piece: { table: "site_products", page: "furniture", list: () => WF, one: "piece of furniture", folder: "furniture", link: (r) => "product.html?id=" + encodeURIComponent(r.slug) }
+  };
+  const setupNotice = `<p class="notice">This part of the dashboard needs one more database step. In Supabase, open <b>SQL Editor</b>, paste in the whole of <code>supabase/update-2-site-photos.sql</code> from the project folder and press <b>Run</b>. Then press Refresh here.</p>`;
+
+  function sitePage(kind, kicker, title, newLabel, emptyText, cols, rowHTML) {
+    const K = KIND[kind], list = K.list();
+    shell(K.page, `
+      ${head(kicker, title, siteReady ? `<button class="btn btn-o btn-sm" id="newpost">${newLabel}</button>` : "")}
+      ${!siteReady ? setupNotice : list.length ? `<table class="list posts"><thead><tr><th></th>${cols}<th>On website</th><th class="hide-s">Posted</th></tr></thead><tbody>
+        ${list.map((r) => `<tr class="rowlink" tabindex="0" data-id="${r.id}">
+          <td class="th">${r.photos && r.photos[0] ? `<img src="${esc(photoUrl(r.photos[0]))}" alt="" loading="lazy">` : ""}</td>
+          ${rowHTML(r)}
+          <td><span class="pill ${r.published ? "won" : "lost"}">${r.published ? "Live" : "Hidden"}</span></td>
+          <td class="m hide-s">${ago(r.created_at)}</td></tr>`).join("")}
+      </tbody></table>` : `<p class="empty">${emptyText}</p>`}`);
+    const main = document.getElementById("main");
+    const nb = document.getElementById("newpost");
+    if (nb) nb.onclick = () => postDrawer(kind, null);
+    main.querySelectorAll("tr.rowlink").forEach((tr) => {
+      const open = () => postDrawer(kind, list.find((r) => r.id === tr.dataset.id));
+      tr.onclick = open; tr.onkeydown = (e) => { if (e.key === "Enter") open(); };
+    });
+  }
+  function projects() {
+    sitePage("project", "Website", "<em>Projects.</em>", "New project", "No projects posted yet. Press “New project”, add photos of a finished job and it appears on the website.",
+      `<th>Project</th><th class="hide-s">Space</th>`,
+      (r) => `<td>${esc(r.title)}<span class="sub">${(r.photos || []).length} photo${(r.photos || []).length === 1 ? "" : "s"}</span></td><td class="hide-s">${esc(spaceName(r.space))}</td>`);
+  }
+  function furniture() {
+    sitePage("piece", "Website", "<em>Furniture.</em>", "New piece", "No furniture posted yet. Press “New piece”, add photos and it appears on the Furniture page.",
+      `<th>Piece</th><th class="hide-s">Category</th>`,
+      (r) => `<td>${esc(r.name)}<span class="sub">${esc(r.type || "")}</span></td><td class="hide-s">${esc((RIO.category(r.category) || {}).name || r.category)}</td>`);
+  }
+
+  /* One form for both: a project (photos, title, space, a few words)
+     or a piece of furniture (photos, name, type, category, spaces, colours, a few words). */
+  function postDrawer(kind, src) {
+    const K = KIND[kind], isNew = !src, isPiece = kind === "piece";
+    const r = src ? JSON.parse(JSON.stringify(src)) : (isPiece
+      ? { id: uuid(), name: "", type: "", category: RIO.CATEGORIES[0].id, spaces: [], description: "", finishes: [], photos: [], published: true }
+      : { id: uuid(), title: "", space: "", story: "", photos: [], published: true });
+    // photos in the form: ones already uploaded ({ path }) and new ones waiting to upload ({ file, url })
+    let photos = (r.photos || []).map((path) => ({ path }));
+    const removed = [];
+    let busy = false;
+
+    const checks = (id, options, chosen, swatch) => `<div class="checks" id="${id}">${options.map(([v, label, hex]) => `<label><input type="checkbox" value="${v}" ${chosen.includes(v) ? "checked" : ""}>${swatch ? `<span class="sw" style="background:${hex}"></span>` : ""}${esc(label)}</label>`).join("")}</div>`;
+    const thumbs = () => photos.map((ph, i) => `<li>
+        <img src="${esc(ph.path ? photoUrl(ph.path) : ph.url)}" alt="Photo ${i + 1}">
+        ${i === 0 ? `<span class="tag">${isPiece ? "Main photo" : "Cover"}</span>` : `<button type="button" class="mk" data-first="${i}">Make ${isPiece ? "main" : "cover"}</button>`}
+        <button type="button" class="rm" data-rmp="${i}" aria-label="Remove photo ${i + 1}">×</button></li>`).join("");
+
+    const render = () => {
+      openDrawer(`
+        <div class="d-top"><span class="mono muted">${isNew ? "New " + K.one : "Edit " + K.one}</span><button class="x" data-x aria-label="Close">×</button></div>
+        <div class="d-body">
+          <div class="d-sec" style="margin-top:0"><span class="mono muted">Photos</span>
+            <label class="dropzone" id="p-drop">Tap to add photos<span class="mono muted">from your gallery or camera · several at once is fine</span>
+              <input type="file" id="p-files" accept="image/*" multiple></label>
+            <ul class="photo-grid" id="p-thumbs">${thumbs()}</ul>
+            <p class="public-hint" style="margin:10px 0 0">The first photo is the one people see first. Photos are made smaller automatically before they upload.</p>
+          </div>
+
+          <div class="d-sec" style="display:grid;gap:22px">
+            ${isPiece ? `
+            <div class="field"><label for="p-name">Name</label><input class="input" id="p-name" maxlength="120" value="${esc(r.name)}" placeholder="e.g. Rope Dining Chair"></div>
+            <div class="f2">
+              <div class="field"><label for="p-type">What it is</label><input class="input" id="p-type" maxlength="80" value="${esc(r.type)}" placeholder="e.g. Dining chair"></div>
+              <div class="field"><label for="p-cat">Category</label><select class="select" id="p-cat">${RIO.CATEGORIES.map((c) => `<option value="${c.id}" ${r.category === c.id ? "selected" : ""}>${c.name}</option>`).join("")}</select></div>
+            </div>
+            <div class="field"><span class="lbl">Good for which spaces?</span>${checks("p-spaces", RIO.SPACES.map((s) => [s.id, s.plural]), r.spaces || [])}</div>
+            <div class="field"><span class="lbl">Colours it comes in</span>${checks("p-fins", Object.keys(F).map((k) => [k, F[k].name, F[k].hex]), r.finishes || [], true)}</div>
+            <div class="field"><label for="p-desc">A sentence or two about it</label><textarea class="textarea" id="p-desc" maxlength="1200" style="min-height:96px" placeholder="What it's made of and where it works well.">${esc(r.description)}</textarea></div>`
+            : `
+            <div class="field"><label for="p-title">Title</label><input class="input" id="p-title" maxlength="160" value="${esc(r.title)}" placeholder="e.g. Church chairs for a 300-seat hall"></div>
+            <div class="field"><label for="p-space">Kind of space</label><select class="select" id="p-space"><option value="">Choose…</option>${RIO.SPACES.map((s) => `<option value="${s.id}" ${r.space === s.id ? "selected" : ""}>${s.plural}</option>`).join("")}</select></div>
+            <div class="field"><label for="p-story">A sentence or two about it (optional)</label><textarea class="textarea" id="p-story" maxlength="1200" style="min-height:96px" placeholder="What was made and for what kind of place.">${esc(r.story)}</textarea></div>`}
+            <label class="checkline"><input type="checkbox" id="p-pub" ${r.published ? "checked" : ""}> Show on the website</label>
+            <p class="public-hint" style="margin:-12px 0 0"><b>Public:</b> everything here is visible to anyone. Only post photos and names the customer is happy to have shown.</p>
+          </div>
+          ${isNew ? "" : `<div class="d-sec"><button type="button" class="link" id="p-del">Delete this ${K.one}</button></div>`}
+        </div>
+        <div class="d-actions">
+          <button class="btn btn-o" id="p-save">${isNew ? "Post to website" : "Save changes"}</button>
+          <span class="spacer"></span><span class="saved" id="p-msg" role="status"></span>
+        </div>`);
+      bind();
+    };
+
+    const say = (text, cls) => { const m = document.getElementById("p-msg"); if (m) { m.className = "saved " + (cls || ""); m.innerHTML = text; } };
+    const collect = () => {
+      const v = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ""; };
+      const ticked = (id) => Array.from(document.querySelectorAll("#" + id + " input:checked")).map((i) => i.value);
+      if (isPiece) { r.name = v("p-name"); r.type = v("p-type"); r.category = v("p-cat"); r.spaces = ticked("p-spaces"); r.finishes = ticked("p-fins"); r.description = v("p-desc"); }
+      else { r.title = v("p-title"); r.space = v("p-space"); r.story = v("p-story"); }
+      r.published = document.getElementById("p-pub").checked;
+    };
+    const redrawPhotos = () => { document.getElementById("p-thumbs").innerHTML = thumbs(); };
+
+    function bind() {
+      const input = document.getElementById("p-files");
+      input.onchange = () => {
+        Array.from(input.files).forEach((f) => { if (/^image\//.test(f.type) || /\.(jpe?g|png|webp|heic)$/i.test(f.name)) photos.push({ file: f, url: URL.createObjectURL(f) }); });
+        input.value = ""; redrawPhotos(); say("");
+      };
+      document.getElementById("p-thumbs").onclick = (e) => {
+        const rm = e.target.closest("[data-rmp]"), mk = e.target.closest("[data-first]");
+        if (rm) { const [gone] = photos.splice(+rm.dataset.rmp, 1); if (gone.path) removed.push(gone.path); redrawPhotos(); }
+        if (mk) { const [ph] = photos.splice(+mk.dataset.first, 1); photos.unshift(ph); redrawPhotos(); }
+      };
+      document.getElementById("p-save").onclick = save;
+      const del = document.getElementById("p-del");
+      if (del) del.onclick = async () => {
+        if (!del.dataset.sure) { del.dataset.sure = "1"; del.textContent = "Tap again to delete for good"; setTimeout(() => { del.textContent = "Delete this " + K.one; delete del.dataset.sure; }, 3500); return; }
+        del.disabled = true; say("Deleting…");
+        const res = await sb.from(K.table).delete().eq("id", r.id);
+        if (res.error) { say("Couldn't delete", "err"); del.disabled = false; return; }
+        const paths = (src.photos || []); if (paths.length) await sb.storage.from(BUCKET).remove(paths);
+        const list = K.list(); const i = list.findIndex((x) => x.id === r.id); if (i > -1) list.splice(i, 1);
+        clearSiteCopy(); closeDrawer(); refreshBehind();
+      };
+    }
+
+    async function save() {
+      if (busy) return;
+      collect();
+      if (!photos.length) return say("Add at least one photo", "err");
+      if (isPiece) {
+        if (!r.name) return say("Give it a name", "err");
+        if (!r.spaces.length) return say("Tick at least one space", "err");
+        if (!r.finishes.length) return say("Tick at least one colour", "err");
+      } else {
+        if (!r.title) return say("Give it a title", "err");
+        if (!r.space) return say("Choose the kind of space", "err");
+      }
+      busy = true; const btn = document.getElementById("p-save"); btn.disabled = true;
+      // 1. upload any new photos
+      const fresh = photos.filter((ph) => ph.file);
+      for (let i = 0; i < fresh.length; i++) {
+        const ph = fresh[i];
+        say(`Uploading photo ${i + 1} of ${fresh.length}…`);
+        try {
+          const blob = await shrink(ph.file);
+          const path = `${K.folder}/${r.id}/${Date.now().toString(36)}-${i}.jpg`;
+          const up = await sb.storage.from(BUCKET).upload(path, blob, { contentType: "image/jpeg", upsert: false });
+          if (up.error) throw up.error;
+          ph.path = path; delete ph.file;
+        } catch (e) {
+          busy = false; btn.disabled = false; redrawPhotos();
+          return say(/unreadable/.test(String(e && e.message)) ? "One photo couldn't be read. Try a JPG or PNG." : "A photo didn't upload. Check the connection and try again.", "err");
+        }
+      }
+      // 2. save the details
+      say("Saving…");
+      const row = isPiece
+        ? { id: r.id, slug: r.slug || slugify(r.name) + "-" + r.id.slice(0, 4), name: r.name, type: r.type, category: r.category, spaces: r.spaces, description: r.description, finishes: r.finishes }
+        : { id: r.id, title: r.title, space: r.space, story: r.story };
+      row.photos = photos.map((ph) => ph.path); row.published = r.published; row.updated_at = new Date().toISOString();
+      const res = isNew && !r._saved ? await sb.from(K.table).insert(row).select().single() : await sb.from(K.table).update(row).eq("id", r.id).select().single();
+      busy = false; btn.disabled = false;
+      if (res.error) return say("Couldn't save. Try again.", "err");
+      // 3. tidy up photos that were removed in the form
+      if (removed.length) { await sb.storage.from(BUCKET).remove(removed.splice(0)); }
+      const saved = res.data, list = K.list(), i = list.findIndex((x) => x.id === saved.id);
+      if (i === -1) list.unshift(saved); else list[i] = saved;
+      Object.assign(r, saved); r._saved = true; src = saved;
+      clearSiteCopy();
+      history.replaceState(null, "", "#" + K.page + "/" + saved.id);
+      btn.textContent = "Save changes";
+      say(saved.published ? `Saved. It's live. <a class="link" href="${K.link(saved)}" target="_blank" rel="noopener">View on the website</a>` : "Saved. Hidden from the website.", "ok");
+      refreshBehind();
+    }
+    render();
   }
 
   /* ================= Staff ================= */

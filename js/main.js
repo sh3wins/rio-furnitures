@@ -144,8 +144,8 @@
       <a class="card reveal" href="product.html?id=${p.id}">
         <div class="media card-media ${p.image ? "" : "is-drawing"}">${RIO.visual(p, p.finishes[0])}</div>
         <div class="card-body">
-          <h3 class="h-s">${RIO.shortName(p)}</h3>
-          <span class="meta">${p.type || ""}</span>
+          <h3 class="h-s">${RIO.esc(RIO.shortName(p))}</h3>
+          <span class="meta">${RIO.esc(p.type || "")}</span>
           <div class="card-dots" aria-label="Colours: ${p.finishes.map((f) => F[f].name).join(", ")}">${p.finishes.map((f) => `<span data-f="${f}" style="background-color:${F[f].hex}"></span>`).join("")}</div>
         </div>
       </a>`;
@@ -221,7 +221,7 @@
       if (target.value === "__new") pr = RIO.store.create(nn.value.trim() || "My project", opts.space || (p.spaces.length === 1 ? p.spaces[0] : ""));
       else { pr = RIO.store.get(target.value); RIO.store.setActive(pr.id); }
       RIO.store.addItem(pr.id, p.id, qty);
-      RIO.toast(`<span>${t} × ${RIO.shortName(p)} added to <b>${RIO.esc(pr.name)}</b></span><a href="project.html">View project</a>`);
+      RIO.toast(`<span>${t} × ${RIO.esc(RIO.shortName(p))} added to <b>${RIO.esc(pr.name)}</b></span><a href="project.html">View project</a>`);
       p.finishes.forEach((f) => (qty[f] = 0)); nn.value = "";
       paint(); fill();
       if (opts.onAdded) opts.onAdded(pr);

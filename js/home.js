@@ -1,5 +1,5 @@
 /* RIO — home page */
-(function () {
+RIO.whenReady(function () {
   const $ = (s) => document.querySelector(s);
   const F = RIO.FINISHES, ARR = RIO.ARR;
 
@@ -46,4 +46,4 @@
 
   $("#ask-wa").href = "https://wa.me/" + RIO.CONTACT.whatsapp;
   RIO.observeReveal();
-})();
+});

@@ -1,5 +1,5 @@
 /* RIO — Furniture: browse by type, filter by space */
-(function () {
+RIO.whenReady(function () {
   let cat = RIO.qs("cat") || "all";
   let space = RIO.qs("space") || "all";
   const catEl = document.getElementById("f-cat"), spEl = document.getElementById("f-space"), list = document.getElementById("f-list");
@@ -38,4 +38,4 @@
   catEl.addEventListener("click", (e) => { const b = e.target.closest("[data-cat]"); if (b) { cat = b.dataset.cat; nav(); render(); } });
   spEl.addEventListener("change", () => { space = spEl.value; render(); });
   nav(); render();
-})();
+});

@@ -1,6 +1,6 @@
 /* RIO — product page
    In order: the picture, the name, what it is, colours, how many, add to project. */
-(function () {
+RIO.whenReady(function () {
   const F = RIO.FINISHES, ARR = RIO.ARR;
   const asked = RIO.product(RIO.qs("id")) || RIO.PRODUCTS[0];
   // A frame variant (hidden product) opens on its main product with that frame chosen
@@ -11,14 +11,17 @@
   // Extra photo views, if the product has them: photos: { front, back, side, detail, material }
   const PH = Object.assign({}, p.photos || {});
   if (PH.rear && !PH.back) PH.back = PH.rear;
-  const PHOTO_VIEWS = [["front", "Front"], ["back", "Back"], ["side", "Side"], ["detail", "Detail"], ["material", "Material"]].filter(([k]) => PH[k]);
-  const VIEWS = PHOTO_VIEWS.length ? PHOTO_VIEWS.concat(p.image ? [["object", "Photo"]] : []) : [];
+  let PHOTO_VIEWS = [["front", "Front"], ["back", "Back"], ["side", "Side"], ["detail", "Detail"], ["material", "Material"]].filter(([k]) => PH[k]);
+  let VIEWS = PHOTO_VIEWS.length ? PHOTO_VIEWS.concat(p.image ? [["object", "Photo"]] : []) : [];
+  // Pieces posted from the admin have a plain set of photos: 1, 2, 3…
+  const gallery = p.gallery && p.gallery.length > 1 ? p.gallery : null;
+  if (gallery) { gallery.forEach((src, i) => (PH["g" + i] = src)); PHOTO_VIEWS = VIEWS = gallery.map((src, i) => ["g" + i, "Photo " + (i + 1)]); }
   const canTurn = !!(PH.front && PH.back);
-  let fin = p.finishes[0], view = PH.front ? "front" : "object";
+  let fin = p.finishes[0], view = gallery ? "g0" : PH.front ? "front" : "object";
 
   const cat = RIO.category(p.cats[0]);
   document.getElementById("crumbs").innerHTML =
-    `<a href="furniture.html">Furniture</a><span>/</span><a href="furniture.html?cat=${cat.id}">${cat.name}</a><span>/</span><span class="ink">${RIO.shortName(p)}</span>`;
+    `<a href="furniture.html">Furniture</a><span>/</span><a href="furniture.html?cat=${cat.id}">${cat.name}</a><span>/</span><span class="ink">${RIO.esc(RIO.shortName(p))}</span>`;
 
   const FRAME_HEX = { black: "#1b1a19", white: "#e9e8e4", grey: "#85878a" };
   const swatch = (attr, id, name, hex, on) =>
@@ -35,9 +38,9 @@
     </div>
 
     <div class="p-info">
-      <span class="meta">${p.type || ""}</span>
-      <h1 class="h-l">${RIO.shortName(p)}</h1>
-      <p class="lead">${p.desc}</p>
+      <span class="meta">${RIO.esc(p.type || "")}</span>
+      <h1 class="h-l">${RIO.esc(RIO.shortName(p))}</h1>
+      <p class="lead">${RIO.esc(p.desc)}</p>
 
       <div class="p-block">
         <span class="label">${p.finishLabel ? p.finishLabel + " colour" : "Colour"}: <b id="fin-name">${F[fin].name}</b></span>
@@ -73,7 +76,7 @@
     } else {
       const turn = canTurn && (view === "front" || view === "back")
         ? `<button type="button" class="turn-btn" id="turn">${view === "front" ? "See the back" : "See the front"}</button>` : "";
-      stage.innerHTML = `<img src="${PH[view]}" alt="${RIO.esc(RIO.shortName(p))}, ${view} view">${turn}`;
+      stage.innerHTML = `<img src="${PH[view]}" alt="${RIO.esc(RIO.shortName(p))}${gallery ? "" : ", " + view + " view"}">${turn}`;
       const t = document.getElementById("turn");
       if (t) t.onclick = () => setView(view === "front" ? "back" : "front");
     }
@@ -122,4 +125,4 @@
   const rel = RIO.PRODUCTS.filter((x) => !x.hidden && x.id !== p.id && x.spaces.some((s) => p.spaces.includes(s))).slice(0, 4);
   document.getElementById("related").innerHTML = rel.map((x) => RIO.piece(x)).join("");
   RIO.observeReveal();
-})();
+});

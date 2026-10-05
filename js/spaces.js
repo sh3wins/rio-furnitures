@@ -1,5 +1,5 @@
 /* RIO — Spaces: each kind of space, a photo, and the furniture made for it */
-(function () {
+RIO.whenReady(function () {
   const box = document.getElementById("rooms");
   const nav = document.getElementById("room-nav");
   const ARR = RIO.ARR;
@@ -41,4 +41,4 @@
 
   const q = RIO.qs("space");
   if (q && document.getElementById(q)) setTimeout(() => document.getElementById(q).scrollIntoView(), 60);
-})();
+});

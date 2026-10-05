@@ -58,3 +58,25 @@ Then open **riofurniturekenya.com/admin.html** and sign in.
 - **Telling the customer**: when you move an order to a new stage and press *Save*, an orange box appears at the top with **WhatsApp** / **Email** buttons and a ready-written message. Press it, then press send.
 - **Tracking**: customers can track with their quote reference (`Q-…`) or order code (`RIO-…`).
 - `js/orders.js` is now only a fallback — once the database is connected, manage orders in the admin.
+
+## Posting projects and furniture from the dashboard
+
+Staff can add finished projects and new furniture, with photos, straight from the
+dashboard (**Website → Projects** and **Website → Furniture**). Anything marked
+"Show on the website" is live straight away.
+
+One-time setup:
+
+1. In Supabase, open **SQL Editor → New query**.
+2. Paste in the whole of `supabase/update-2-site-photos.sql` and press **Run**.
+3. Open the dashboard and press **Refresh**. The two Website pages are ready.
+
+How it works:
+
+- Photos are made smaller in the browser before they upload, then stored in the
+  public `site-photos` storage bucket. Details are stored in `site_projects` and
+  `site_products`.
+- The website reads published posts and shows them first, ahead of what is written
+  in `js/data.js`. Visitors may take up to a minute to see a new post.
+- Only signed-in staff can add, change or delete. Visitors can only read what is published.
+- **Everything posted is public.** Only post photos and names customers are happy to have shown.
