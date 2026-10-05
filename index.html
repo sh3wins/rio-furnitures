@@ -2,162 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RIO Furnitures — Furniture for bars, lounges &amp; restaurants in Nairobi</title>
-  <meta name="description" content="RIO Furnitures — a furniture showroom for restaurants, bars and cafés, hospitality, offices, schools, churches and outdoor spaces in Nairobi, Kenya. Explore the rooms, choose your pieces and build your project.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23cf8646%27/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/pages.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=20">
+  <title>RIO Furnitures — Furniture for spaces that work</title>
+  <meta name="description" content="RIO makes furniture for restaurants, schools, offices, hospitality spaces and more. Made to order in Nairobi, in the quantities and colours your space needs.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231b1a18%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27Arial,sans-serif%27 font-size=%2713%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f7f5f0%27%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
+  <link rel="preload" as="image" href="images/site/hero.jpg">
+  <link rel="stylesheet" href="css/rio.css?v=1">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
 
 <main>
-  <!-- HERO: featured piece (premium, product first).
-       TODO: replace "The Rope Sofa" with the piece's real name. -->
-  <section class="feature-hero">
-    <div class="fh-text">
-      <p class="mono">New from the workshop</p>
-      <h1 class="serif s-xxl">The Rope Sofa</h1>
-      <p class="lead">Rope-woven arms on a slim steel frame, with a soft cushioned seat. Designed and made in Nairobi.</p>
-      <div class="fh-pick" id="sofa-pick">
-        <div class="fh-row"><span class="mono">Seat</span>
-          <div class="fh-sw" data-g="seat" role="radiogroup" aria-label="Seat colour">
-            <button type="button" role="radio" data-v="beige" aria-label="Beige" style="--c:#c9a37a" class="on"></button>
-            <button type="button" role="radio" data-v="white" aria-label="White" style="--c:#ece6dc"></button>
-            <button type="button" role="radio" data-v="black" aria-label="Black" style="--c:#2a2826"></button>
-            <button type="button" role="radio" data-v="red" aria-label="Red" style="--c:#9c2f27"></button>
-          </div><span class="fh-name" data-name="seat">Beige</span></div>
-        <div class="fh-row"><span class="mono">Frame</span>
-          <div class="fh-sw" data-g="frame" role="radiogroup" aria-label="Frame colour">
-            <button type="button" role="radio" data-v="black" aria-label="Black coated" style="--c:#1b1a19" class="on"></button>
-            <button type="button" role="radio" data-v="white" aria-label="White coated" style="--c:#e9e8e4"></button>
-            <button type="button" role="radio" data-v="grey" aria-label="Grey coated" style="--c:#85878a"></button>
-          </div><span class="fh-name" data-name="frame">Black coated</span></div>
-        <p class="fh-note mono">Colour preview · final finishes may vary slightly</p>
-      </div>
+  <!-- HERO. To change the photo, replace images/site/hero.jpg (landscape, about 2000px wide). -->
+  <section class="hero">
+    <div class="media hero-media" data-label="Photo to come: hero (images/site/hero.jpg)">
+      <img src="images/site/hero.jpg" alt="A warm, furnished interior" fetchpriority="high" decoding="async" onerror="this.parentNode.classList.add('is-empty')">
+    </div>
+    <div class="wrap hero-text">
+      <h1 class="h-xl">Furniture for spaces that work.</h1>
+      <p class="lead">Furniture for restaurants, schools, offices, hospitality spaces and more. Made to order in Nairobi.</p>
       <div class="row mt-m">
-        <a class="btn fh-btn" href="product.html?id=rope-sofa">Order this piece <span class="arr">→</span></a>
-        <a class="link" href="furniture.html">Explore furniture <span class="arr">→</span></a>
+        <a class="btn" href="furniture.html">Explore Furniture</a>
+        <a class="btn btn-line" href="start.html">Start a Project</a>
       </div>
     </div>
-    <figure class="fh-img" id="sofa-stage">
-      <img src="images/real/featured-sofa.jpg" alt="RIO rope sofa with a steel frame, rope-woven arms and striped cushions" fetchpriority="high">
-      <img class="lyr" data-g="bg" data-v="white" src="images/real/sofa/bg-white.webp" alt="" loading="lazy">
-      <img class="lyr" data-g="bg" data-v="black" src="images/real/sofa/bg-black.webp" alt="" loading="lazy">
-      <img class="lyr" data-g="bg" data-v="red" src="images/real/sofa/bg-red.webp" alt="" loading="lazy">
-      <img class="lyr" data-g="seat" data-v="white" src="images/real/sofa/seat-white.webp" alt="" loading="lazy">
-      <img class="lyr" data-g="seat" data-v="black" src="images/real/sofa/seat-black.webp" alt="" loading="lazy">
-      <img class="lyr" data-g="seat" data-v="red" src="images/real/sofa/seat-red.webp" alt="" loading="lazy">
-      <img class="lyr" data-g="frame" data-v="white" src="images/real/sofa/frame-white.webp" alt="" loading="lazy">
-      <img class="lyr" data-g="frame" data-v="grey" src="images/real/sofa/frame-grey.webp" alt="" loading="lazy">
-    </figure>
   </section>
 
-  <!-- THE SHOWROOM: walk into the showroom (full screen) -->
-  <section class="showroom-intro hero-full">
-    <div class="wrap hero-over">
-      <p class="mono muted">RIO Furnitures — The showroom</p>
-      <h2 class="serif s-xl">Walk the rooms.<br><em>Tap any piece.</em></h2>
-      <div class="row mt-m">
-        <a class="btn btn-o" href="start.html">Start a project <span class="arr">→</span></a>
-        <a class="link" href="spaces.html">All spaces <span class="arr">→</span></a>
-      </div>
-    </div>
-    <div id="hero-room"></div>
-  </section>
-
-  <!-- THE ROOMS -->
-  <div id="rooms" class="rooms-walk"></div>
-
-  <!-- SELECTED PIECES -->
+  <!-- SPACES -->
   <section class="section">
     <div class="wrap">
-      <div class="head-row">
-        <div><p class="mono muted">Furniture</p><h2 class="serif s-l">Pieces that belong <em>in a room.</em></h2></div>
-        <a class="link" href="furniture.html">All furniture <span class="arr">→</span></a>
+      <div class="head">
+        <div><span class="eyebrow">Spaces</span><h2 class="h-l">Made for the space you run.</h2></div>
+        <a class="link" href="spaces.html">All spaces <span class="arr" aria-hidden="true">→</span></a>
       </div>
-      <div class="pieces" id="pieces"></div>
+      <div class="walk" id="walk"></div>
     </div>
   </section>
 
-  <!-- ORDERING, QUIETLY -->
-  <section class="section">
-    <div class="wrap mix-demo">
-      <div class="reveal">
-        <p class="mono muted">Build your order</p>
-        <h2 class="serif s-l">One chair.<br><em>Or seventy-five,</em><br>in four finishes.</h2>
-        <p class="lead mt-s">Pick a piece, set a quantity for each finish, and keep it as one order. Then add it to your project.</p>
-        <a class="link mt-m" href="product.html?id=chair-04">Try it on Chair 04 <span class="arr">→</span></a>
-      </div>
-      <div class="demo reveal" data-d="1" id="demo" aria-hidden="true">
-        <div class="demo-head"><span class="mono ink">RIO / Chair 04</span><span class="mono muted">Project 0001</span></div>
-        <div class="demo-rows" id="demo-rows"></div>
-        <div class="demo-total"><span class="mono muted">Total</span><span class="demo-n" id="demo-n">000</span></div>
-        <div class="o-bar" id="demo-bar"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- REAL SPACES -->
-  <section class="section-s">
+  <!-- FURNITURE -->
+  <section class="section" style="padding-top:0">
     <div class="wrap">
-      <div class="head-row">
-        <div><p class="mono muted">Projects</p><h2 class="serif s-l">Real spaces. <em>Real projects.</em></h2></div>
-        <a class="link" href="projects.html">All projects <span class="arr">→</span></a>
+      <div class="head">
+        <div><span class="eyebrow">Furniture</span><h2 class="h-l">Made for the spaces you actually use.</h2></div>
+        <a class="link" href="furniture.html">All furniture <span class="arr" aria-hidden="true">→</span></a>
       </div>
-      <div class="gallery" id="gallery"></div>
+      <div class="cards four" id="pieces"></div>
     </div>
   </section>
 
-  <!-- CUSTOM -->
-  <section class="section custom-q">
-    <div class="wrap reveal custom-grid">
-      <figure class="custom-clip">
-        <video src="images/real/clip-custom.mp4" poster="images/real/clip-custom.jpg" autoplay muted loop playsinline preload="metadata" aria-label="A RIO welder fixing a custom chair back cut with a lounge's name"></video>
-        <figcaption class="mono muted">Custom chair backs, cut with the venue's name</figcaption>
-      </figure>
+  <!-- ORDERING IN QUANTITY -->
+  <section class="section band">
+    <div class="wrap split">
       <div>
-      <p class="mono muted">Custom</p>
-      <h2 class="serif s-xl">Can't find it?<br><em>Let's make it.</em></h2>
-      <p class="lead mt-s">Send a sketch, a photo, a drawing or measurements. We'll work from what you have.</p>
-      <a class="link mt-m" href="start.html?mode=custom">Start a custom project <span class="arr">→</span></a>
+        <span class="eyebrow">Ordering</span>
+        <h2 class="h-l">Order one piece, or furnish the whole room.</h2>
+        <p class="lead mt-s">Choose a piece, set a quantity for each colour and add it to your project. We quote on your exact numbers.</p>
+        <a class="link mt-m" href="product.html?id=chair-04">Try it with Chair 04 <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <div class="sample" aria-label="Example order">
+        <p class="h-s">Chair 04</p>
+        <p class="meta">Example order</p>
+        <ul class="mt-s" id="sample"></ul>
+        <a class="btn" href="product.html?id=chair-04">Add to Project</a>
       </div>
     </div>
   </section>
 
-  <!-- WE MAKE IT -->
-  <section class="section dark make">
-    <div class="wrap head-row">
-      <div><p class="mono muted">The workshop</p><h2 class="serif s-xl">We don't just sell it.<br><em>We make it.</em></h2></div>
-      <a class="link" href="about.html#make">How we build <span class="arr">→</span></a>
-    </div>
-    <div class="strip-wrap"><div class="strip" id="strip"></div></div>
-  </section>
-
-  <!-- CLOSING -->
-  <section class="section closing">
+  <!-- REAL RIO WORK -->
+  <section class="section">
     <div class="wrap">
-      <h2 class="serif s-xxl reveal">Got a space?<br><em>Let's furnish it.</em></h2>
-      <p class="lead mt-m reveal" data-d="1">Tell us what you're building. We'll help you figure out what goes in it.</p>
-      <div class="row mt-l reveal" data-d="2">
-        <a class="btn btn-o" href="start.html">Start a project <span class="arr">→</span></a>
-        <a class="link" href="furniture.html">Explore furniture <span class="arr">→</span></a>
+      <div class="head">
+        <div><span class="eyebrow">Projects</span><h2 class="h-l">In real spaces.</h2></div>
+        <a class="link" href="projects.html">All projects <span class="arr" aria-hidden="true">→</span></a>
       </div>
+      <div class="proofs" id="proofs"></div>
+    </div>
+  </section>
+
+  <!-- WORKSHOP -->
+  <section class="section dark">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow">Workshop</span><h2 class="h-l">From raw material to finished space.</h2></div>
+        <a class="link" href="about.html">About RIO <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <div class="steps" id="steps"></div>
+    </div>
+  </section>
+
+  <!-- START A PROJECT -->
+  <section class="section">
+    <div class="wrap ask">
+      <div>
+        <h2 class="h-l">Have a space to furnish?</h2>
+        <p class="lead mt-s">Tell us a few things and we'll take it from there.</p>
+        <div class="row mt-m">
+          <a class="btn" href="start.html">Start a Project</a>
+          <a class="link" id="ask-wa" target="_blank" rel="noopener">Or message us on WhatsApp</a>
+        </div>
+      </div>
+      <ul class="ask-list">
+        <li>What kind of space?</li>
+        <li>What furniture do you need?</li>
+        <li>Roughly how many?</li>
+        <li>Which colours and materials?</li>
+        <li>When do you need it?</li>
+      </ul>
     </div>
   </section>
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=8"></script>
-<script src="js/store.js?v=6"></script>
-<script src="js/main.js?v=8"></script>
-<script src="js/scenes.js?v=6"></script>
-<script src="js/home.js?v=12"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/store.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
+<script src="js/home.js?v=9"></script>
 </body>
 </html>

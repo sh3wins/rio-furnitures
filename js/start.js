@@ -2,7 +2,7 @@
 (function () {
   const $ = (s) => document.querySelector(s);
   const custom = RIO.qs("mode") === "custom";
-  const STEPS = ["What are you building?", "What do you need?", "How much?", "Tell us about it", "Send to RIO"];
+  const STEPS = ["The space", "What you need", "How many", "Details", "Send to RIO"];
   const NEEDS = ["Seating", "Tables", "Workspace", "Storage", "Beds", "Counters", "Custom", "Other"];
   const QTY = [["1–9", "A few pieces"], ["10–49", "Bulk"], ["50–99", "A project"], ["100+", "Large-scale"]];
   const st = { space: RIO.space(RIO.qs("space")) ? RIO.qs("space") : "", needs: custom ? ["Custom"] : [], qty: "", files: [], fileObjs: {}, text: {} };
@@ -10,34 +10,34 @@
 
   if (custom) {
     $("#s-kicker").textContent = "Custom furniture";
-    $("#s-title").innerHTML = "Can't find it?<br><em>Let's make it.</em>";
+    $("#s-title").textContent = "Tell us what you need made.";
     document.title = "Custom Project — RIO Furnitures";
   }
-  $("#s-steps").innerHTML = STEPS.map((s, i) => `<li data-go="${i}"><span class="mono">0${i + 1}</span>${s}</li>`).join("");
+  $("#s-steps").innerHTML = STEPS.map((s, i) => `<li data-go="${i}">${i + 1}. ${s}</li>`).join("");
 
-  const choice = (k, v, word, aside, multi, mono) => {
+  const choice = (k, v, word, aside, multi) => {
     const on = multi ? st[k].includes(v) : st[k] === v;
     return `<li><button type="button" class="choice ${multi ? "sq" : ""} ${on ? "on" : ""}" data-k="${k}" data-v="${v}" aria-pressed="${on}">
-      <span class="ring"></span><span class="w ${mono ? "mono-w" : ""}">${word}</span><span class="aside">${aside || ""}</span></button></li>`;
+      <span class="ring"></span><span class="w">${word}</span><span class="aside">${aside || ""}</span></button></li>`;
   };
   const val = (id) => (document.getElementById(id) ? document.getElementById(id).value.trim() : st.text[id] || "");
 
   function body() {
-    if (step === 0) return `<p class="mono muted">Step 01</p><h2 class="serif s-l">What are you <em>building?</em></h2>
+    if (step === 0) return `<h2 class="h-l">What kind of space?</h2>
       <ul class="choices">${RIO.SPACES.map((s) => choice("space", s.id, s.name, s.needs.slice(0, 3).join(", "))).join("")}</ul>`;
-    if (step === 1) return `<p class="mono muted">Step 02</p><h2 class="serif s-l">What do you <em>need?</em></h2>
-      <p class="muted" style="margin:-20px 0 24px">Choose as many as you like.</p>
+    if (step === 1) return `<h2 class="h-l">What furniture do you need?</h2>
+      <p class="f-sub">Choose as many as you like.</p>
       <ul class="choices">${NEEDS.map((n) => choice("needs", n, n, "", true)).join("")}</ul>`;
-    if (step === 2) return `<p class="mono muted">Step 03</p><h2 class="serif s-l">How <em>much?</em></h2>
-      <p class="muted" style="margin:-20px 0 24px">Roughly, across the whole space.</p>
-      <ul class="choices">${QTY.map(([q, a]) => choice("qty", q, q + " pcs", a, false, true)).join("")}</ul>
+    if (step === 2) return `<h2 class="h-l">Roughly how many?</h2>
+      <p class="f-sub">Across the whole space. A rough number is fine.</p>
+      <ul class="choices">${QTY.map(([q, a]) => choice("qty", q, q + " pieces", a)).join("")}</ul>
       <p class="f-hint ${st.qty === "50–99" || st.qty === "100+" ? "" : "hide"}" id="qhint">A project-scale order. We'll plan production around your space and quote on your exact quantities and finishes.</p>`;
-    if (step === 3) return `<p class="mono muted">Step 04</p><h2 class="serif s-l">Tell us <em>about it.</em></h2>
-      <div style="display:grid;gap:36px">
-        <div class="field"><label for="t-about">${custom ? "Describe the piece — size, use, look" : "The space, the look, the timeline"}</label>
-          <textarea class="textarea" id="t-about" placeholder="${custom ? "A curved reception counter, about 3m long, walnut front with a black top…" : "Opening a 40-seat café in Kilimani in March. Black and natural finishes, a few orange chairs, a long counter by the window…"}">${RIO.esc(st.text["t-about"])}</textarea></div>
+    if (step === 3) return `<h2 class="h-l">Tell us about it.</h2>
+      <div class="f-fields">
+        <div class="field"><label for="t-about">${custom ? "Describe the piece: size, use and look" : "The space, the colours and materials, and anything else"}</label>
+          <textarea class="textarea" id="t-about" placeholder="${custom ? "A curved reception counter, about 3m long, walnut front with a black top…" : "Opening a 40-seat café in March. Black and natural finishes, a long counter by the window…"}">${RIO.esc(st.text["t-about"])}</textarea></div>
         <div class="field"><span class="lbl">Upload what you have</span>
-          <label class="dropzone" id="t-drop">Drawings · photos · floor plans · inspiration · measurements<span class="mono muted">drop here or click to choose</span>
+          <label class="dropzone" id="t-drop">Drawings, photos, floor plans or measurements<span class="meta">drop here or tap to choose</span>
             <input type="file" multiple id="t-files" accept="image/*,.pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx"></label>
           <ul class="files" id="t-list"></ul></div>
         <div class="f-grid2">
@@ -45,19 +45,19 @@
           <div class="field"><label for="t-phone">Phone / WhatsApp</label><input class="input" id="t-phone" autocomplete="tel" inputmode="tel" value="${RIO.esc(st.text["t-phone"])}"></div>
           <div class="field"><label for="t-email">Email</label><input class="input" id="t-email" type="email" autocomplete="email" value="${RIO.esc(st.text["t-email"])}"></div>
           <div class="field"><label for="t-loc">Location</label><input class="input" id="t-loc" placeholder="Westlands, Nairobi" value="${RIO.esc(st.text["t-loc"])}"></div>
-          <div class="field"><label for="t-proj">Project name</label><input class="input" id="t-proj" placeholder="My Restaurant — Westlands" value="${RIO.esc(st.text["t-proj"])}"></div>
+          <div class="field"><label for="t-proj">Project name</label><input class="input" id="t-proj" placeholder="My Restaurant" value="${RIO.esc(st.text["t-proj"])}"></div>
           <div class="field"><label for="t-when">When do you need it?</label><select class="select" id="t-when">${["Not sure yet", "As soon as possible", "Within a month", "1–3 months", "3+ months"].map((w) => `<option ${st.text["t-when"] === w ? "selected" : ""}>${w}</option>`).join("")}</select></div>
         </div>
       </div>`;
     const sp = RIO.space(st.space);
     const contact = ["t-name", "t-phone", "t-email", "t-loc"].map((k) => st.text[k]).filter(Boolean).map(RIO.esc).join(" · ");
-    return `<p class="mono muted">Step 05</p><h2 class="serif s-l">Ready to <em>send.</em></h2>
+    return `<h2 class="h-l">Ready to send.</h2>
       <dl class="review">
-        <div><dt class="mono muted">Building</dt><dd>${sp ? sp.name : "—"}</dd><button type="button" data-go="0">Edit</button></div>
-        <div><dt class="mono muted">Needs</dt><dd>${st.needs.join(", ") || "—"}</dd><button type="button" data-go="1">Edit</button></div>
-        <div><dt class="mono muted">How much</dt><dd>${st.qty ? st.qty + " pieces" : "—"}</dd><button type="button" data-go="2">Edit</button></div>
-        <div><dt class="mono muted">The space</dt><dd>${RIO.esc(st.text["t-about"]) || '<span class="muted">No description</span>'}${st.files.length ? `<br><span class="mono muted">${st.files.length} file(s)</span>` : ""}</dd><button type="button" data-go="3">Edit</button></div>
-        <div><dt class="mono muted">Contact</dt><dd>${contact || '<span class="muted">Add your details so we can reply</span>'}</dd><button type="button" data-go="3">Edit</button></div>
+        <div><dt>Space</dt><dd>${sp ? sp.name : "—"}</dd><button type="button" data-go="0">Edit</button></div>
+        <div><dt>Needs</dt><dd>${st.needs.join(", ") || "—"}</dd><button type="button" data-go="1">Edit</button></div>
+        <div><dt>How many</dt><dd>${st.qty ? st.qty + " pieces" : "—"}</dd><button type="button" data-go="2">Edit</button></div>
+        <div><dt>Details</dt><dd>${RIO.esc(st.text["t-about"]) || '<span class="muted">No description</span>'}${st.files.length ? `<br><span class="meta">${st.files.length} file(s)</span>` : ""}</dd><button type="button" data-go="3">Edit</button></div>
+        <div><dt>Contact</dt><dd>${contact || '<span class="muted">Add your details so we can reply</span>'}</dd><button type="button" data-go="3">Edit</button></div>
       </dl>
       <label class="row mt-m small" id="save-row" style="gap:10px"><input type="checkbox" id="t-save" checked> Also save as a project in this browser</label>`;
   }
@@ -72,16 +72,15 @@
 
   function render() {
     $("#s-body").innerHTML = `<div class="f-step on">${body()}</div>`;
-    $("#s-count").textContent = `Step 0${step + 1} / 05`;
+    $("#s-count").textContent = `Step ${step + 1} of 5`;
     $("#s-prog").style.width = ((step + 1) / STEPS.length) * 100 + "%";
     document.querySelectorAll("#s-steps li").forEach((li, i) => { li.classList.toggle("on", i === step); li.classList.toggle("done", i < step); });
     $("#s-back").style.visibility = step ? "visible" : "hidden";
     const next = $("#s-next");
-    next.className = step === 4 ? "btn btn-o" : "btn";
-    next.innerHTML = step === 4 ? `Send project to RIO <span class="arr">→</span>` : `Continue <span class="arr">→</span>`;
+    next.innerHTML = step === 4 ? `Send project to RIO ${RIO.ARR}` : `Continue ${RIO.ARR}`;
     $("#s-msg").textContent = "";
     if (step === 3) {
-      RIO.fileDrop($("#t-drop"), $("#t-files"), (l) => { Array.from(l).forEach((f) => { if (f.size > (RIO.MAX_FILE || 2e7)) { alert(f.name + " is over 20 MB — please send it on WhatsApp instead."); return; } if (!st.files.includes(f.name)) st.files.push(f.name); st.fileObjs[f.name] = f; }); files(); });
+      RIO.fileDrop($("#t-drop"), $("#t-files"), (l) => { Array.from(l).forEach((f) => { if (f.size > (RIO.MAX_FILE || 2e7)) { alert(f.name + " is over 20 MB. Please send it on WhatsApp instead."); return; } if (!st.files.includes(f.name)) st.files.push(f.name); st.fileObjs[f.name] = f; }); files(); });
       $("#t-list").addEventListener("click", (e) => { const b = e.target.closest("[data-rm]"); if (b) { delete st.fileObjs[st.files[+b.dataset.rm]]; st.files.splice(+b.dataset.rm, 1); files(); } });
       files();
     }
@@ -113,7 +112,7 @@
       });
       const h = $("#qhint"); if (h) h.classList.toggle("hide", !(st.qty === "50–99" || st.qty === "100+"));
       $("#s-msg").textContent = "";
-      if (!Array.isArray(st[k])) setTimeout(() => go(step + 1), 450);
+      if (!Array.isArray(st[k])) setTimeout(() => go(step + 1), 250);
       return;
     }
     const g = e.target.closest("[data-go]"); if (g) go(+g.dataset.go);
@@ -144,7 +143,7 @@
       p.files = st.files.slice();
       p.contact = { name: T["t-name"], phone: T["t-phone"], email: T["t-email"], location: T["t-loc"] };
       RIO.store.save(p);
-      $("#save-row").innerHTML = `<span class="dot-o"></span> Saved as <a class="link" href="project.html">${RIO.esc(name)}</a> — add exact pieces and finishes any time.`;
+      $("#save-row").innerHTML = `<span>Saved as <a class="link" href="project.html">${RIO.esc(name)}</a>. Add exact pieces and colours any time.</span>`;
     }
     const T = st.text;
     const row = {

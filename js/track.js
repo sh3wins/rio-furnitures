@@ -33,26 +33,26 @@
     out.innerHTML = `
       <section class="track-card reveal">
         <div class="track-head">
-          <div><span class="mono muted">${RIO.esc(o.code)}${sp ? " · " + sp.plural : ""}</span>
-            <h2 class="serif s-l">${RIO.esc(o.project || "Your order")}</h2></div>
-          <div class="track-now"><span class="mono muted">Now</span><span class="title t-l">${RIO.STAGES[st]}</span>
+          <div><span class="meta">${RIO.esc(o.code)}${sp ? " · " + sp.plural : ""}</span>
+            <h2 class="h-l">${RIO.esc(o.project || "Your order")}</h2></div>
+          <div class="track-now"><span class="meta">Now</span><span class="h-m">${RIO.STAGES[st]}</span>
             ${o.expected ? `<span class="muted small">${RIO.esc(o.expected)}</span>` : ""}</div>
         </div>
         <div class="track-bar" aria-hidden="true"><span style="width:0" data-w="${pct}"></span></div>
         <ol class="track-stages">
-          ${RIO.STAGES.map((s, i) => `<li class="${i < st ? "done" : i === st ? "now" : ""}" ${i === st ? 'aria-current="step"' : ""}><span class="mono">${String(i + 1).padStart(2, "0")}</span>${s}</li>`).join("")}
+          ${RIO.STAGES.map((s, i) => `<li class="${i < st ? "done" : i === st ? "now" : ""}" ${i === st ? 'aria-current="step"' : ""}>${s}</li>`).join("")}
         </ol>
         ${o.items && o.items.length ? `
-        <div class="track-block"><span class="mono muted">In this order · ${total} pieces</span>
-          <ul class="track-items">${o.items.map((i) => `<li><span>${RIO.esc(i.name)}</span><span class="muted">${RIO.esc(i.finishes || "")}</span><span class="mono ink">${String(i.qty || 0).padStart(3, "0")}</span></li>`).join("")}</ul></div>` : ""}
+        <div class="track-block"><span class="meta">In this order · ${total} pieces</span>
+          <ul class="track-items">${o.items.map((i) => `<li><span>${RIO.esc(i.name)}</span><span class="muted">${RIO.esc(i.finishes || "")}</span><span>${i.qty || 0}</span></li>`).join("")}</ul></div>` : ""}
         ${o.updates && o.updates.length ? `
-        <div class="track-block"><span class="mono muted">Updates</span>
-          <ul class="track-log">${o.updates.map((u) => `<li><span class="mono muted">${fmt(u.date)}</span><span>${RIO.esc(u.text)}</span></li>`).join("")}</ul></div>` : ""}
+        <div class="track-block"><span class="meta">Updates</span>
+          <ul class="track-log">${o.updates.map((u) => `<li><span class="meta">${fmt(u.date)}</span><span>${RIO.esc(u.text)}</span></li>`).join("")}</ul></div>` : ""}
         <div class="track-help"><span class="muted">Questions about this order?</span>
-          <a class="link" href="https://wa.me/${C.whatsapp}?text=${encodeURIComponent("Hi RIO, a question about order " + o.code)}" target="_blank" rel="noopener">Message us on WhatsApp <span class="arr">→</span></a></div>
+          <a class="link" href="https://wa.me/${C.whatsapp}?text=${encodeURIComponent("Hi RIO, a question about order " + o.code)}" target="_blank" rel="noopener">Message us on WhatsApp ${RIO.ARR}</a></div>
       </section>`;
     RIO.observeReveal(out);
-    requestAnimationFrame(() => setTimeout(() => { const b = out.querySelector(".track-bar span"); if (b) b.style.width = b.dataset.w + "%"; }, 300));
+    requestAnimationFrame(() => setTimeout(() => { const b = out.querySelector(".track-bar span"); if (b) b.style.width = b.dataset.w + "%"; }, 150));
     history.replaceState(null, "", "track.html?order=" + encodeURIComponent(o.code));
   }
 
@@ -63,7 +63,7 @@
       ["quoted", "Quote sent", "Your quote is ready — check WhatsApp or email."],
       ["won", "Order confirmed", "Your order is being set up. Your order code will be sent to you."]];
     if (q.status === "lost") {
-      out.innerHTML = `<section class="track-card reveal"><span class="mono muted">${RIO.esc(q.ref)}</span><h2 class="serif s-l">This request <em>is closed.</em></h2>
+      out.innerHTML = `<section class="track-card reveal"><span class="meta">${RIO.esc(q.ref)}</span><h2 class="h-l">This request is closed.</h2>
         <p class="lead mt-s">Want to pick it up again? <a class="link" href="https://wa.me/${C.whatsapp}?text=${encodeURIComponent("Hi RIO, about my request " + q.ref)}" target="_blank" rel="noopener">Message us on WhatsApp</a>.</p></section>`;
       RIO.observeReveal(out); return;
     }
@@ -72,21 +72,21 @@
     out.innerHTML = `
       <section class="track-card reveal">
         <div class="track-head">
-          <div><span class="mono muted">${RIO.esc(q.ref)}${sp ? " · " + sp.plural : ""}</span>
-            <h2 class="serif s-l">${RIO.esc(q.project_name || "Your project request")}</h2></div>
-          <div class="track-now"><span class="mono muted">Now</span><span class="title t-l">${STEPS[at][1]}</span>
+          <div><span class="meta">${RIO.esc(q.ref)}${sp ? " · " + sp.plural : ""}</span>
+            <h2 class="h-l">${RIO.esc(q.project_name || "Your project request")}</h2></div>
+          <div class="track-now"><span class="meta">Now</span><span class="h-m">${STEPS[at][1]}</span>
             <span class="muted small">${STEPS[at][2]}</span></div>
         </div>
         <div class="track-bar" aria-hidden="true"><span style="width:0" data-w="${(at / (STEPS.length - 1)) * 100}"></span></div>
         <ol class="track-stages" style="grid-template-columns:repeat(4,1fr)">
-          ${STEPS.map((s, i) => `<li class="${i < at ? "done" : i === at ? "now" : ""}"><span class="mono">${String(i + 1).padStart(2, "0")}</span>${s[1]}</li>`).join("")}
+          ${STEPS.map((s, i) => `<li class="${i < at ? "done" : i === at ? "now" : ""}">${s[1]}</li>`).join("")}
         </ol>
         <p class="muted small mt-m">Sent ${new Date(q.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}${q.total_pieces ? " · " + q.total_pieces + " pieces" : q.qty_range ? " · " + RIO.esc(q.qty_range) + " pieces" : ""}. Once your order is confirmed, you'll get an order code to follow it through production.</p>
         <div class="track-help"><span class="muted">Questions?</span>
-          <a class="link" href="https://wa.me/${C.whatsapp}?text=${encodeURIComponent("Hi RIO, a question about my request " + q.ref)}" target="_blank" rel="noopener">Message us on WhatsApp <span class="arr">→</span></a></div>
+          <a class="link" href="https://wa.me/${C.whatsapp}?text=${encodeURIComponent("Hi RIO, a question about my request " + q.ref)}" target="_blank" rel="noopener">Message us on WhatsApp ${RIO.ARR}</a></div>
       </section>`;
     RIO.observeReveal(out);
-    requestAnimationFrame(() => setTimeout(() => { const b = out.querySelector(".track-bar span"); if (b) b.style.width = b.dataset.w + "%"; }, 300));
+    requestAnimationFrame(() => setTimeout(() => { const b = out.querySelector(".track-bar span"); if (b) b.style.width = b.dataset.w + "%"; }, 150));
     history.replaceState(null, "", "track.html?order=" + encodeURIComponent(q.ref));
   }
 

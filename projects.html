@@ -2,17 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projects — RIO Furnitures</title>
-  <meta name="description" content="Real spaces furnished by RIO — restaurants, bars and cafés, offices, schools, churches, hospitality, outdoor and commercial spaces.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23cf8646%27/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/pages.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=20">
+  <meta name="description" content="Real spaces furnished by RIO.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231b1a18%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27Arial,sans-serif%27 font-size=%2713%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f7f5f0%27%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
+  <link rel="stylesheet" href="css/rio.css?v=1">
 </head>
 <body data-page="projects">
 <header id="site-header"></header>
@@ -20,24 +16,24 @@
 <main>
   <section class="intro">
     <div class="wrap">
-      <p class="mono muted">Projects</p>
-      <h1 class="serif s-xl reveal">Real spaces.<br><em>Real projects.</em></h1>
-      <p class="lead reveal" data-d="1">What people were building, and what we made for it.</p>
+      <h1 class="h-xl">In real spaces</h1>
+      <p class="lead">Furniture we've made, in the places it was made for.</p>
     </div>
   </section>
-  <nav class="sticky-nav" aria-label="Filter projects"><div class="wrap quiet-nav" id="pf"></div></nav>
+  <nav class="filters" aria-label="Filter projects"><div class="wrap"><div class="tabs" id="pf"></div></div></nav>
   <div class="wrap" id="stories"></div>
-  <section class="section closing">
-    <div class="wrap"><h2 class="serif s-xl">Your space<br><em>could be next.</em></h2>
-      <a class="btn btn-o mt-m" href="start.html">Start a project <span class="arr">→</span></a></div>
+  <section class="section">
+    <div class="wrap">
+      <h2 class="h-l">Have a space to furnish?</h2>
+      <a class="btn mt-m" href="start.html">Start a Project</a>
+    </div>
   </section>
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=8"></script>
-<script src="js/store.js?v=6"></script>
-<script src="js/main.js?v=8"></script>
-<script src="js/scenes.js?v=6"></script>
-<script src="js/projects.js?v=7"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/store.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
+<script src="js/projects.js?v=9"></script>
 </body>
 </html>

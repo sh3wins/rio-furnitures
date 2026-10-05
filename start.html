@@ -2,53 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Start a Project — RIO Furnitures</title>
-  <meta name="description" content="Tell RIO what you are building, what you need and how much. Upload drawings and send your project.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23cf8646%27/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/pages.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=20">
+  <meta name="description" content="Tell RIO about your space, what you need and how many. Upload drawings and send your project.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231b1a18%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27Arial,sans-serif%27 font-size=%2713%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f7f5f0%27%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
+  <link rel="stylesheet" href="css/rio.css?v=1">
 </head>
 <body data-page="start">
 <header id="site-header"></header>
 
 <main>
-  <section class="intro" style="padding-bottom:24px">
+  <section class="intro" style="padding-bottom:32px">
     <div class="wrap">
-      <p class="mono muted" id="s-kicker">Start a project</p>
-      <h1 class="serif s-xl" id="s-title">Tell us about<br><em>the space.</em></h1>
+      <span class="eyebrow" id="s-kicker">Start a project</span>
+      <h1 class="h-xl" id="s-title">Tell us about your space.</h1>
     </div>
   </section>
   <div class="wrap flow">
     <aside class="flow-aside">
-      <p class="mono muted" id="s-count">Step 01 / 05</p>
+      <p class="meta" id="s-count">Step 1 of 5</p>
       <div class="progress"><span id="s-prog"></span></div>
       <ol class="flow-steps" id="s-steps"></ol>
     </aside>
     <form id="s-form" novalidate onsubmit="return false">
       <div id="s-body"></div>
       <div class="f-foot">
-        <button type="button" class="link" id="s-back">← Back</button>
+        <button type="button" class="link" id="s-back">Back</button>
         <span class="msg" id="s-msg" role="alert"></span>
-        <button type="button" class="btn" id="s-next">Continue <span class="arr">→</span></button>
+        <button type="button" class="btn" id="s-next">Continue</button>
       </div>
     </form>
   </div>
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=8"></script>
-<script src="js/store.js?v=6"></script>
-<script src="js/main.js?v=8"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/store.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="js/supabase-config.js?v=6"></script>
-<script src="js/backend.js?v=6"></script>
-<script src="js/scenes.js?v=6"></script>
-<script src="js/start.js?v=6"></script>
+<script src="js/supabase-config.js?v=9"></script>
+<script src="js/backend.js?v=9"></script>
+<script src="js/start.js?v=9"></script>
 </body>
 </html>

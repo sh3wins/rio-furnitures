@@ -1,38 +1,49 @@
-# RIO Furnitures — Showroom website
+# RIO Furnitures — website
 
-Open `index.html` with Live Server in VS Code.
+Plain HTML, CSS and JavaScript. No build step: open `index.html` with Live Server in VS Code.
 
 ## The idea
-Quiet surface, powerful underneath:
-1. Calm: rooms, type, whitespace.
-2. Discover: hover furniture in a room → orange marker → click → the piece opens.
-3. Powerful: mix finishes in one order (e.g. Black 40 + White 20 + Orange 10 + Natural 5 = 75), add to My Project, save, upload refs, request a quote.
-4. Trust: workshop and real projects.
+Calm, light and photo-led. One typeface, lots of space, very little decoration.
+The visitor should understand what RIO makes, see it in a space, and be able to
+order it in the quantity they need.
 
 ## Pages
-- index.html — the showroom (room viewer, pieces, ordering, projects, custom, workshop)
-- spaces.html — walk through all six rooms (spaces.html?space=church jumps to one)
-- furniture.html — all pieces, grouped by category (?cat=seating, ?space=school)
-- product.html?id=chair-04 — examine a piece, views, finishes, build your order
-- project.html — My Project workspace
-- start.html — Start a Project, 5 steps (start.html?mode=custom for custom work)
-- projects.html — project stories (placeholders)
-- about.html — how we build, how ordering works, visit
+- `index.html` — home: hero photo, spaces, furniture, ordering, real projects, workshop, start a project
+- `furniture.html` — all pieces by type (`?cat=seating`, `?space=school`)
+- `product.html?id=chair-04` — photo or drawing, colours, quantities, add to project
+- `spaces.html` — each kind of space with its photo and furniture (`?space=church` jumps to one)
+- `projects.html` — real RIO projects
+- `about.html` — what RIO does, the workshop, how ordering works, visit
+- `project.html` — My project (saved in the visitor's browser)
+- `start.html` — Start a project, 5 steps (`?mode=custom` for custom work)
+- `track.html` — order tracking
+- `admin.html` — staff dashboard (separate styles: `css/style.css` + `css/admin.css`)
 
-## Fonts
-Instrument Serif (statements) · Inter Tight (everything you read and click) · IBM Plex Mono (codes, quantities, labels)
+## Files
+- `css/rio.css` — all styles for the public site. Colours, type and spacing are the
+  variables at the top; light and dark themes are both defined there.
+- `js/data.js` — everything you edit: contact details, photos, colours, spaces, products, projects.
+- `js/main.js` — header, footer, photo frames, furniture cards, the order builder.
+- `js/<page>.js` — one small file per page.
+- `fonts/` — Instrument Sans (open licence), served from the site.
 
-## Where to edit — js/data.js
-- Contact details, finishes, products, spaces, portfolio.
-- Product `dims`, `materials`, `lead`, `price` are null → shown as "confirmed with your quote".
+## Photos
+- `images/site/` — TEMPORARY stock photos standing in for RIO's own photography.
+- `images/real/` — RIO's own photos and workshop clips.
+
+To replace a photo, save the new one over the old file with the same name. Every
+photo sits in a frame with a fixed shape, so the layout does not change. Landscape,
+about 2000px wide, saved as JPG is ideal. The list of photos is `RIO.IMAGES` in
+`js/data.js`; the big home page photo is `images/site/hero.jpg` (set in `index.html`).
+A missing photo shows a quiet labelled placeholder instead of a broken image.
+
+## Editing content — js/data.js
+- Product `dims`, `materials`, `lead` and `price` are `null` until known. Unknown
+  details are simply not shown; nothing is invented.
 - Real product photo: `image: "images/products/chair-04.jpg"`.
-  Extra views: `photos: { front: "...", side: "...", back: "...", detail: "...", material: "..." }`.
-- Real room photo: set `photo: "images/spaces/restaurant.jpg"` on a space (markers still use the room layout in js/scenes.js).
-- Portfolio: fill `RIO.PORTFOLIO` — headline first ("A 42-seat restaurant in Westlands"), then supplied, materials, finishes, photos.
-
-## Rooms — js/scenes.js
-Each room is drawn from the same furniture drawings. Move pieces by changing `x`, `foot`, `s` (scale), `f` (finish).
+  Extra views: `photos: { front: "...", back: "...", side: "...", detail: "...", material: "..." }`.
+- Projects: only real projects (`RP(...)` with photos) appear on the site.
 
 ## Sending quotes
-Static site: "Send project to RIO" opens WhatsApp (0700 910 628) or email with the full breakdown filled in.
-Projects are saved in the visitor's browser (localStorage).
+"Send to RIO" saves the request to the database when Supabase is connected
+(see `ADMIN-SETUP.md`), and otherwise opens WhatsApp or email with the details filled in.

@@ -2,17 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Furniture — RIO Furnitures</title>
-  <meta name="description" content="Seating, tables, workspace, storage, hospitality and custom furniture, made in Nairobi and ordered in any quantity with mixed finishes.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23cf8646%27/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/pages.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=20">
+  <meta name="description" content="Seating, tables, workspace, storage and hospitality furniture, made to order in Nairobi. Order one piece or hundreds, in the colours you choose.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231b1a18%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27Arial,sans-serif%27 font-size=%2713%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f7f5f0%27%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
+  <link rel="stylesheet" href="css/rio.css?v=1">
 </head>
 <body data-page="furniture">
 <header id="site-header"></header>
@@ -20,26 +16,24 @@
 <main>
   <section class="intro">
     <div class="wrap">
-      <p class="mono muted">Furniture</p>
-      <h1 class="serif s-xl reveal">The <em>pieces.</em></h1>
-      <p class="lead reveal" data-d="1">Every piece can be ordered one at a time or by the room — in more than one finish, in one order.</p>
+      <h1 class="h-xl">Furniture</h1>
+      <p class="lead">Made for the spaces you actually use.</p>
     </div>
   </section>
-  <nav class="sticky-nav" aria-label="Filter furniture">
-    <div class="wrap f-bar">
-      <div class="quiet-nav" id="f-cat"></div>
-      <label class="row small" style="gap:10px"><span class="mono muted">For</span>
-        <select id="f-space" aria-label="Filter by space"></select></label>
+  <nav class="filters" aria-label="Filter furniture">
+    <div class="wrap">
+      <div class="tabs" id="f-cat"></div>
+      <label class="row small" style="gap:10px;flex-wrap:nowrap"><span class="meta">For</span>
+        <select class="select-line" id="f-space" aria-label="Filter by space"></select></label>
     </div>
   </nav>
-  <div class="wrap" id="f-list" style="padding-bottom:clamp(80px,10vw,140px)"></div>
+  <div class="wrap" id="f-list" style="padding-bottom:var(--space-section)"></div>
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=8"></script>
-<script src="js/store.js?v=6"></script>
-<script src="js/main.js?v=8"></script>
-<script src="js/scenes.js?v=6"></script>
-<script src="js/furniture.js?v=8"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/store.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
+<script src="js/furniture.js?v=9"></script>
 </body>
 </html>

@@ -2,59 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About — RIO Furnitures</title>
-  <meta name="description" content="RIO Furnitures designs and makes furniture for restaurants, bars and cafés, hospitality, offices, schools, churches and outdoor spaces in Nairobi, Kenya.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23151412%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%275%27 fill=%27%23cf8646%27/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/pages.css?v=6">
-  <link rel="stylesheet" href="css/theme.css?v=20">
+  <meta name="description" content="RIO makes furniture for restaurants, bars and cafés, hospitality, offices, schools, churches and outdoor spaces. Made to order in Nairobi.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231b1a18%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27Arial,sans-serif%27 font-size=%2713%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f7f5f0%27%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
+  <link rel="stylesheet" href="css/rio.css?v=1">
 </head>
 <body data-page="about">
 <header id="site-header"></header>
 
 <main>
   <section class="intro">
-    <div class="wrap statement">
-      <div><p class="mono muted">About RIO</p>
-      <h1 class="serif s-xl reveal">You build the space.<br><em>We build what goes in it.</em></h1></div>
-      <div class="reveal" data-d="1">
-        <p class="lead">RIO makes furniture for people creating spaces — restaurants, bars and cafés, hotels and guest rooms, offices, schools, churches and outdoor spaces.</p>
-        <p class="lead mt-s">We start with your project, not a product: the room, the people using it, how many pieces it needs and how it should feel. Then we make it.</p>
+    <div class="wrap">
+      <div class="about-top">
+        <h1 class="h-xl">We make furniture for real spaces.</h1>
+        <div>
+          <p class="lead">RIO makes furniture for restaurants, bars and cafés, hotels and guest rooms, offices, schools, churches and outdoor spaces.</p>
+          <p class="lead">We start with your space: how it's used, how many pieces it needs and how it should look. Then we make it, in Nairobi.</p>
+        </div>
       </div>
+      <div id="about-photo"></div>
     </div>
   </section>
 
   <section class="section dark" id="make">
     <div class="wrap">
-      <div class="head-row"><div><p class="mono muted">How we build</p><h2 class="serif s-xl">We don't just sell it.<br><em>We make it.</em></h2></div></div>
-      <div class="proc" id="proc"></div>
+      <div class="head"><div><span class="eyebrow">Workshop</span><h2 class="h-l">From raw material to finished space.</h2></div></div>
+      <div class="steps" id="steps"></div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <div class="head-row"><div><p class="mono muted">How ordering works</p><h2 class="serif s-l">From an idea<br><em>to opening day.</em></h2></div>
-        <a class="btn btn-o" href="start.html">Start a project <span class="arr">→</span></a></div>
-      <ol class="howto" id="howto"></ol>
+      <div class="head">
+        <div><span class="eyebrow">Ordering</span><h2 class="h-l">How it works</h2></div>
+        <a class="btn" href="start.html">Start a Project</a>
+      </div>
+      <ol class="how">
+        <li><h3 class="h-s">Choose</h3><p>Pick pieces from our furniture, or describe something custom.</p></li>
+        <li><h3 class="h-s">Set quantities</h3><p>Say how many you need in each colour and add them to your project.</p></li>
+        <li><h3 class="h-s">Request a quote</h3><p>Send your project. We quote on your exact quantities and colours.</p></li>
+        <li><h3 class="h-s">We make and deliver</h3><p>Follow your order online from production to delivery.</p></li>
+      </ol>
     </div>
   </section>
 
-
-  <section class="section-s">
+  <section class="section band">
     <div class="wrap visit" id="visit"></div>
   </section>
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=8"></script>
-<script src="js/store.js?v=6"></script>
-<script src="js/main.js?v=8"></script>
-<script src="js/scenes.js?v=6"></script>
-<script src="js/about.js?v=8"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/store.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
+<script src="js/about.js?v=9"></script>
 </body>
 </html>

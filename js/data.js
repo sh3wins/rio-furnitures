@@ -25,6 +25,27 @@ RIO.CONTACT = {
   tiktokHandle: "@lewisky.km"
 };
 
+/* ---------- Site photographs ----------
+   Every large photo on the site is listed here, once.
+   To replace one, save the new photo over the old file (same
+   name), or change the path below. Shapes are fixed by the
+   layout, so any landscape photo will fit without redesigning.
+
+   Photos in images/site/ are TEMPORARY stock images that stand
+   in for RIO's own photography. Photos in images/real/ are RIO's.
+   (The big photo at the top of the home page is images/site/hero.jpg,
+   set in index.html.) */
+RIO.IMAGES = {
+  restaurant:  { src: "images/site/space-restaurant.jpg",  alt: "Restaurant dining room with tables and chairs" },
+  office:      { src: "images/site/space-office.jpg",      alt: "Office with desks and chairs" },
+  school:      { src: "images/site/space-school.jpg",      alt: "Classroom with desks and chairs" },
+  hospitality: { src: "images/site/space-hospitality.jpg", alt: "Furnished guest room" },
+  church:      { src: "images/site/space-church.jpg",      alt: "Church interior with rows of seating" },
+  outdoor:     { src: "images/site/space-outdoor.jpg",     alt: "Terrace with outdoor tables and chairs" },
+  bar:         { src: "images/real/barrel-table.jpg",      alt: "RIO barrel tables and bar stools in a bar" },
+  about:       { src: "images/real/workshop-assembly.jpg", alt: "Furniture being assembled in the RIO workshop" }
+};
+
 /* ---------- Finishes (colours) ---------- */
 RIO.FINISHES = {
   black:   { name: "Black",   hex: "#1b1b1a" },
@@ -51,49 +72,45 @@ RIO.CATEGORIES = [
 
 /* ---------- Spaces (WHERE the furniture goes) ----------
    name = singular (used in forms), plural = headings.
-   photo: set to "images/spaces/<id>.jpg" to use a real photograph. */
+   short = the one line shown with the photo. line = a little more detail.
+   The photo for each space comes from RIO.IMAGES above (same id). */
 RIO.SPACES = [
   { id: "restaurant", name: "Restaurant", plural: "Restaurants",
-    tagline: "Furniture for places where people gather, eat and stay awhile.",
+    short: "Tables, seating and custom furniture for dining spaces.",
     line: "Dining rooms, casual restaurants, larger restaurants and food-service spaces.",
-    needs: ["Dining chairs", "Dining tables", "Bar stools", "Benches", "Booths", "Counters", "Storage", "Custom pieces"],
-    icons: ["chair", "table", "stool", "booth"], photo: null },
+    needs: ["Dining chairs", "Dining tables", "Bar stools", "Benches", "Booths", "Counters", "Storage", "Custom pieces"] },
   { id: "bar", name: "Bar & Café", plural: "Bars & Cafés",
-    tagline: "For long evenings, quick coffees and everything in between.",
+    short: "Stools, counters and lounge seating for bars and cafés.",
     line: "Bars, coffee shops, lounges and casual hospitality spaces.",
-    needs: ["Bar stools", "Counters", "Booths", "High tables", "Benches", "Lounge seating", "Custom pieces"],
-    icons: ["stool", "counter", "booth", "table"], photo: null },
+    needs: ["Bar stools", "Counters", "Booths", "High tables", "Benches", "Lounge seating", "Custom pieces"] },
   { id: "office", name: "Office", plural: "Offices",
-    tagline: "Furniture for the way teams actually work.",
+    short: "Furniture designed for productive working spaces.",
     line: "Workspaces, startups, corporate offices, meeting rooms, reception areas and shared spaces.",
-    needs: ["Desks", "Workstations", "Office chairs", "Meeting tables", "Reception desks", "Cabinets", "Shelving", "Custom pieces"],
-    icons: ["desk", "taskchair", "table", "cabinet"], photo: null },
+    needs: ["Desks", "Workstations", "Office chairs", "Meeting tables", "Reception desks", "Cabinets", "Shelving", "Custom pieces"] },
   { id: "school", name: "School", plural: "Schools",
-    tagline: "Built for full classrooms and busy school days.",
+    short: "Furniture for high-use educational environments.",
     line: "Classrooms, learning environments, libraries, staff areas and institutional spaces.",
-    needs: ["Student desks", "Student chairs", "Teacher desks", "Shelving", "Storage", "Tables", "Custom pieces"],
-    icons: ["studentdesk", "chair", "shelf", "desk"], photo: null },
+    needs: ["Student desks", "Student chairs", "Teacher desks", "Shelving", "Storage", "Tables", "Custom pieces"] },
   { id: "church", name: "Church", plural: "Churches",
-    tagline: "For worship, gathering and everything that happens around it.",
+    short: "Seating and furniture for worship and gathering spaces.",
     line: "Worship spaces, offices, meeting rooms and gathering spaces.",
-    needs: ["Pews", "Seating", "Pulpits", "Tables", "Office furniture", "Storage", "Custom pieces"],
-    icons: ["pew", "pulpit", "counter", "chair"], photo: null },
+    needs: ["Pews", "Seating", "Pulpits", "Tables", "Office furniture", "Storage", "Custom pieces"] },
   { id: "hospitality", name: "Hospitality", plural: "Hospitality",
-    tagline: "Rooms guests remember for the right reasons.",
+    short: "Beds, storage and seating for hotels, Airbnbs and guest rooms.",
     line: "Hotels, lodges, Airbnbs, serviced apartments, guest rooms and short-stay spaces.",
-    needs: ["Beds", "Bedside tables", "Wardrobes", "Storage units", "Side tables", "Lounge seating", "Custom pieces"],
-    icons: ["bed", "bedside", "wardrobe", "lowtable"], photo: null },
+    needs: ["Beds", "Bedside tables", "Wardrobes", "Storage units", "Side tables", "Lounge seating", "Custom pieces"] },
   { id: "outdoor", name: "Outdoor", plural: "Outdoor",
-    tagline: "Furniture for fresh air.",
+    short: "Tables and seating for terraces, patios and gardens.",
     line: "Patios, terraces, outdoor dining, gardens and outdoor commercial spaces.",
-    needs: ["Loungers", "Outdoor tables", "Outdoor chairs", "Benches", "Custom pieces"],
-    icons: ["lounger", "table", "bench", "chair"], photo: null },
+    needs: ["Loungers", "Outdoor tables", "Outdoor chairs", "Benches", "Custom pieces"] },
   { id: "other", name: "Other", plural: "Other spaces",
-    tagline: "For spaces that don't fit neatly into a box.",
+    short: "For spaces that don't fit neatly into a box.",
     line: "Tell us what you're building and we'll work out what goes in it.",
-    needs: ["Seating", "Tables", "Counters", "Reception", "Shelving", "Storage", "Custom pieces"],
-    icons: ["counter", "shelf", "chair", "custom"], photo: null }
+    needs: ["Seating", "Tables", "Counters", "Reception", "Shelving", "Storage", "Custom pieces"] }
 ];
+
+/* The six spaces shown on the home page, in order */
+RIO.HOME_SPACES = ["restaurant", "office", "school", "hospitality", "church", "outdoor"];
 
 /* ---------- Products ----------
    type:   what kind of piece it is (shown under the name)
@@ -167,8 +184,10 @@ RIO.PRODUCTS = [
     "Pulpit and lectern for sanctuaries and stages. Size and detailing made to order.", ["walnut", "natural", "white", "black"])
 ];
 
-/* ---------- Portfolio (REAL SPACES. REAL PROJECTS.) ----------
-   PLACEHOLDERS — replace with real completed projects. Story first:
+/* ---------- Projects (real RIO work) ----------
+   Only real projects (RP) are shown on the site. The PF lines are
+   reminders of projects still to be photographed; they stay hidden
+   until they are turned into an RP with photos. Fields you can add:
      headline: "A 42-seat restaurant in Westlands",
      building: "A new neighbourhood restaurant with a bar",
      supplied: ["Chair 04 — 42 (black, natural)", "Table 08 — 14", "Custom counter"],
@@ -205,7 +224,17 @@ RIO.FRAMES = { black: "Black coated", white: "White coated", grey: "Grey coated"
     RIO.PRODUCTS.push(Object.assign({}, base, { id, name: base.name + " — " + RIO.FRAMES[f].toLowerCase() + " frame", frame: f, hidden: true })));
 })();
 
+/* ---------- Workshop: material → build → finish → space ----------
+   Photos are RIO's own. Replace a file or change its path here. */
+RIO.WORKSHOP = [
+  { name: "Material", text: "Cut for your full quantity.",        photo: "images/real/workshop-cutting.jpg" },
+  { name: "Build",    text: "Frames and parts made in our workshop.", photo: "images/real/clip-welding.jpg" },
+  { name: "Finish",   text: "In the colours you chose.",          photo: "images/real/clip-grinding.jpg" },
+  { name: "Space",    text: "Delivered to your space.",           photo: "images/real/rope-dining.jpg" }
+];
+
 /* ---------- Helpers ---------- */
+RIO.projects = () => RIO.PORTFOLIO.filter((p) => !p.placeholder && p.photos.length);
 RIO.product = (id) => RIO.PRODUCTS.find((p) => p.id === id);
 RIO.space = (id) => RIO.SPACES.find((s) => s.id === id);
 RIO.category = (id) => RIO.CATEGORIES.find((c) => c.id === id);
@@ -236,10 +265,6 @@ RIO.icon = function (type, f, opts) {
   if (opts && opts.raw) return RIO.iconShapes(type, f, k, s);
   return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${RIO.iconShapes(type, f, k, s)}</svg>`;
 };
-
-/* Top edge of each drawing (in its 0–120 box) — used to place markers in rooms */
-RIO.ICON_TOP = { chair: 16, stool: 30, bench: 58, pew: 18, booth: 18, taskchair: 14, table: 40, lowtable: 58, desk: 40,
-  studentdesk: 42, counter: 34, pulpit: 22, shelf: 10, cabinet: 24, wardrobe: 8, tvunit: 54, bed: 30, bedside: 44, lounger: 42, custom: 18 };
 
 RIO.iconShapes = function (type, f, k, s) {
   const shapes = {
@@ -341,7 +366,7 @@ RIO.iconShapes = function (type, f, k, s) {
       <rect x="18" y="18" width="84" height="84" fill="none" ${s} stroke-dasharray="6 6"/>
       <path d="M36 84 L36 60 L84 60 L84 84" fill="none" ${s}/>
       <rect x="36" y="52" width="48" height="8" fill="${f}" ${s}/>
-      <line x1="60" y1="30" x2="60" y2="44" stroke="#ff5a1f" stroke-width="3"/><line x1="53" y1="37" x2="67" y2="37" stroke="#ff5a1f" stroke-width="3"/>`
+      <line x1="60" y1="30" x2="60" y2="44" ${s}/><line x1="53" y1="37" x2="67" y2="37" ${s}/>`
   };
   return shapes[type] || shapes.custom;
 };

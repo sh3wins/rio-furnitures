@@ -1,33 +1,33 @@
-/* RIO — Projects: stories first, numbers second */
+/* RIO — Projects: real RIO work. The photographs do the talking. */
 (function () {
   let f = "all";
   const nav = document.getElementById("pf"), box = document.getElementById("stories");
-  const tbc = `<span class="tbc">to be added</span>`;
-  const label = (s) => s.plural;
+  const all = RIO.projects();
+  const spaces = RIO.SPACES.filter((s) => all.some((p) => p.space === s.id));
 
-  nav.innerHTML = [["all", "All"]].concat(RIO.SPACES.map((s) => [s.id, label(s)])).map(([id, n]) => `<button type="button" data-f="${id}" class="${id === f ? "on" : ""}">${n}</button>`).join("");
+  nav.innerHTML = [["all", "All"]].concat(spaces.map((s) => [s.id, s.plural])).map(([id, n]) => `<button type="button" data-f="${id}" class="${id === f ? "on" : ""}">${n}</button>`).join("");
+
+  // Only facts we actually have are shown
+  const fact = (label, value) => value ? `<div><dt>${label}</dt><dd>${value}</dd></div>` : "";
   function render() {
-    box.innerHTML = RIO.PORTFOLIO.filter((p) => f === "all" || p.space === f).map((p) => {
+    box.innerHTML = all.filter((p) => f === "all" || p.space === f).map((p) => {
       const s = RIO.space(p.space);
-      const ph = (i, cls, lbl) => p.photos[i] ? `<div class="ph has-img ${cls}"><img src="${p.photos[i]}" alt="${RIO.esc(p.headline || p.title)}" loading="lazy"></div>` : `<div class="ph ${cls}" data-label="${lbl}"></div>`;
+      const facts = fact("Space", p.building && RIO.esc(p.building)) +
+        fact("Furniture", p.supplied.length ? "<ul>" + p.supplied.map((x) => `<li>${RIO.esc(x)}</li>`).join("") + "</ul>" : "") +
+        fact("Materials", p.materials && RIO.esc(p.materials)) + fact("Finishes", p.finishes && RIO.esc(p.finishes));
+      const more = p.photos.slice(1, 3);
       return `
         <article class="story" id="p${p.no}">
-          <div class="img-reveal">${p.video ? `<div class="ph has-img hero-ph"><video src="${p.video}" poster="${p.photos[0]}" autoplay muted loop playsinline preload="metadata" aria-label="${RIO.esc(p.headline)}"></video></div>` : ph(0, "hero-ph", label(s) + " — the finished space")}</div>
+          <div class="reveal">${p.video ? RIO.clip(p.video, p.photos[0], p.headline) : RIO.media(p.photos[0], { alt: p.headline })}</div>
           <div class="story-body">
-            <div class="reveal">
-              <span class="mono muted">Project ${p.no} · ${label(s)}</span>
-              <h2 class="serif s-l">${p.headline ? RIO.esc(p.headline) : `${RIO.esc(p.title)}<br><em>— story coming soon</em>`}</h2>
-              <p class="lead mt-s">${p.story ? RIO.esc(p.story) : "Photographs and the story of this space will appear here."}</p>
-              ${p.placeholder ? `<p class="note-edit">Placeholder — add the real project in <code>js/data.js → RIO.PORTFOLIO</code>.</p>` : ""}
+            <div>
+              <span class="meta">${s.name}</span>
+              <h2 class="h-l">${RIO.esc(p.headline)}</h2>
+              ${p.story ? `<p class="lead">${RIO.esc(p.story)}</p>` : ""}
             </div>
-            <div class="reveal" data-d="1">
-              <dl>
-                <div><dt class="mono muted">Building</dt><dd>${p.building ? RIO.esc(p.building) : tbc}</dd></div>
-                <div><dt class="mono muted">Furniture supplied</dt><dd>${p.supplied.length ? "<ul>" + p.supplied.map((x) => `<li>${RIO.esc(x)}</li>`).join("") + "</ul>" : tbc}</dd></div>
-                <div><dt class="mono muted">Materials</dt><dd>${p.materials ? RIO.esc(p.materials) : tbc}</dd></div>
-                <div><dt class="mono muted">Finishes</dt><dd>${p.finishes ? RIO.esc(p.finishes) : tbc}</dd></div>
-              </dl>
-              <div class="story-thumbs">${ph(1, "", "Detail")}${ph(2, "", "Detail")}</div>
+            <div>
+              ${facts ? `<dl class="facts">${facts}</dl>` : ""}
+              ${more.length ? `<div class="story-thumbs">${more.map((src) => RIO.media(src, { alt: p.headline })).join("")}</div>` : ""}
             </div>
           </div>
         </article>`;
