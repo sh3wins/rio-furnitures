@@ -42,7 +42,7 @@ RIO.IMAGES = {
   office:      { src: "images/site/space-office.jpg",      alt: "Office with desks and chairs" },
   school:      { src: "images/site/space-school.jpg",      alt: "Classroom with desks and chairs" },
   hospitality: { src: "images/site/space-hospitality.jpg", alt: "Hotel guest room with a bed and armchairs", pos: "50% 62%" },
-  church:      { src: "images/site/space-church.jpg",      alt: "Church interior with rows of seating" },
+  church:      { src: "images/real/church-chairs.jpg",     alt: "Rows of red upholstered church chairs made by RIO", pos: "42% 12%" },
   outdoor:     { src: "images/site/space-outdoor.jpg",     alt: "Balcony terrace with woven lounge chairs", pos: "50% 64%" },
   bar:         { src: "images/real/barrel-table.jpg",      alt: "RIO barrel tables and bar stools in a bar" },
   about:       { src: "images/real/workshop-assembly.jpg", alt: "Furniture being assembled in the RIO workshop" }
