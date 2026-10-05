@@ -30,18 +30,20 @@ RIO.CONTACT = {
    To replace one, save the new photo over the old file (same
    name), or change the path below. Shapes are fixed by the
    layout, so any landscape photo will fit without redesigning.
+   pos (optional) says which part of a photo to keep in view when it
+   is cropped: "50% 62%" means centre, a little below the middle.
 
    Photos in images/site/ are TEMPORARY stock images that stand
    in for RIO's own photography. Photos in images/real/ are RIO's.
    (The big photo at the top of the home page is images/site/hero.jpg,
    set in index.html.) */
 RIO.IMAGES = {
-  restaurant:  { src: "images/site/space-restaurant.jpg",  alt: "Restaurant dining room with tables and chairs" },
+  restaurant:  { src: "images/site/space-restaurant.jpg",  alt: "Restaurant tables set for service, with woven chairs", pos: "50% 46%" },
   office:      { src: "images/site/space-office.jpg",      alt: "Office with desks and chairs" },
   school:      { src: "images/site/space-school.jpg",      alt: "Classroom with desks and chairs" },
-  hospitality: { src: "images/site/space-hospitality.jpg", alt: "Furnished guest room" },
+  hospitality: { src: "images/site/space-hospitality.jpg", alt: "Hotel guest room with a bed and armchairs", pos: "50% 62%" },
   church:      { src: "images/site/space-church.jpg",      alt: "Church interior with rows of seating" },
-  outdoor:     { src: "images/site/space-outdoor.jpg",     alt: "Terrace with outdoor tables and chairs" },
+  outdoor:     { src: "images/site/space-outdoor.jpg",     alt: "Balcony terrace with woven lounge chairs", pos: "50% 64%" },
   bar:         { src: "images/real/barrel-table.jpg",      alt: "RIO barrel tables and bar stools in a bar" },
   about:       { src: "images/real/workshop-assembly.jpg", alt: "Furniture being assembled in the RIO workshop" }
 };

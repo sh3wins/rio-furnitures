@@ -104,7 +104,7 @@
 
   /* ---------- Photos ----------
      RIO.media(image, { ratio: "16 / 9", cls: "", eager: false })
-     `image` is an entry from RIO.IMAGES ({ src, alt }) or a plain path.
+     `image` is an entry from RIO.IMAGES ({ src, alt, pos }) or a plain path.
      The frame keeps its shape, so replacing a photo never moves the layout.
      If the file is missing, a quiet labelled placeholder is shown instead. */
   RIO.media = function (image, opts) {
@@ -114,7 +114,7 @@
     const label = RIO.esc(im.alt || opts.alt || "Photograph");
     if (!im.src) return `<div class="media is-empty ${opts.cls || ""}"${ratio} data-label="Photo to come: ${label}"></div>`;
     return `<div class="media ${opts.cls || ""}"${ratio} data-label="Photo to come: ${label}">
-      <img src="${im.src}" alt="${label}" ${opts.eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.parentNode.classList.add('is-empty')"></div>`;
+      <img src="${im.src}" alt="${label}"${im.pos ? ` style="object-position:${im.pos}"` : ""} ${opts.eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.parentNode.classList.add('is-empty')"></div>`;
   };
   /* A looping, silent clip with a still image behind it */
   RIO.clip = function (video, poster, alt, opts) {
