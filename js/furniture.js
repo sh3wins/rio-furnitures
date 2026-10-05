@@ -27,7 +27,7 @@ RIO.whenReady(function () {
     const shown = groups.filter((g) => g.items.length);
     list.innerHTML = (shown.map((g) => `
       <section class="f-group">
-        <div class="f-group-head"><h2 class="h-m">${g.c.name}</h2><span class="meta">${g.items.length}</span></div>
+        <h2 class="h-m f-group-head">${g.c.name}</h2>
         <div class="cards">${g.items.map((p) => RIO.piece(p)).join("")}</div>
       </section>`).join("") || `<section class="f-group"><p class="lead">Nothing listed for that space yet.</p></section>`) + custom;
     RIO.observeReveal(list);

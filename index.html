@@ -8,17 +8,18 @@
   <meta name="description" content="RIO makes furniture for restaurants, schools, offices, hospitality spaces and more. Made to order in Nairobi, in the quantities and colours your space needs.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231b1a18%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27Arial,sans-serif%27 font-size=%2713%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f7f5f0%27%3ER%3C/text%3E%3C/svg%3E">
   <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
-  <link rel="preload" as="image" href="images/site/hero.jpg">
-  <link rel="stylesheet" href="css/rio.css?v=3">
+  <link rel="preload" as="image" href="images/site/hero.jpg" imagesrcset="images/site/hero-1100.jpg 1100w, images/site/hero.jpg 2200w" imagesizes="100vw">
+  <link rel="stylesheet" href="css/rio.css?v=4">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
 
-<main>
-  <!-- HERO. To change the photo, replace images/site/hero.jpg (landscape, about 2000px wide). -->
+<main id="main">
+  <!-- HERO. To change the photo, replace images/site/hero.jpg (landscape, about 2200px wide)
+       and its lighter copy for phones, images/site/hero-1100.jpg (1100px wide). -->
   <section class="hero">
     <div class="media hero-media" data-label="Photo to come: hero (images/site/hero.jpg)">
-      <img src="images/site/hero.jpg" alt="A restaurant table set for four, with bentwood chairs" style="object-position:50% 58%" fetchpriority="high" decoding="async" onerror="this.parentNode.classList.add('is-empty')">
+      <img src="images/site/hero.jpg" srcset="images/site/hero-1100.jpg 1100w, images/site/hero.jpg 2200w" sizes="100vw" alt="A restaurant table set for four, with bentwood chairs" style="object-position:50% 58%" fetchpriority="high" decoding="async" onerror="this.parentNode.classList.add('is-empty')">
     </div>
     <div class="wrap hero-text">
       <h1 class="h-xl">Furniture for spaces that work.</h1>
@@ -34,7 +35,7 @@
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <div><span class="eyebrow">Spaces</span><h2 class="h-l">Made for the space you run.</h2></div>
+        <h2 class="h-l">Spaces</h2>
         <a class="link" href="spaces.html">All spaces <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="walk" id="walk"></div>
@@ -45,7 +46,7 @@
   <section class="section" style="padding-top:0">
     <div class="wrap">
       <div class="head">
-        <div><span class="eyebrow">Furniture</span><h2 class="h-l">Made for the spaces you actually use.</h2></div>
+        <h2 class="h-l">Furniture</h2>
         <a class="link" href="furniture.html">All furniture <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="cards four" id="pieces"></div>
@@ -56,16 +57,14 @@
   <section class="section band">
     <div class="wrap split">
       <div>
-        <span class="eyebrow">Ordering</span>
         <h2 class="h-l">Order one piece, or furnish the whole room.</h2>
-        <p class="lead mt-s">Choose a piece, set a quantity for each colour and add it to your project. We quote on your exact numbers.</p>
+        <p class="lead mt-s">Set a quantity for each colour and add it to your project. We quote on your exact numbers.</p>
         <a class="link mt-m" href="product.html?id=chair-04">Try it with Chair 04 <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="sample" aria-label="Example order">
         <p class="h-s">Chair 04</p>
         <p class="meta">Example order</p>
         <ul class="mt-s" id="sample"></ul>
-        <a class="btn" href="product.html?id=chair-04">Add to Project</a>
       </div>
     </div>
   </section>
@@ -74,7 +73,7 @@
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <div><span class="eyebrow">Projects</span><h2 class="h-l">In real spaces.</h2></div>
+        <h2 class="h-l">In real spaces</h2>
         <a class="link" href="projects.html">All projects <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="proofs" id="proofs"></div>
@@ -85,7 +84,7 @@
   <section class="section dark">
     <div class="wrap">
       <div class="head">
-        <div><span class="eyebrow">Workshop</span><h2 class="h-l">From raw material to finished space.</h2></div>
+        <h2 class="h-l">From raw material to finished space.</h2>
         <a class="link" href="about.html">About RIO <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="steps" id="steps"></div>
@@ -115,11 +114,11 @@
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=11"></script>
-<script src="js/store.js?v=11"></script>
-<script src="js/supabase-config.js?v=11"></script>
-<script src="js/live.js?v=11"></script>
-<script src="js/main.js?v=11"></script>
-<script src="js/home.js?v=11"></script>
+<script src="js/data.js?v=12"></script>
+<script src="js/store.js?v=12"></script>
+<script src="js/supabase-config.js?v=12"></script>
+<script src="js/live.js?v=12"></script>
+<script src="js/main.js?v=12"></script>
+<script src="js/home.js?v=12"></script>
 </body>
 </html>

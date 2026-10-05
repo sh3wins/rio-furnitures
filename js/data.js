@@ -32,20 +32,23 @@ RIO.CONTACT = {
    layout, so any landscape photo will fit without redesigning.
    pos (optional) says which part of a photo to keep in view when it
    is cropped: "50% 62%" means centre, a little below the middle.
+   small (optional) is a lighter copy, 900px wide, that phones load instead.
 
    Photos in images/site/ are TEMPORARY stock images that stand
    in for RIO's own photography. Photos in images/real/ are RIO's.
    (The big photo at the top of the home page is images/site/hero.jpg,
    set in index.html.) */
 RIO.IMAGES = {
-  restaurant:  { src: "images/site/space-restaurant.jpg",  alt: "Restaurant tables set for service, with woven chairs", pos: "50% 46%" },
-  office:      { src: "images/site/space-office.jpg",      alt: "Office with desks and chairs" },
-  school:      { src: "images/site/space-school.jpg",      alt: "Classroom with desks and chairs" },
-  hospitality: { src: "images/site/space-hospitality.jpg", alt: "Hotel guest room with a bed and armchairs", pos: "50% 62%" },
+  restaurant:  { src: "images/site/space-restaurant.jpg",  small: "images/site/space-restaurant-900.jpg",  alt: "Restaurant tables set for service, with woven chairs", pos: "50% 46%" },
+  office:      { src: "images/site/space-office.jpg",      small: "images/site/space-office-900.jpg",      alt: "Office desks with task chairs", pos: "58% 50%" },
+  hospitality: { src: "images/site/space-hospitality.jpg", small: "images/site/space-hospitality-900.jpg", alt: "Hotel guest room with a bed and armchairs", pos: "50% 62%" },
   church:      { src: "images/real/church-chairs.jpg",     alt: "Rows of red upholstered church chairs made by RIO", pos: "42% 12%" },
-  outdoor:     { src: "images/site/space-outdoor.jpg",     alt: "Balcony terrace with woven lounge chairs", pos: "50% 64%" },
+  outdoor:     { src: "images/site/space-outdoor.jpg",     small: "images/site/space-outdoor-900.jpg",     alt: "Balcony terrace with woven lounge chairs", pos: "50% 64%" },
   bar:         { src: "images/real/barrel-table.jpg",      alt: "RIO barrel tables and bar stools in a bar" },
   about:       { src: "images/real/workshop-assembly.jpg", alt: "Furniture being assembled in the RIO workshop" }
+  /* Schools has no photo yet. When there is one, save it as images/site/space-school.jpg and add:
+     school: { src: "images/site/space-school.jpg", alt: "Classroom with desks and chairs" },
+     It then appears on the home page and the Spaces page automatically. */
 };
 
 /* ---------- Finishes (colours) ---------- */
@@ -111,8 +114,8 @@ RIO.SPACES = [
     needs: ["Seating", "Tables", "Counters", "Reception", "Shelving", "Storage", "Custom pieces"] }
 ];
 
-/* The six spaces shown on the home page, in order */
-RIO.HOME_SPACES = ["restaurant", "office", "school", "hospitality", "church", "outdoor"];
+/* The spaces shown on the home page, in order. One without a photo is skipped. */
+RIO.HOME_SPACES = ["restaurant", "office", "hospitality", "school", "church", "outdoor"];
 
 /* ---------- Products ----------
    type:   what kind of piece it is (shown under the name)

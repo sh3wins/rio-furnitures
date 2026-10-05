@@ -15,7 +15,7 @@ order it in the quantity they need.
 - `projects.html` — real RIO projects
 - `about.html` — what RIO does, the workshop, how ordering works, visit
 - `project.html` — My project (saved in the visitor's browser)
-- `start.html` — Start a project, 5 steps (`?mode=custom` for custom work)
+- `start.html` — Start a project, 4 steps (`?mode=custom` for custom work)
 - `track.html` — order tracking
 - `admin.html` — staff dashboard (separate styles: `css/style.css` + `css/admin.css`)
 
@@ -37,6 +37,13 @@ photo sits in a frame with a fixed shape, so the layout does not change. Landsca
 about 2000px wide, saved as JPG is ideal. The list of photos is `RIO.IMAGES` in
 `js/data.js`; the big home page photo is `images/site/hero.jpg` (set in `index.html`).
 A missing photo shows a quiet labelled placeholder instead of a broken image.
+
+The large stock photos also have a lighter copy that phones load instead
+(`space-…-900.jpg`, 900px wide, and `hero-1100.jpg`). When you replace a photo,
+replace its lighter copy too, or remove its `small:` line in `RIO.IMAGES`.
+
+A space with no entry in `RIO.IMAGES` (Schools, for now) is left off the home page
+and shown without a photo on the Spaces page. Add its line and it appears.
 
 ## Editing content — js/data.js
 - Product `dims`, `materials`, `lead` and `price` are `null` until known. Unknown

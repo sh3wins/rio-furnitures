@@ -13,11 +13,12 @@
   RIO.ARR = ARR;
 
   /* ---------- Header ---------- */
-  const NAV = [["furniture", "furniture.html", "Furniture"], ["spaces", "spaces.html", "Spaces"], ["projects", "projects.html", "Projects"], ["about", "about.html", "About"]];
+  const NAV = [["spaces", "spaces.html", "Spaces"], ["furniture", "furniture.html", "Furniture"], ["projects", "projects.html", "Projects"], ["about", "about.html", "About"]];
   const header = document.getElementById("site-header");
   if (header) {
     header.className = "site-header";
     header.innerHTML = `
+      <a class="skip" href="#main">Skip to content</a>
       <div class="wrap">
         <a href="index.html" class="logo" aria-label="RIO Furnitures — home">RIO</a>
         <nav class="nav" aria-label="Main">
@@ -25,7 +26,7 @@
           <a class="btn nav-cta" href="start.html">Start a Project</a>
         </nav>
         <div class="header-right">
-          <a class="proj-link" href="project.html" aria-label="My project"><span class="pl-t">My project</span><span class="qty" id="proj-count">0</span></a>
+          <a class="proj-link" href="project.html"><span class="pl-t">My project</span><span class="qty" id="proj-count"></span></a>
           <button class="theme-btn" type="button">
             <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
             <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
@@ -60,8 +61,9 @@
   function updateCount() {
     const el = document.getElementById("proj-count"); if (!el) return;
     const n = RIO.store.total(RIO.store.active());
-    el.textContent = n > 999 ? "999+" : n;
+    el.textContent = n > 999 ? "999+" : n || "";
     el.classList.toggle("has", n > 0);
+    el.parentNode.setAttribute("aria-label", n ? `My project, ${n} pieces` : "My project");
   }
   updateCount();
   document.addEventListener("rio:projects", updateCount);
@@ -75,7 +77,7 @@
         <div class="foot-top">
           <div class="foot-brand"><a href="index.html" class="logo">RIO</a><p>Furniture for real spaces.</p></div>
           <ul>
-            <li><a href="furniture.html">Furniture</a></li><li><a href="spaces.html">Spaces</a></li>
+            <li><a href="spaces.html">Spaces</a></li><li><a href="furniture.html">Furniture</a></li>
             <li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li>
             <li><a href="start.html">Start a project</a></li>
           </ul>
@@ -113,14 +115,28 @@
     const ratio = opts.ratio ? ` style="--ar:${opts.ratio}"` : "";
     const label = RIO.esc(im.alt || opts.alt || "Photograph");
     if (!im.src) return `<div class="media is-empty ${opts.cls || ""}"${ratio} data-label="Photo to come: ${label}"></div>`;
+    const light = im.small ? ` srcset="${im.small} 900w, ${im.src} 1600w" sizes="${opts.sizes || "(max-width: 760px) 100vw, 50vw"}"` : "";
     return `<div class="media ${opts.cls || ""}"${ratio} data-label="Photo to come: ${label}">
-      <img src="${im.src}" alt="${label}"${im.pos ? ` style="object-position:${im.pos}"` : ""} ${opts.eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.parentNode.classList.add('is-empty')"></div>`;
+      <img src="${im.src}"${light} alt="${label}"${im.pos ? ` style="object-position:${im.pos}"` : ""} ${opts.eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" onerror="this.parentNode.classList.add('is-empty')"></div>`;
   };
   /* A looping, silent clip with a still image behind it */
   RIO.clip = function (video, poster, alt, opts) {
     opts = opts || {};
     return `<div class="media ${opts.cls || ""}"${opts.ratio ? ` style="--ar:${opts.ratio}"` : ""}>
       <video src="${video}" poster="${poster}" autoplay muted loop playsinline preload="metadata" aria-label="${RIO.esc(alt)}"></video></div>`;
+  };
+
+  /* ---------- Workshop: material → build → finish → space (home and About) ---------- */
+  RIO.workshopSteps = function (clips) {
+    clips = clips || {};
+    return RIO.WORKSHOP.map((w) => {
+      const alt = "RIO workshop: " + w.name.toLowerCase();
+      return `
+      <figure class="reveal">
+        ${clips[w.name] ? RIO.clip(clips[w.name], w.photo, alt) : RIO.media(w.photo, { alt })}
+        <figcaption><span class="h-s">${w.name}</span><span class="meta">${w.text}</span></figcaption>
+      </figure>`;
+    }).join("");
   };
 
   /* ---------- Toast ---------- */
@@ -146,7 +162,6 @@
         <div class="card-body">
           <h3 class="h-s">${RIO.esc(RIO.shortName(p))}</h3>
           <span class="meta">${RIO.esc(p.type || "")}</span>
-          <div class="card-dots" aria-label="Colours: ${p.finishes.map((f) => F[f].name).join(", ")}">${p.finishes.map((f) => `<span data-f="${f}" style="background-color:${F[f].hex}"></span>`).join("")}</div>
         </div>
       </a>`;
   };
@@ -176,10 +191,10 @@
         <div class="o-total"><span>Total</span><span><span class="n" data-total>0</span> <span class="meta" data-tier>pieces</span></span></div>
         <p class="o-mix meta" data-mix></p>
         <div class="o-add">
-          <label class="target"><span class="meta">Add to</span><select data-target aria-label="Choose project"></select></label>
-          <input class="field-line hide" data-newname placeholder="Project name, e.g. My Restaurant" aria-label="New project name">
+          <label class="target hide" data-target-row><span class="meta">Add to</span><select data-target aria-label="Choose project"></select></label>
           <button type="button" class="btn" data-add disabled>Add to Project</button>
-          <p class="o-note">Nothing is charged here. We quote on your exact quantities and colours.</p>
+          <p class="o-done hide" data-done role="status"></p>
+          <p class="o-note">Nothing is charged here. Add what you need, then send your project for a quote.</p>
         </div>
       </div>`;
     const $ = (s) => el.querySelector(s);
@@ -206,22 +221,25 @@
     el.addEventListener("input", (e) => { if (e.target.matches(".o-row input")) set(e.target.closest(".o-row").dataset.f, e.target.value); });
     el.addEventListener("focusin", (e) => { const r = e.target.closest(".o-row"); if (r && opts.onFinish) opts.onFinish(r.dataset.f); });
 
-    const target = $("[data-target]"), nn = $("[data-newname]");
+    // First visit: there is nothing to choose, the order goes into "My project".
+    // Once a visitor has more than one project, they can pick which one.
+    const target = $("[data-target]");
     function fill() {
       const all = RIO.store.all(), act = RIO.store.active();
-      target.innerHTML = all.map((pr) => `<option value="${pr.id}" ${act && act.id === pr.id ? "selected" : ""}>${RIO.esc(pr.name)} (${RIO.store.total(pr)} pieces)</option>`).join("") + `<option value="__new" ${all.length ? "" : "selected"}>A new project…</option>`;
-      nn.classList.toggle("hide", target.value !== "__new");
+      target.innerHTML = all.map((pr) => `<option value="${pr.id}" ${act && act.id === pr.id ? "selected" : ""}>${RIO.esc(pr.name)} (${RIO.store.total(pr)} pieces)</option>`).join("");
+      $("[data-target-row]").classList.toggle("hide", all.length < 2);
     }
-    target.addEventListener("change", () => { nn.classList.toggle("hide", target.value !== "__new"); if (target.value === "__new") nn.focus(); });
     fill();
     $("[data-add]").addEventListener("click", () => {
       const t = total(); if (!t) return;
-      let pr;
-      if (target.value === "__new") pr = RIO.store.create(nn.value.trim() || "My project", opts.space || (p.spaces.length === 1 ? p.spaces[0] : ""));
-      else { pr = RIO.store.get(target.value); RIO.store.setActive(pr.id); }
+      const chosen = target.value && RIO.store.get(target.value);
+      const pr = chosen || RIO.store.create("My project", opts.space || (p.spaces.length === 1 ? p.spaces[0] : ""));
+      RIO.store.setActive(pr.id);
       RIO.store.addItem(pr.id, p.id, qty);
-      RIO.toast(`<span>${t} × ${RIO.esc(RIO.shortName(p))} added to <b>${RIO.esc(pr.name)}</b></span><a href="project.html">View project</a>`);
-      p.finishes.forEach((f) => (qty[f] = 0)); nn.value = "";
+      const done = $("[data-done]");
+      done.innerHTML = `<span>${t} × ${RIO.esc(RIO.shortName(p))} added to ${RIO.esc(pr.name)}.</span><a class="link" href="project.html">View Project ${ARR}</a>`;
+      done.classList.remove("hide");
+      p.finishes.forEach((f) => (qty[f] = 0));
       paint(); fill();
       if (opts.onAdded) opts.onAdded(pr);
     });

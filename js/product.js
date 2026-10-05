@@ -20,8 +20,6 @@ RIO.whenReady(function () {
   document.getElementById("crumbs").innerHTML =
     `<a href="furniture.html">Furniture</a><span>/</span><a href="furniture.html?cat=${cat.id}">${cat.name}</a><span>/</span><span class="ink">${RIO.esc(RIO.shortName(p))}</span>`;
 
-  const swatch = (attr, id, name, hex, on) =>
-    `<button type="button" class="fin ${on ? "on" : ""}" ${attr}="${id}" aria-label="${name}" aria-pressed="${on}"><span class="c" data-f="${id}" style="background-color:${hex}"></span><span class="meta">${name}</span></button>`;
   const fact = (label, value) => value ? `<div><dt>${label}</dt><dd>${value}</dd></div>` : "";
   const facts = fact("Dimensions", p.dims) + fact("Materials", p.materials) + fact("Lead time", p.lead) +
     fact("Price", p.price ? "From KES " + p.price.toLocaleString() + " per piece" : "Quoted on your quantities") +
@@ -37,11 +35,6 @@ RIO.whenReady(function () {
       <span class="meta">${RIO.esc(p.type || "")}</span>
       <h1 class="h-l">${RIO.esc(RIO.shortName(p))}</h1>
       <p class="lead">${RIO.esc(p.desc)}</p>
-
-      ${p.finishes.length > 1 ? `<div class="p-block">
-        <span class="label">Colour: <b id="fin-name">${F[fin].name}</b></span>
-        <div class="finishes" id="fins">${p.finishes.map((f) => swatch("data-fin", f, F[f].name, F[f].hex, f === fin)).join("")}</div>
-      </div>` : ""}
 
       <div class="p-block" id="builder"></div>
 
@@ -82,17 +75,11 @@ RIO.whenReady(function () {
     stage.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") step(1); if (e.key === "ArrowLeft") step(-1); });
   }
 
-  const mark = (box, attr, value) => box.querySelectorAll(".fin").forEach((b) => { const on = b.dataset[attr] === value; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
-
+  // Touching a colour's quantity shows the drawing in that colour
   function setFin(f) {
     if (f === fin) return; fin = f;
-    document.getElementById("fin-name").textContent = F[f].name;
-    mark(document.getElementById("fins"), "fin", f);
     if (view === "object" && !p.image) paint();
   }
-  const finsEl = document.getElementById("fins");
-  if (finsEl) finsEl.addEventListener("click", (e) => { const b = e.target.closest("[data-fin]"); if (b) setFin(b.dataset.fin); });
-
   RIO.builder(document.getElementById("builder"), p, { onFinish: setFin });
   paint();
 

@@ -21,7 +21,7 @@ RIO.whenReady(function () {
         <div class="field mt-l"><span class="lbl">What are you furnishing?</span>
           <div class="tabs wrap-tabs" id="np-space">${RIO.SPACES.map((s) => `<button type="button" data-sp="${s.id}">${s.name}</button>`).join("")}</div></div>
         <div class="row mt-l">
-          <button type="button" class="btn" id="np-go">Save this project</button>
+          <button type="button" class="btn" id="np-go">Create project</button>
           <a class="link" href="furniture.html">Browse furniture first ${ARR}</a>
         </div>
         <p class="meta mt-m">Projects are kept in this browser, so you can build over time and come back before requesting a quote.</p>
@@ -63,7 +63,7 @@ RIO.whenReady(function () {
         <div>
           <div class="row" style="justify-content:space-between"><span class="eyebrow" style="margin:0">My project</span><span class="save-state" id="save-state">Saved in this browser</span></div>
           <input class="pj-name mt-s" id="pj-name" value="${RIO.esc(proj.name)}" aria-label="Project name">
-          <div class="pj-space"><div class="tabs wrap-tabs" id="pj-space">${RIO.SPACES.map((s) => `<button type="button" data-sp="${s.id}" class="${proj.space === s.id ? "on" : ""}">${s.name}</button>`).join("")}</div></div>
+          <div class="pj-space"><span class="meta">Kind of space</span><div class="tabs wrap-tabs" id="pj-space">${RIO.SPACES.map((s) => `<button type="button" data-sp="${s.id}" class="${proj.space === s.id ? "on" : ""}">${s.name}</button>`).join("")}</div></div>
 
           <div id="items">${proj.items.length ? proj.items.map(itemHTML).join("") : `
             <div class="pj-empty"><p class="h-m">Nothing here yet.</p>
@@ -77,7 +77,7 @@ RIO.whenReady(function () {
             <div class="field"><label for="pj-notes">Notes</label><textarea class="textarea" id="pj-notes" placeholder="Sizes, fabrics, deadline, delivery location…">${RIO.esc(proj.notes)}</textarea></div>
             <div class="field"><span class="lbl">References and drawings</span>
               <label class="dropzone" id="pj-drop">Drop photos, sketches, floor plans, PDFs or measurements<span class="meta">or tap to choose</span>
-                <input type="file" multiple id="pj-files" accept="image/*,.pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx"></label>
+                <input type="file" multiple id="pj-files" aria-label="Upload references and drawings" accept="image/*,.pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx"></label>
               <ul class="files" id="pj-file-list"></ul>
               <span class="meta">Files are sent to RIO with your quote request. Added on an earlier visit? Add them again before sending.</span></div>
             <div class="f-grid2">
@@ -97,8 +97,8 @@ RIO.whenReady(function () {
             <p class="meta pj-tier" id="pj-tier"></p>
           </div>
           <div class="pj-actions">
-            <button type="button" class="btn" id="pj-quote">Request a quote ${ARR}</button>
-            <button type="button" class="btn btn-line" id="pj-save">Save this project</button>
+            <button type="button" class="btn" id="pj-quote">Send Request ${ARR}</button>
+            <p class="meta">We reply with a quote on WhatsApp or email.</p>
             <div class="row"><button type="button" id="pj-dl">Download summary</button><button type="button" id="pj-del">Delete project</button></div>
           </div>
         </aside>
@@ -156,7 +156,6 @@ RIO.whenReady(function () {
       Array.from(list).forEach((f) => { if (f.size > (RIO.MAX_FILE || 2e7)) { alert(f.name + " is over 20 MB. Please send it on WhatsApp instead."); return; } if (!proj.files.includes(f.name)) proj.files.push(f.name); RIO._fileObjs[proj.id + "/" + f.name] = f; }); files(); persist();
     });
     document.getElementById("pj-file-list").addEventListener("click", (e) => { const b = e.target.closest("[data-rm]"); if (b) { proj.files.splice(+b.dataset.rm, 1); files(); persist(); } });
-    document.getElementById("pj-save").addEventListener("click", () => { persist("Project saved"); RIO.toast(`<span><b>${RIO.esc(proj.name)}</b> is saved in this browser.</span>`); });
     document.getElementById("pj-quote").addEventListener("click", () => {
       if (!S.total(proj) && !proj.notes) { RIO.toast(`<span>Add some furniture or a note first.</span><a href="furniture.html">Browse furniture</a>`); return; }
       const qrow = RIO.quoteFromProject ? RIO.quoteFromProject(proj) : null;
@@ -176,9 +175,23 @@ RIO.whenReady(function () {
     });
   }
 
+  // First visit: nothing to manage yet, so just point to the two ways to begin
+  function emptyView() {
+    view.innerHTML = `
+      <div class="pj-new">
+        <h1 class="h-xl">Your project is empty.</h1>
+        <p class="lead">Add the furniture you need, with a quantity for each colour. Then send it to us for a quote.</p>
+        <div class="row mt-m">
+          <a class="btn" href="furniture.html">Explore Furniture</a>
+          <a class="link" href="start.html">Or describe what you need ${ARR}</a>
+        </div>
+      </div>`;
+  }
+
   function render(creating) {
-    renderSwitch(creating || !proj);
-    if (!proj || creating) newView(); else mainView();
+    sw.parentNode.classList.toggle("hide", !proj && !creating);
+    renderSwitch(creating);
+    if (creating) newView(); else if (!proj) emptyView(); else mainView();
   }
   sw.addEventListener("click", (e) => {
     const o = e.target.closest("[data-open]");

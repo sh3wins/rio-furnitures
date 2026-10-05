@@ -3,12 +3,15 @@ RIO.whenReady(function () {
   const $ = (s) => document.querySelector(s);
   const F = RIO.FINISHES, ARR = RIO.ARR;
 
-  /* ---------- Spaces: one large room, then two side by side, and again ---------- */
-  $("#walk").innerHTML = RIO.HOME_SPACES.map((id, i) => {
-    const s = RIO.space(id), wide = i % 3 === 0;
+  /* ---------- Spaces: one large room first, then side by side ----------
+     Only spaces that have a photo are shown. If that leaves one on its own
+     at the end, it is shown large too. */
+  const shown = RIO.HOME_SPACES.filter((id) => RIO.IMAGES[id]);
+  $("#walk").innerHTML = shown.map((id, i) => {
+    const s = RIO.space(id), wide = i === 0 || (i === shown.length - 1 && shown.length % 2 === 0);
     return `
       <a class="space reveal ${wide ? "wide" : ""}" href="spaces.html?space=${s.id}">
-        ${RIO.media(RIO.IMAGES[s.id])}
+        ${RIO.media(RIO.IMAGES[s.id], { sizes: wide ? "100vw" : undefined })}
         <div class="space-cap">
           <h3 class="h-m">${s.plural}</h3>
           <p>${s.short}</p>
@@ -38,11 +41,7 @@ RIO.whenReady(function () {
     </a>`).join("");
 
   /* ---------- Workshop ---------- */
-  $("#steps").innerHTML = RIO.WORKSHOP.map((w) => `
-    <figure class="reveal">
-      ${RIO.media(w.photo, { alt: "RIO workshop: " + w.name.toLowerCase() })}
-      <figcaption><span class="h-s">${w.name}</span><span class="meta">${w.text}</span></figcaption>
-    </figure>`).join("");
+  $("#steps").innerHTML = RIO.workshopSteps();
 
   $("#ask-wa").href = "https://wa.me/" + RIO.CONTACT.whatsapp;
   RIO.observeReveal();

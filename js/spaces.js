@@ -11,18 +11,17 @@ RIO.whenReady(function () {
     const pieces = RIO.PRODUCTS.filter((p) => !p.hidden && p.spaces.includes(s.id)).slice(0, 4);
     return `
       <section class="room ${image ? "" : "plain"}" id="${s.id}" data-s="${s.id}">
-        ${image ? RIO.media(image, { cls: "reveal" }) : ""}
+        ${image ? RIO.media(image, { cls: "reveal", sizes: "100vw" }) : ""}
         <div class="room-head">
           <div>
             <h2 class="h-l">${s.plural}</h2>
             <p class="lead mt-s">${s.short}</p>
           </div>
           <div>
-            <p>${s.line}</p>
-            <p class="meta room-needs">${s.needs.join(" · ")}</p>
+            <p class="room-needs">${s.needs.join(" · ")}</p>
             <div class="row">
-              <a class="btn" href="start.html?space=${s.id}">Furnish this space</a>
-              ${pieces.length ? `<a class="link" href="furniture.html?space=${s.id}">All furniture for ${s.plural.toLowerCase()} ${ARR}</a>` : ""}
+              <a class="btn" href="start.html?space=${s.id}">Start a Project</a>
+              ${pieces.length ? `<a class="link" href="furniture.html?space=${s.id}">Furniture for ${s.plural.toLowerCase()} ${ARR}</a>` : ""}
             </div>
           </div>
         </div>
