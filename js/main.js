@@ -158,10 +158,9 @@
   RIO.builder = function (el, p, opts) {
     opts = opts || {};
     const qty = {}; p.finishes.forEach((f) => (qty[f] = 0));
-    const word = p.finishLabel ? p.finishLabel.toLowerCase() + " colour" : "colour";
     el.innerHTML = `
       <div class="order">
-        <div class="order-head"><h2 class="h-s">How many do you need?</h2><p class="meta">Set a quantity for each ${word}. Mix as many as you like in one order.</p></div>
+        <div class="order-head"><h2 class="h-s">How many do you need?</h2><p class="meta">${p.finishes.length > 1 ? "Set a quantity for each colour. Mix as many as you like in one order." : "Set the quantity you need."}</p></div>
         <div class="o-rows">
         ${p.finishes.map((f) => `
           <div class="o-row" data-f="${f}">

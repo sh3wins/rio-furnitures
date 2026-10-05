@@ -2,10 +2,7 @@
    In order: the picture, the name, what it is, colours, how many, add to project. */
 RIO.whenReady(function () {
   const F = RIO.FINISHES, ARR = RIO.ARR;
-  const asked = RIO.product(RIO.qs("id")) || RIO.PRODUCTS[0];
-  // A frame variant (hidden product) opens on its main product with that frame chosen
-  const p = asked.hidden ? (RIO.PRODUCTS.find((x) => x.variants && Object.values(x.variants).includes(asked.id)) || asked) : asked;
-  let frame = asked.frame || p.frame;
+  const p = RIO.product(RIO.qs("id")) || RIO.PRODUCTS[0];
   document.title = RIO.shortName(p) + " — RIO Furnitures";
 
   // Extra photo views, if the product has them: photos: { front, back, side, detail, material }
@@ -23,7 +20,6 @@ RIO.whenReady(function () {
   document.getElementById("crumbs").innerHTML =
     `<a href="furniture.html">Furniture</a><span>/</span><a href="furniture.html?cat=${cat.id}">${cat.name}</a><span>/</span><span class="ink">${RIO.esc(RIO.shortName(p))}</span>`;
 
-  const FRAME_HEX = { black: "#1b1a19", white: "#e9e8e4", grey: "#85878a" };
   const swatch = (attr, id, name, hex, on) =>
     `<button type="button" class="fin ${on ? "on" : ""}" ${attr}="${id}" aria-label="${name}" aria-pressed="${on}"><span class="c" data-f="${id}" style="background-color:${hex}"></span><span class="meta">${name}</span></button>`;
   const fact = (label, value) => value ? `<div><dt>${label}</dt><dd>${value}</dd></div>` : "";
@@ -42,16 +38,10 @@ RIO.whenReady(function () {
       <h1 class="h-l">${RIO.esc(RIO.shortName(p))}</h1>
       <p class="lead">${RIO.esc(p.desc)}</p>
 
-      <div class="p-block">
-        <span class="label">${p.finishLabel ? p.finishLabel + " colour" : "Colour"}: <b id="fin-name">${F[fin].name}</b></span>
+      ${p.finishes.length > 1 ? `<div class="p-block">
+        <span class="label">Colour: <b id="fin-name">${F[fin].name}</b></span>
         <div class="finishes" id="fins">${p.finishes.map((f) => swatch("data-fin", f, F[f].name, F[f].hex, f === fin)).join("")}</div>
-      </div>
-
-      ${p.variants ? `<div class="p-block">
-        <span class="label">Frame: <b id="frame-name">${RIO.FRAMES[frame]}</b></span>
-        <div class="finishes" id="frames">${Object.keys(p.variants).map((f) => swatch("data-frame", f, RIO.FRAMES[f], FRAME_HEX[f], f === frame)).join("")}</div>
       </div>` : ""}
-      ${p.layers ? `<p class="meta mt-s">Colour preview. Final finishes may vary slightly.</p>` : ""}
 
       <div class="p-block" id="builder"></div>
 
@@ -65,11 +55,7 @@ RIO.whenReady(function () {
 
   const stage = document.getElementById("stage");
   function paint() {
-    if (view === "object" && p.layers) {
-      // real photo with see-through colour layers on top (seat and frame)
-      const L = p.layers, lyr = (g, v) => Object.keys(L[g]).map((k) => `<img class="lyr ${k === v ? "on" : ""}" data-g="${g}" data-v="${k}" src="${L[g][k]}" alt="">`).join("");
-      stage.innerHTML = `<img src="${p.image}" alt="${RIO.esc(RIO.shortName(p))}">${lyr("seat", fin)}${lyr("frame", frame)}`;
-    } else if (view === "object" && p.image) {
+    if (view === "object" && p.image) {
       stage.innerHTML = `<img src="${p.image}" alt="${RIO.esc(RIO.shortName(p))}">`;
     } else if (view === "object") {
       stage.innerHTML = RIO.visual(p, fin) + `<span class="meta cap">Drawing, shown in ${F[fin].name.toLowerCase()}</span>`;
@@ -96,30 +82,18 @@ RIO.whenReady(function () {
     stage.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") step(1); if (e.key === "ArrowLeft") step(-1); });
   }
 
-  const showLayer = (g, v) => stage.querySelectorAll(`.lyr[data-g="${g}"]`).forEach((l) => l.classList.toggle("on", l.dataset.v === v));
   const mark = (box, attr, value) => box.querySelectorAll(".fin").forEach((b) => { const on = b.dataset[attr] === value; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
 
   function setFin(f) {
     if (f === fin) return; fin = f;
     document.getElementById("fin-name").textContent = F[f].name;
     mark(document.getElementById("fins"), "fin", f);
-    if (p.layers) showLayer("seat", f); else if (view === "object" && !p.image) paint();
+    if (view === "object" && !p.image) paint();
   }
-  document.getElementById("fins").addEventListener("click", (e) => { const b = e.target.closest("[data-fin]"); if (b) setFin(b.dataset.fin); });
+  const finsEl = document.getElementById("fins");
+  if (finsEl) finsEl.addEventListener("click", (e) => { const b = e.target.closest("[data-fin]"); if (b) setFin(b.dataset.fin); });
 
-  // The order goes in under the chosen frame, so the project remembers it
-  const orderProduct = () => (p.variants ? RIO.product(p.variants[frame]) : p);
-  const builder = () => RIO.builder(document.getElementById("builder"), orderProduct(), { onFinish: setFin });
-  builder();
-  const framesEl = document.getElementById("frames");
-  if (framesEl) framesEl.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-frame]"); if (!b || b.dataset.frame === frame) return;
-    frame = b.dataset.frame;
-    mark(framesEl, "frame", frame);
-    document.getElementById("frame-name").textContent = RIO.FRAMES[frame];
-    showLayer("frame", frame);
-    builder();
-  });
+  RIO.builder(document.getElementById("builder"), p, { onFinish: setFin });
   paint();
 
   const rel = RIO.PRODUCTS.filter((x) => !x.hidden && x.id !== p.id && x.spaces.some((s) => p.spaces.includes(s))).slice(0, 4);

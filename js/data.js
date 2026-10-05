@@ -43,7 +43,7 @@ RIO.IMAGES = {
   school:      { src: "images/site/space-school.jpg",      alt: "Classroom with desks and chairs" },
   hospitality: { src: "images/site/space-hospitality.jpg", alt: "Hotel guest room with a bed and armchairs", pos: "50% 62%" },
   church:      { src: "images/real/church-chairs.jpg",     alt: "Rows of red upholstered church chairs made by RIO", pos: "42% 12%" },
-  outdoor:     { src: "images/site/space-outdoor.jpg",     alt: "Balcony terrace with woven lounge chairs", pos: "50% 64%" },
+  outdoor:     { src: "images/site/space-outdoor.jpg",     alt: "Rope-woven outdoor corner sofa on a terrace", pos: "50% 62%" },
   bar:         { src: "images/real/barrel-table.jpg",      alt: "RIO barrel tables and bar stools in a bar" },
   about:       { src: "images/real/workshop-assembly.jpg", alt: "Furniture being assembled in the RIO workshop" }
 };
@@ -126,14 +126,11 @@ const P = (id, name, icon, type, cats, spaces, desc, finishes) =>
   ({ id, name, icon, type, cats, spaces, desc, finishes, dims: null, materials: null, lead: null, price: null });
 
 RIO.PRODUCTS = [
-  /* The Rope Sofa — real photo with colour preview layers.
-     TODO: replace the name when the real one is confirmed.
-     finishes = seat colours; frame colour is chosen separately (see FRAMES below). */
+  /* The Rope Sofa — real photo. Offered as shown: beige seat, black frame.
+     TODO: replace the name when the real one is confirmed. */
   Object.assign(P("rope-sofa", "RIO Rope Sofa", "lounger", "Sofa · lounge seating", ["seating"], ["hospitality", "outdoor", "bar", "restaurant"],
-    "Rope-woven arms on a slim steel frame, with a soft cushioned seat. Designed and made in Nairobi.", ["beige", "white", "black", "red"]),
-    { image: "images/real/featured-sofa.jpg", finishLabel: "Seat", frame: "black",
-      layers: { seat: { white: "images/real/sofa/seat-white.webp", black: "images/real/sofa/seat-black.webp", red: "images/real/sofa/seat-red.webp" },
-                frame: { white: "images/real/sofa/frame-white.webp", grey: "images/real/sofa/frame-grey.webp" } } }),
+    "Rope-woven arms on a slim black steel frame, with a soft beige cushioned seat. Designed and made in Nairobi.", ["beige"]),
+    { image: "images/real/featured-sofa.jpg" }),
 
   P("chair-04", "RIO Chair 04", "chair", "Dining chair", ["seating"], ["restaurant", "bar", "church", "outdoor", "other"],
     "A clean dining chair built to be ordered by the room. At home in cafés, dining rooms and event spaces.", ["black", "white", "orange", "natural"]),
@@ -217,14 +214,10 @@ RIO.PORTFOLIO = [
   PF("007", "church", "Church project")
 ];
 
-/* Frame variants of the Rope Sofa (hidden from listings; used so a project remembers the frame colour) */
-RIO.FRAMES = { black: "Black coated", white: "White coated", grey: "Grey coated" };
-(function () {
-  const base = RIO.PRODUCTS.find((p) => p.id === "rope-sofa");
-  base.variants = { black: "rope-sofa", white: "rope-sofa-wf", grey: "rope-sofa-gf" };
-  [["white", "rope-sofa-wf"], ["grey", "rope-sofa-gf"]].forEach(([f, id]) =>
-    RIO.PRODUCTS.push(Object.assign({}, base, { id, name: base.name + " — " + RIO.FRAMES[f].toLowerCase() + " frame", frame: f, hidden: true })));
-})();
+/* The Rope Sofa used to be offered with other frame colours. These hidden
+   entries keep any project a visitor saved back then readable. */
+["rope-sofa-wf", "rope-sofa-gf"].forEach((id) =>
+  RIO.PRODUCTS.push(Object.assign({}, RIO.PRODUCTS.find((p) => p.id === "rope-sofa"), { id, hidden: true })));
 
 /* ---------- Workshop: material → build → finish → space ----------
    Photos are RIO's own. Replace a file or change its path here. */
