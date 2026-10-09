@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Schedule a Site Visit — RIO Furnitures</title>
+  <meta name="description" content="Book a visit from RIO Furnitures. We come to your space, measure up and talk through what you need.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23ff5a1f%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27Arial Narrow,Arial,sans-serif%27 font-size=%2720%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%231b1a18%27%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/barlow-condensed-latin-600-normal.woff2" crossorigin>
+  <link rel="stylesheet" href="css/rio.css?v=5">
+</head>
+<body data-page="visit">
+<header id="site-header"></header>
+
+<main id="main">
+  <section class="intro" style="padding-bottom:32px">
+    <div class="wrap narrow">
+      <span class="eyebrow">Site visit</span>
+      <h1 class="h-xl">Schedule a site visit.</h1>
+      <p class="lead">We come to your space, measure up and talk through what you need. Choose a day and we'll confirm it with you on WhatsApp.</p>
+    </div>
+  </section>
+  <div class="wrap narrow" style="padding-bottom:var(--space-section)">
+    <form id="v-form" novalidate>
+      <div class="f-fields" style="max-width:720px">
+        <div class="f-grid2">
+          <div class="field"><label for="v-space">What kind of space?</label><select class="select" id="v-space"></select></div>
+          <div class="field"><label for="v-loc">Where is it?</label><input class="input" id="v-loc" placeholder="Westlands, Nairobi" autocomplete="street-address"></div>
+          <div class="field"><label for="v-date">Preferred day</label><input class="input" id="v-date" type="date"><span class="meta">Monday to Saturday</span></div>
+          <div class="field"><label for="v-time">Preferred time</label><select class="select" id="v-time">
+            <option>Morning (8:30am – 12pm)</option><option>Afternoon (12pm – 4pm)</option><option>Late afternoon (4pm – 6:30pm)</option></select></div>
+          <div class="field"><label for="v-name">Name</label><input class="input" id="v-name" autocomplete="name"></div>
+          <div class="field"><label for="v-phone">Phone / WhatsApp</label><input class="input" id="v-phone" autocomplete="tel" inputmode="tel"></div>
+        </div>
+        <div class="field"><label for="v-notes">Anything we should know? (optional)</label>
+          <textarea class="textarea" id="v-notes" placeholder="What you want to furnish, roughly how many pieces, how to find the place…"></textarea></div>
+      </div>
+      <div class="f-foot" style="max-width:720px">
+        <span class="msg" id="v-msg" role="alert"></span>
+        <button type="submit" class="btn" id="v-send">Request Visit <span class="arr" aria-hidden="true">→</span></button>
+      </div>
+      <p class="meta mt-m">This is a request, not a confirmed booking. We'll confirm the day and time with you.</p>
+    </form>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="js/data.js?v=15"></script>
+<script src="js/store.js?v=15"></script>
+<script src="js/supabase-config.js?v=15"></script>
+<script src="js/main.js?v=15"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/backend.js?v=15"></script>
+<script src="js/visit.js?v=15"></script>
+</body>
+</html>

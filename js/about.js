@@ -11,6 +11,7 @@
     <div><h2 class="h-l">Visit us</h2><p class="lead mt-s">${C.location}<br>${C.hours}</p></div>
     <div class="row">
       <a class="btn" href="https://wa.me/${C.whatsapp}" target="_blank" rel="noopener">WhatsApp ${C.phoneDisplay} ${ARR}</a>
+      <a class="link" href="visit.html">Or we come to you: schedule a site visit ${ARR}</a>
       <a class="link" href="mailto:${C.email}">${C.email}</a>
     </div>`;
   RIO.observeReveal();

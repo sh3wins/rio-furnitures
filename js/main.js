@@ -81,6 +81,7 @@
             <li><a href="spaces.html">Spaces</a></li><li><a href="furniture.html">Furniture</a></li>
             <li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li>
             <li><a href="start.html">Start a project</a></li>
+            <li><a href="visit.html">Schedule a site visit</a></li>
           </ul>
           <ul>
             <li><a href="https://wa.me/${C.whatsapp}" target="_blank" rel="noopener">WhatsApp ${C.phoneDisplay}</a></li>
@@ -275,7 +276,7 @@
   };
 
   /* ---------- Send to RIO (database if connected, else WhatsApp / email) ---------- */
-  RIO.openSend = function (text, subject, hasFiles, row) {
+  RIO.openSend = function (text, subject, hasFiles, row, title) {
     let m = document.getElementById("send-modal");
     if (!m) { m = document.createElement("div"); m.id = "send-modal"; m.className = "modal"; m.setAttribute("role", "dialog"); m.setAttribute("aria-modal", "true"); document.body.appendChild(m); }
     const online = !!(RIO.db && row);
@@ -290,7 +291,7 @@
         <button class="modal-close" data-close aria-label="Close">×</button>
         <div data-stage="ready">
           <span class="meta">Send to RIO</span>
-          <h2 class="h-m">Your project is ready.</h2>
+          <h2 class="h-m">${title || "Your project is ready."}</h2>
           <p class="muted">${online ? "Send it straight to our team. We'll reply on WhatsApp or email." : "Choose how to send it. Everything below is filled in for you."}</p>
           <div class="summary">${RIO.esc(text)}</div>
           ${hasFiles ? `<p class="small" style="margin-bottom:18px">${online ? "Your files will be sent to RIO with your request." : "Your drawings, photos or PDFs: attach them in WhatsApp or email once it opens."}</p>` : ""}
