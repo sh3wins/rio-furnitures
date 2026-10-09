@@ -1,8 +1,8 @@
 /* =========================================================
    RIO — content posted from the admin dashboard
    ---------------------------------------------------------
-   Staff can post projects and furniture (with photos) from
-   admin.html. This file fetches what they have published and
+   Staff can post projects and furniture (with photos) and set
+   prices from admin.html. This file fetches what they have published and
    adds it to RIO.PORTFOLIO and RIO.PRODUCTS, newest first, so
    every page shows it alongside what is written in data.js.
 
@@ -16,6 +16,7 @@
   const FRESH_MS = 60 * 1000;      // reuse the saved copy for a minute
   const WAIT_MS = 2500;            // never hold a page longer than this
   const base = { projects: RIO.PORTFOLIO.slice(), products: RIO.PRODUCTS.slice() };
+  base.products.forEach((p) => (p._price = p.price));   // the price written in data.js, if any
 
   RIO.photoUrl = (path) => /^https?:/.test(path) ? path : cfg.url + "/storage/v1/object/public/site-photos/" + String(path).split("/").map(encodeURIComponent).join("/");
 
@@ -37,6 +38,10 @@
     });
     RIO.PORTFOLIO = projects.concat(base.projects);
     RIO.PRODUCTS = products.concat(base.products);
+    // Prices typed into the dashboard (Website → Prices) win over anything in data.js
+    const set = {};
+    (data.prices || []).forEach((r) => { if (r.price > 0) set[r.product_id] = r.price; });
+    RIO.PRODUCTS.forEach((p) => (p.price = set[p.id] || p._price || null));
   }
 
   const read = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
@@ -48,6 +53,10 @@
     return res.json();
   }
 
+  // Prices live in their own table. If it isn't there yet, the site simply shows no prices.
+  const getPrices = () => fetch(`${cfg.url}/rest/v1/site_prices?select=product_id,price`, { headers: { apikey: cfg.anonKey, Authorization: "Bearer " + cfg.anonKey } })
+    .then((res) => (res.ok ? res.json() : [])).catch(() => []);
+
   let ready = false; const waiting = [];
   const go = () => { if (ready) return; ready = true; waiting.splice(0).forEach((fn) => fn()); };
   RIO.whenReady = (fn) => (ready ? fn() : waiting.push(fn));
@@ -57,8 +66,8 @@
   if (cached && Date.now() - cached.t < FRESH_MS) { apply(cached); return go(); }
 
   const timer = setTimeout(() => { if (cached) apply(cached); go(); }, WAIT_MS);
-  Promise.all([get("site_projects", "created_at.desc"), get("site_products", "created_at.desc")])
-    .then(([projects, products]) => { const data = { projects, products }; save(data); if (!ready) apply(data); })
+  Promise.all([get("site_projects", "created_at.desc").catch(() => []), get("site_products", "created_at.desc").catch(() => []), getPrices()])
+    .then(([projects, products, prices]) => { const data = { projects, products, prices }; save(data); if (!ready) apply(data); })
     .catch(() => { if (!ready && cached) apply(cached); })
     .then(() => { clearTimeout(timer); go(); });
 })();

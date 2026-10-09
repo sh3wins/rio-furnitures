@@ -10,6 +10,7 @@
   RIO.qs = (k) => new URLSearchParams(location.search).get(k);
   RIO.esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const ARR = `<span class="arr" aria-hidden="true">→</span>`;
+  RIO.kes = (n) => "KES " + Number(n).toLocaleString("en-KE");   // 45000 → KES 45,000
   RIO.ARR = ARR;
 
   /* ---------- Header ---------- */
@@ -75,7 +76,7 @@
     footer.innerHTML = `
       <div class="wrap">
         <div class="foot-top">
-          <div class="foot-brand"><a href="index.html" class="logo">RIO</a><p>Furniture for real spaces.</p></div>
+          <div class="foot-brand"><a href="index.html" class="foot-plate" aria-label="RIO Furnitures — home"><img src="images/logo/rio-logo-orange.svg" alt="RIO Furnitures, Nairobi" width="132" height="132" loading="lazy"></a><p>Furniture for real spaces.</p></div>
           <ul>
             <li><a href="spaces.html">Spaces</a></li><li><a href="furniture.html">Furniture</a></li>
             <li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li>
@@ -149,8 +150,9 @@
   };
 
   /* ---------- A product's picture: its photo if it has one, else its line drawing ---------- */
-  RIO.visual = function (p, finishId) {
-    if (p.image) return `<img src="${p.image}" alt="${RIO.esc(RIO.shortName(p))}" loading="lazy" decoding="async">`;
+  RIO.visual = function (p, finishId, plain) {
+    const c = !plain && p.crop;   // zoom in on the furniture where a crop is set
+    if (p.image) return `<img src="${p.image}" alt="${RIO.esc(RIO.shortName(p))}" loading="lazy" decoding="async"${c ? ` class="crop" style="width:${c.w}%;left:${c.x}%;top:${c.y}%"` : ""}>`;
     return RIO.icon(p.icon, (F[finishId] || F[p.finishes[0]]).hex);
   };
 
@@ -160,8 +162,10 @@
       <a class="card reveal" href="product.html?id=${p.id}">
         <div class="media card-media ${p.image ? "" : "is-drawing"}">${RIO.visual(p, p.finishes[0])}</div>
         <div class="card-body">
+          ${p.no ? `<span class="no">No. ${p.no}</span>` : ""}
           <h3 class="h-s">${RIO.esc(RIO.shortName(p))}</h3>
           <span class="meta">${RIO.esc(p.type || "")}</span>
+          ${p.price ? `<span class="meta price">${RIO.kes(p.price)}</span>` : ""}
         </div>
       </a>`;
   };

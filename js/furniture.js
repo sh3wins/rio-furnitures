@@ -3,7 +3,8 @@ RIO.whenReady(function () {
   let cat = RIO.qs("cat") || "all";
   let space = RIO.qs("space") || "all";
   const catEl = document.getElementById("f-cat"), spEl = document.getElementById("f-space"), list = document.getElementById("f-list");
-  const CATS = RIO.CATEGORIES;
+  // Only the kinds of furniture that have something to show
+  const CATS = RIO.CATEGORIES.filter((c) => RIO.PRODUCTS.some((p) => !p.hidden && p.cats.includes(c.id)));
   if (!CATS.find((c) => c.id === cat)) cat = "all";
   if (!RIO.space(space)) space = "all";
 
@@ -29,7 +30,8 @@ RIO.whenReady(function () {
       <section class="f-group">
         <h2 class="h-m f-group-head">${g.c.name}</h2>
         <div class="cards">${g.items.map((p) => RIO.piece(p)).join("")}</div>
-      </section>`).join("") || `<section class="f-group"><p class="lead">Nothing listed for that space yet.</p></section>`) + custom;
+      </section>`).join("") || `<section class="f-group"><p class="lead">Nothing listed for that space yet.</p></section>`) +
+      `<p class="shot-note">Photographed as made, in our Nairobi workshop and at customers' spaces. Prices are quoted on your quantities.</p>` + custom;
     RIO.observeReveal(list);
     const q = new URLSearchParams();
     if (cat !== "all") q.set("cat", cat); if (space !== "all") q.set("space", space);

@@ -1,8 +1,8 @@
 /* =========================================================
    RIO FURNITURES — site styles
    ---------------------------------------------------------
-   One typeface. Warm off-white. Photography does the talking.
-   The accent colour is used for small signals only.
+   Workshop look: concrete grey and charcoal, condensed headings,
+   RIO orange as the accent. Photos are shown as taken.
 
    Contents
    1. Tokens (colours, type, spacing) — light and dark
@@ -21,46 +21,55 @@
 @font-face { font-family: "Instrument Sans"; font-weight: 500; font-style: normal; font-display: swap; src: url("../fonts/instrument-sans-latin-500-normal.woff2") format("woff2"); }
 @font-face { font-family: "Instrument Sans"; font-weight: 600; font-style: normal; font-display: swap; src: url("../fonts/instrument-sans-latin-600-normal.woff2") format("woff2"); }
 
+@font-face { font-family: "Barlow Condensed"; font-weight: 500; font-style: normal; font-display: swap; src: url("../fonts/barlow-condensed-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 600; font-style: normal; font-display: swap; src: url("../fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); }
+
 /* ---------- 1. Tokens ---------- */
 :root {
-  --paper: #f7f5f0;        /* warm off-white: the page */
-  --paper-2: #efece5;      /* soft ivory: quiet bands, image frames */
-  --paper-3: #e4e0d6;
+  --paper: #d5d1ca;        /* workshop concrete: the page */
+  --paper-2: #c9c5bd;      /* quiet bands */
+  --paper-3: #bab5ac;      /* image frames */
   --ink: #1b1a18;          /* headings */
-  --ink-soft: #46433e;     /* body text */
-  --muted: #6a665f;        /* small supporting text */
-  --line: rgba(27, 26, 24, .11);
-  --line-2: rgba(27, 26, 24, .22);
-  --accent: #9c5124;       /* used sparingly: focus, counts, progress */
-  --night: #1b1a18;        /* the occasional dark section */
-  --on-night: #f7f5f0;
-  --on-night-soft: #bdb8ae;
-  --header-bg: rgba(247, 245, 240, .94);
+  --ink-soft: #33312d;     /* body text */
+  --muted: #4b4842;        /* small supporting text */
+  --line: rgba(27, 26, 24, .18);
+  --line-2: rgba(27, 26, 24, .36);
+  --accent: #9a3408;       /* orange dark enough to read as text on concrete */
+  --brand: #ff5a1f;        /* RIO orange: buttons and marks on charcoal */
+  --on-brand: #1b1a18;
+  --night: #1b1a18;        /* charcoal: header, hero, workshop, footer */
+  --on-night: #f2efe9;
+  --on-night-soft: #c9c4bb;
+  --on-night-muted: #9c968c;
+  --header-bg: rgba(213, 209, 202, .95);   /* the sticky filter bar */
+  --rope: #c9a77c;         /* warm rope tan: the workshop band */
 
   --font: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
 
   --gutter: clamp(20px, 5vw, 72px);
   --max: 1360px;
   --nav-h: 72px;
   --gap: clamp(16px, 2vw, 28px);
-  --space-section: clamp(96px, 12vw, 176px);
-  --space-block: clamp(48px, 6vw, 88px);
+  --space-section: clamp(80px, 9vw, 136px);
+  --space-block: clamp(40px, 5vw, 72px);
   --ease: cubic-bezier(.22, .61, .2, 1);
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --paper: #161513;
-  --paper-2: #1e1c1a;
-  --paper-3: #2b2825;
-  --ink: #f3efe8;
-  --ink-soft: #cbc5ba;
-  --muted: #979188;
-  --line: rgba(243, 239, 232, .12);
-  --line-2: rgba(243, 239, 232, .24);
-  --accent: #d48a55;
+  --paper: #171614;
+  --paper-2: #201e1c;
+  --paper-3: #2c2a26;
+  --ink: #f2efe9;
+  --ink-soft: #cfc9be;
+  --muted: #9c968c;
+  --line: rgba(242, 239, 233, .13);
+  --line-2: rgba(242, 239, 233, .26);
+  --accent: #ff7a45;
   --night: #0e0d0c;
-  --header-bg: rgba(22, 21, 19, .94);
+  --header-bg: rgba(23, 22, 20, .95);
+  --rope: #3b2f22;
 }
 
 /* ---------- 2. Base ---------- */
@@ -172,13 +181,6 @@ main { padding-top: var(--nav-h); }
 [data-theme="dark"] .theme-btn .i-moon { display: none; }
 .menu-btn { display: none; width: 40px; height: 40px; }
 .menu-btn span { display: block; width: 22px; height: 1.5px; background: currentColor; margin: 6px auto; transition: transform .3s var(--ease); }
-
-/* The home page opens on a photograph: the header sits on it until you scroll */
-body[data-page="home"] main { padding-top: 0; }
-body[data-page="home"]:not(.menu-open) .site-header:not(.scrolled) { background: transparent; color: #fff; }
-body[data-page="home"]:not(.menu-open) .site-header:not(.scrolled) :is(.logo, .nav a.nl, .proj-link, .theme-btn, .menu-btn) { color: #fff; }
-body[data-page="home"]:not(.menu-open) .site-header:not(.scrolled) .btn { background: #fff; border-color: #fff; color: #1b1a18; }
-body[data-page="home"]:not(.menu-open) .site-header:not(.scrolled) .theme-btn:hover { background: rgba(255, 255, 255, .16); }
 
 @media (max-width: 960px) {
   .nav { display: none; margin: 0; }
@@ -565,3 +567,119 @@ a:hover .media > img, a:hover .media > video { transform: scale(1.025); }
 /* Line drawings keep their light tile in dark mode too */
 .p-stage.is-drawing, .th.is-drawing { background: #ece8e0; }
 .p-stage.is-drawing .cap { color: #5f5b54; }
+
+
+/* =========================================================
+   WORKSHOP LOOK
+   Everything below restyles the pieces above. Colours come
+   from the tokens at the top of this file.
+   ========================================================= */
+
+/* ---------- Type ---------- */
+.h-xl, .h-l, .h-m { font-family: var(--display); font-weight: 600; text-transform: uppercase; text-wrap: balance; }
+.h-xl { font-size: clamp(44px, 6.6vw, 96px); line-height: .96; letter-spacing: .004em; }
+.h-l  { font-size: clamp(34px, 4.3vw, 60px); line-height: 1; letter-spacing: .006em; }
+.h-m  { font-size: clamp(24px, 2.2vw, 30px); line-height: 1.05; letter-spacing: .02em; }
+.h-s  { font-weight: 600; }
+.eyebrow, .no { display: block; font-family: var(--display); font-weight: 500; text-transform: uppercase; letter-spacing: .16em; font-size: 16px; line-height: 1.3; color: var(--muted); }
+.no { font-size: 15px; margin-bottom: 2px; }
+.dark .eyebrow, .hero .eyebrow { color: var(--brand); }
+.dark .meta, .dark .muted { color: var(--on-night-muted); }
+.pj-name { font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: .006em; }
+.shot-note { margin-top: var(--space-block); padding-top: 16px; border-top: 1px solid var(--line-2); font-size: 15px; color: var(--muted); }
+
+/* ---------- Square, sturdy shapes ---------- */
+.btn { border-radius: 0; font-weight: 600; }
+.order, .sample, .modal-card, .f-custom, .summary, .o-done, .f-hint, .toast, .input, .textarea, .select, .dropzone, .skip,
+.qty button, .suggest button, .p-stage .turn-btn, .theme-btn { border-radius: 0; }
+.dark .btn, .hero .btn, .site-header .btn { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.dark .btn:hover, .hero .btn:hover, .site-header .btn:hover { background: transparent; color: var(--on-night); }
+.dark .btn-line, .hero .btn-line { background: transparent; color: var(--on-night); border-color: rgba(242, 239, 233, .45); }
+.dark .btn-line:hover, .hero .btn-line:hover { border-color: var(--on-night); }
+.dark .link { text-decoration-color: rgba(242, 239, 233, .4); }
+
+/* ---------- Header and footer: charcoal on every page ---------- */
+.site-header { background: var(--night); }
+.site-header.scrolled { border-bottom-color: rgba(242, 239, 233, .12); }
+.site-header :is(.logo, .proj-link, .theme-btn, .menu-btn) { color: var(--on-night); }
+.logo { font-family: var(--display); font-weight: 600; font-size: 30px; letter-spacing: .08em; line-height: 1; }
+.proj-link:hover { color: #fff; }
+.proj-link .qty.has { background: var(--brand); color: var(--on-brand); }
+.theme-btn:hover { color: #fff; background: rgba(255, 255, 255, .12); }
+@media (min-width: 961px) {
+  .nav a.nl { color: var(--on-night-soft); }
+  .nav a.nl:hover, .nav a.nl.active { color: var(--on-night); }
+  .nav a.nl.active { border-bottom-color: var(--brand); }
+}
+@media (max-width: 960px) { body.menu-open .site-header { background: var(--night); } }
+
+.site-footer { background: var(--night); color: var(--on-night-soft); border-top: 0; }
+.site-footer .logo, .site-footer a:hover { color: var(--on-night); }
+.site-footer .foot-brand .logo { font-size: 30px; }
+.site-footer .foot-brand p, .site-footer .meta { color: var(--on-night-muted); }
+.site-footer .foot-bottom { border-top-color: rgba(242, 239, 233, .14); }
+
+/* ---------- Photos ---------- */
+.media { background: var(--paper-3); }
+.card-media { --ar: 4 / 3; }
+/* A photo with a set crop is zoomed in on the furniture (see `crop` in js/data.js) */
+.media > img.crop { inset: auto; height: auto; max-width: none; object-fit: fill; }
+.p-stage.is-photo { aspect-ratio: 4 / 3; background: var(--paper-3); }
+.p-stage img { object-fit: contain; }
+.about-photo { --ar: 4 / 3; max-width: 760px; }
+
+/* ---------- Home ---------- */
+.hero { min-height: 0; display: block; background: var(--night); color: var(--on-night-soft); }
+.hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px clamp(32px, 6vw, 88px); align-items: center; padding-top: clamp(40px, 5vw, 72px); padding-bottom: clamp(56px, 7vw, 96px); }
+.hero-text { padding: 0; }
+.hero-text h1 { color: var(--on-night); max-width: 12ch; margin-top: 18px; }
+.hero-text .lead { color: var(--on-night-soft); }
+.hero-photo { width: 100%; max-width: 520px; justify-self: end; }
+.hero-photo .media { --ar: 4 / 5; background: #2a2825; }
+.hero-photo figcaption { margin-top: 12px; font-size: 14px; color: var(--on-night-muted); }
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .hero-photo { justify-self: start; } }
+
+.walk { grid-template-columns: repeat(4, 1fr); gap: 40px var(--gap); }
+.space.wide { grid-column: auto; }
+.space .media, .space.wide .media { --ar: 4 / 5; }
+.space-cap { grid-template-columns: 1fr; }
+.space-cap .link { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 8px; }
+@media (max-width: 1000px) { .walk { grid-template-columns: 1fr 1fr; } }
+
+.split .media { --ar: 4 / 5; max-width: 460px; }
+.split .sample { margin-top: 28px; }
+
+.proofs { grid-template-columns: repeat(3, 1fr); }
+.proof:first-child { grid-row: auto; }
+.proof .media, .proof:first-child .media { --ar: 4 / 3; }
+@media (max-width: 760px) { .proofs { grid-template-columns: 1fr; } }
+
+/* ---------- Spaces: photo beside the text, not across the page ---------- */
+@media (min-width: 761px) {
+  .room:not(.plain) { display: grid; grid-template-columns: minmax(0, 34%) 1fr; gap: var(--space-block) clamp(32px, 5vw, 80px); align-items: start; }
+  .room:not(.plain) > .media { --ar: 4 / 5; }
+  .room:not(.plain) > .room-head { grid-template-columns: 1fr; padding: 0; }
+  .room:not(.plain) > .cards { grid-column: 1 / -1; }
+}
+
+/* ---------- Projects: photo beside the story ---------- */
+@media (min-width: 861px) {
+  .story { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
+  .story .media { --ar: 4 / 3; }
+  .story-body { grid-template-columns: 1fr; margin-top: 0; }
+}
+
+/* ---------- Logo: the workshop plate ----------
+   Header: a small orange plate with RIO. Footer: the full plate (images/logo/). */
+.site-header .logo { background: var(--brand); color: var(--on-brand); padding: 5px 11px 4px; font-size: 27px; letter-spacing: .05em; }
+.foot-plate { display: block; width: 132px; }
+.foot-plate img { display: block; width: 100%; height: auto; }
+
+/* ---------- The warm band: the workshop, in the colour of the rope ---------- */
+.warm { background: var(--rope); color: var(--ink-soft); }
+.warm .meta, .warm .muted { color: var(--ink-soft); }
+.warm .steps .media { background: rgba(27, 26, 24, .25); }
+
+/* ---------- Prices (set by staff in the dashboard) ---------- */
+.card-body .price { color: var(--ink); font-weight: 600; margin-top: 6px; }
+.facts .price-note { display: block; margin-top: 2px; }

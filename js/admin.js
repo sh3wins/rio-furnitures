@@ -1,6 +1,6 @@
 /* =========================================================
    RIO — Admin dashboard
-   Overview · Quote requests · Orders · Customers · Website (projects, furniture) · Staff
+   Overview · Quote requests · Orders · Customers · Website (projects, furniture, prices) · Staff
    Data lives in Supabase (see supabase/schema.sql).
    ========================================================= */
 (function () {
@@ -37,6 +37,7 @@
 
   let sb = null, user = null, me = null, Q = [], O = [], S = [];
   let WP = [], WF = [], siteReady = true; // website projects, website furniture, are the tables there?
+  let SP = [], pricesReady = true;        // prices set by staff, is the prices table there?
   const ui = { quoteFilter: "new", orderFilter: "active", search: "" };
 
   /* ================= Boot ================= */
@@ -93,27 +94,29 @@
       return;
     }
     await load();
-    window.addEventListener("hashchange", route);
+    window.addEventListener("hashchange", () => route());
     route();
-    setInterval(async () => { if (document.visibilityState === "visible" && !drawerOpen()) { await load(); route(true); } }, 90000);
+    setInterval(async () => { if (document.visibilityState === "visible" && !drawerOpen() && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || "")) { await load(); route(true); } }, 90000);
   }
 
   async function load() {
-    const [q, o, s, wp, wf] = await Promise.all([
+    const [q, o, s, wp, wf, sp] = await Promise.all([
       sb.from("quotes").select("*").order("created_at", { ascending: false }),
       sb.from("orders").select("*").order("updated_at", { ascending: false }),
       sb.from("staff").select("*"),
       sb.from("site_projects").select("*").order("created_at", { ascending: false }),
-      sb.from("site_products").select("*").order("created_at", { ascending: false })
+      sb.from("site_products").select("*").order("created_at", { ascending: false }),
+      sb.from("site_prices").select("*")
     ]);
     Q = (q && q.data) || []; O = (o && o.data) || []; S = (s && s.data) || [];
     WP = (wp && wp.data) || []; WF = (wf && wf.data) || [];
     siteReady = !(wp && wp.error) && !(wf && wf.error);
+    SP = (sp && sp.data) || []; pricesReady = !(sp && sp.error);
   }
 
   /* ================= Shell ================= */
   const PAGES = [["overview", "Overview"], ["quotes", "Quote requests"], ["orders", "Orders"], ["customers", "Customers"]];
-  const SITE_PAGES = [["projects", "Projects"], ["furniture", "Furniture"]];
+  const SITE_PAGES = [["projects", "Projects"], ["furniture", "Furniture"], ["prices", "Prices"]];
   function navHTML(active) {
     const newQ = Q.filter((q) => q.status === "new").length;
     return `${logo}
@@ -184,7 +187,7 @@
   function route(keep) {
     const h = (location.hash || "#overview").slice(1);
     const [page, id] = h.split("/");
-    ({ overview, quotes, orders, customers, projects, furniture, staff }[page] || overview)();
+    ({ overview, quotes, orders, customers, projects, furniture, prices, staff }[page] || overview)();
     bindRefresh();
     if (id && !keep) {
       if (page === "quotes") { const q = Q.find((x) => x.ref === id || x.id === id); if (q) quoteDrawer(q); }
@@ -514,7 +517,7 @@
   // re-draw the page behind the drawer without closing it
   function refreshBehind() {
     const page = (location.hash || "#overview").slice(1).split("/")[0];
-    ({ overview, quotes, orders, customers, projects, furniture, staff }[page] || overview)();
+    ({ overview, quotes, orders, customers, projects, furniture, prices, staff }[page] || overview)();
     bindRefresh();
   }
 
@@ -611,6 +614,42 @@
     sitePage("piece", "Website", "<em>Furniture.</em>", "New piece", "No furniture posted yet. Press “New piece”, add photos and it appears on the Furniture page.",
       `<th>Piece</th><th class="hide-s">Category</th>`,
       (r) => `<td>${esc(r.name)}<span class="sub">${esc(r.type || "")}</span></td><td class="hide-s">${esc((RIO.category(r.category) || {}).name || r.category)}</td>`);
+  }
+
+  /* Prices: one box per piece on the website. Type a number and it is live;
+     empty the box and the price disappears. Kept in the site_prices table. */
+  function prices() {
+    const pieces = RIO.PRODUCTS.filter((p) => !p.hidden).map((p) => ({ id: p.id, name: RIO.shortName(p), sub: p.type || "", img: p.image || "" }))
+      .concat(WF.filter((r) => !RIO.PRODUCTS.some((p) => p.id === r.slug)).map((r) => ({ id: r.slug, name: r.name, sub: r.type || "", img: r.photos && r.photos[0] ? photoUrl(r.photos[0]) : "" })));
+    const cur = Object.fromEntries(SP.map((r) => [r.product_id, r.price]));
+    shell("prices", `
+      ${head("Website", "<em>Prices.</em>")}
+      ${!pricesReady ? `<p class="notice">Prices need one more database step. In Supabase, open <b>SQL Editor</b>, paste in the whole of <code>supabase/update-3-prices.sql</code> from the project folder and press <b>Run</b>. Then press Refresh here.</p>` : `
+      <p class="notice" style="max-width:640px">Type today's price in Kenya shillings and press Enter. It shows on the website straight away. Empty a box to show no price for that piece. Change a price whenever the market moves.</p>
+      <table class="list posts" style="max-width:760px"><thead><tr><th></th><th>Piece</th><th>Price (KES)</th><th></th></tr></thead><tbody>
+        ${pieces.map((p) => `<tr>
+          <td class="th">${p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy">` : ""}</td>
+          <td><label for="pr-${esc(p.id)}">${esc(p.name)}</label><span class="sub">${esc(p.sub)}</span></td>
+          <td><input class="input" id="pr-${esc(p.id)}" data-pid="${esc(p.id)}" inputmode="numeric" autocomplete="off" placeholder="No price" style="width:140px;padding:10px 12px" value="${cur[p.id] ? Number(cur[p.id]).toLocaleString("en-KE") : ""}"></td>
+          <td><span class="saved" data-msg="${esc(p.id)}" role="status"></span></td></tr>`).join("")}
+      </tbody></table>`}`);
+    document.getElementById("main").querySelectorAll("input[data-pid]").forEach((inp) => {
+      inp.onkeydown = (e) => { if (e.key === "Enter") inp.blur(); };
+      inp.onchange = async () => {
+        const id = inp.dataset.pid, msg = document.querySelector(`[data-msg="${id}"]`);
+        const raw = inp.value.replace(/[,\s]|kes|ksh|\/=/gi, "");
+        const n = raw === "" ? null : Math.round(Number(raw));
+        if (n !== null && (!isFinite(n) || n < 0 || n > 100000000)) { msg.className = "saved err"; msg.textContent = "Numbers only, e.g. 45000"; return; }
+        msg.className = "saved"; msg.textContent = "Saving…";
+        const res = n ? await sb.from("site_prices").upsert({ product_id: id, price: n, updated_at: new Date().toISOString() })
+                      : await sb.from("site_prices").delete().eq("product_id", id);
+        if (res.error) { msg.className = "saved err"; msg.textContent = "Couldn't save. Try again."; return; }
+        SP = SP.filter((r) => r.product_id !== id); if (n) SP.push({ product_id: id, price: n });
+        inp.value = n ? n.toLocaleString("en-KE") : "";
+        clearSiteCopy();
+        msg.className = "saved ok"; msg.textContent = n ? "Saved. Live on the website." : "Price removed.";
+      };
+    });
   }
 
   /* One form for both: a project (photos, title, space, a few words)

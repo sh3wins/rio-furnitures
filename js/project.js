@@ -43,7 +43,7 @@ RIO.whenReady(function () {
     return `
       <div class="pj-item" data-i="${i}">
         <div class="pj-item-head">
-          <a class="th ${p.image ? "" : "is-drawing"}" href="product.html?id=${p.id}" aria-label="${RIO.esc(p.name)}">${RIO.visual(p, firstF)}</a>
+          <a class="th ${p.image ? "" : "is-drawing"}" href="product.html?id=${p.id}" aria-label="${RIO.esc(p.name)}">${RIO.visual(p, firstF, true)}</a>
           <div><div class="h-s">${RIO.esc(RIO.shortName(p))}</div><span class="meta">${RIO.esc(p.type || "")}</span></div>
           <div class="t"><span class="n" data-lt>${S.lineTotal(it)}</span><span class="meta">pieces</span></div>
         </div>
@@ -158,6 +158,9 @@ RIO.whenReady(function () {
     document.getElementById("pj-file-list").addEventListener("click", (e) => { const b = e.target.closest("[data-rm]"); if (b) { proj.files.splice(+b.dataset.rm, 1); files(); persist(); } });
     document.getElementById("pj-quote").addEventListener("click", () => {
       if (!S.total(proj) && !proj.notes) { RIO.toast(`<span>Add some furniture or a note first.</span><a href="furniture.html">Browse furniture</a>`); return; }
+      // RIO can only reply if there is a way to reach the customer
+      const pc = proj.contact || {};
+      if (!pc.phone && !pc.email) { RIO.toast(`<span>Add a phone number or email so we can reply.</span>`); const ph = document.getElementById("c-phone"); ph.scrollIntoView({ block: "center" }); ph.focus({ preventScroll: true }); return; }
       const qrow = RIO.quoteFromProject ? RIO.quoteFromProject(proj) : null;
       if (qrow) qrow._files = (proj.files || []).map((n) => (RIO._fileObjs || {})[proj.id + "/" + n]).filter(Boolean);
       RIO.openSend(RIO.projectSummary(proj), "Project quote — " + proj.name, (proj.files || []).length > 0, qrow);

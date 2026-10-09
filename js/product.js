@@ -22,7 +22,7 @@ RIO.whenReady(function () {
 
   const fact = (label, value) => value ? `<div><dt>${label}</dt><dd>${value}</dd></div>` : "";
   const facts = fact("Dimensions", p.dims) + fact("Materials", p.materials) + fact("Lead time", p.lead) +
-    fact("Price", p.price ? "From KES " + p.price.toLocaleString() + " per piece" : "Quoted on your quantities") +
+    fact("Price", p.price ? RIO.kes(p.price) + `<span class="meta price-note">Prices change with the market. Your quote confirms the price.</span>` : "") +   // no price set = no price row
     fact("Made for", p.spaces.map((s) => `<a class="link" href="spaces.html?space=${s}">${RIO.space(s).plural}</a>`).join(" &nbsp; "));
 
   document.getElementById("prod").innerHTML = `

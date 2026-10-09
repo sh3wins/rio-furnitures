@@ -21,7 +21,7 @@ RIO.whenReady(function () {
   }).join("");
 
   /* ---------- A few pieces ---------- */
-  const PICK = ["rope-sofa", "chair-04", "table-08", "desk-03"];
+  const PICK = ["rope-armchair-set", "woven-chair-set", "dining-table-set", "high-table-set"];
   $("#pieces").innerHTML = PICK.map((id) => RIO.piece(RIO.product(id))).join("");
 
   /* ---------- Example order (shows how ordering in quantity works) ---------- */
@@ -41,7 +41,7 @@ RIO.whenReady(function () {
     </a>`).join("");
 
   /* ---------- Workshop ---------- */
-  $("#steps").innerHTML = RIO.workshopSteps();
+  $("#steps").innerHTML = RIO.workshopSteps({ Build: "images/real/clip-welding.mp4" });   // the welding clip plays; the rest are stills
 
   $("#ask-wa").href = "https://wa.me/" + RIO.CONTACT.whatsapp;
   RIO.observeReveal();

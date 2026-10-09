@@ -80,3 +80,17 @@ How it works:
   in `js/data.js`. Visitors may take up to a minute to see a new post.
 - Only signed-in staff can add, change or delete. Visitors can only read what is published.
 - **Everything posted is public.** Only post photos and names customers are happy to have shown.
+
+## Setting prices from the dashboard
+
+Staff can set and change prices themselves (**Website → Prices**). Each piece on
+the website has a box: type the price in Kenya shillings and press Enter. It shows
+on the website straight away. Empty the box and the price disappears.
+
+One-time setup:
+
+1. In Supabase, open **SQL Editor → New query**.
+2. Paste in the whole of `supabase/update-3-prices.sql` and press **Run**.
+3. Open the dashboard and press **Refresh**. The Prices page is ready.
+
+Until a piece has a price, the website shows none for it.

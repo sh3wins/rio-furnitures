@@ -39,16 +39,14 @@ RIO.CONTACT = {
    (The big photo at the top of the home page is images/site/hero.jpg,
    set in index.html.) */
 RIO.IMAGES = {
-  restaurant:  { src: "images/site/space-restaurant.jpg",  small: "images/site/space-restaurant-900.jpg",  alt: "Restaurant tables set for service, with woven chairs", pos: "50% 46%" },
-  office:      { src: "images/site/space-office.jpg",      small: "images/site/space-office-900.jpg",      alt: "Office desks with task chairs", pos: "58% 50%" },
-  hospitality: { src: "images/site/space-hospitality.jpg", small: "images/site/space-hospitality-900.jpg", alt: "Hotel guest room with a bed and armchairs", pos: "50% 62%" },
+  restaurant:  { src: "images/real/orange-restaurant.jpg", alt: "Orange bar stools and high tables along the windows of a restaurant", pos: "50% 62%" },
+  bar:         { src: "images/real/metal-bar-stools.jpg",  alt: "White metal bar stools with green seats around high tables", pos: "42% 50%" },
   church:      { src: "images/real/church-chairs.jpg",     alt: "Rows of red upholstered church chairs made by RIO", pos: "42% 12%" },
-  outdoor:     { src: "images/site/space-outdoor.jpg",     small: "images/site/space-outdoor-900.jpg",     alt: "Balcony terrace with woven lounge chairs", pos: "50% 64%" },
-  bar:         { src: "images/real/barrel-table.jpg",      alt: "RIO barrel tables and bar stools in a bar" },
+  outdoor:     { src: "images/real/rooftop-dining.jpg",    alt: "Rope dining chairs and round tables on a rooftop terrace" },
   about:       { src: "images/real/workshop-assembly.jpg", alt: "Furniture being assembled in the RIO workshop" }
-  /* Schools has no photo yet. When there is one, save it as images/site/space-school.jpg and add:
-     school: { src: "images/site/space-school.jpg", alt: "Classroom with desks and chairs" },
-     It then appears on the home page and the Spaces page automatically. */
+  /* Offices, Schools and Hospitality have no photo yet. Add a line here when there is one, e.g.
+     office: { src: "images/real/office.jpg", alt: "Office desks and chairs" },
+     and the space appears on the home page and the Spaces page automatically. */
 };
 
 /* ---------- Finishes (colours) ---------- */
@@ -60,7 +58,8 @@ RIO.FINISHES = {
   walnut:  { name: "Walnut",  hex: "#6e4a30" },
   grey:    { name: "Grey",    hex: "#8b8a85" },
   beige:   { name: "Beige",   hex: "#c9a37a" },
-  red:     { name: "Red",     hex: "#9c2f27" }
+  red:     { name: "Red",     hex: "#9c2f27" },
+  shown:   { name: "As shown", hex: "#b79a72" }   /* for pieces photographed in one finish */
 };
 
 /* ---------- Furniture categories (WHAT the furniture is) ----------
@@ -115,7 +114,7 @@ RIO.SPACES = [
 ];
 
 /* The spaces shown on the home page, in order. One without a photo is skipped. */
-RIO.HOME_SPACES = ["restaurant", "office", "hospitality", "school", "church", "outdoor"];
+RIO.HOME_SPACES = ["restaurant", "bar", "church", "outdoor", "office", "hospitality", "school"];
 
 /* ---------- Products ----------
    type:   what kind of piece it is (shown under the name)
@@ -128,12 +127,41 @@ RIO.HOME_SPACES = ["restaurant", "office", "hospitality", "school", "church", "o
 const P = (id, name, icon, type, cats, spaces, desc, finishes) =>
   ({ id, name, icon, type, cats, spaces, desc, finishes, dims: null, materials: null, lead: null, price: null });
 
+/* A photographed piece. `crop` zooms the card photo in on the furniture:
+   { w: photo width as % of the frame, x: left offset %, y: top offset % }.
+   Leave crop out and the photo simply fills the frame.
+   Names here describe what is in the photo until RIO confirms the real ones. */
+const R = (no, id, name, type, cats, spaces, desc, image, crop, gallery) =>
+  Object.assign(P(id, name, "custom", type, cats, spaces, desc, ["shown"]), { no, image, crop: crop || null, gallery: gallery || null });
+
 RIO.PRODUCTS = [
+  R("01", "rope-armchair-set", "RIO Rope Armchair Set", "Two armchairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor", "hospitality"],
+    "Rope-woven armchairs with cream seat and back cushions on a gold-finish steel frame, with a round table to match.",
+    "images/real/rope-armchair-set.jpg", { w: 130, x: -16.9, y: -13 },
+    ["images/real/rope-armchair-set.jpg", "images/real/rope-armchair-set-top.jpg", "images/real/rope-armchair.jpg"]),
+  R("02", "woven-chair-set", "RIO Woven Chair Set", "Two chairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor"],
+    "Woven tub chairs on white steel legs with padded seats, and a round table with a rope-woven apron.",
+    "images/real/woven-set.jpg", { w: 130, x: -9.75, y: -9.1 },
+    ["images/real/woven-set.jpg", "images/real/woven-set-side.jpg", "images/real/woven-set-angle.jpg"]),
+  R("03", "dining-table-set", "RIO Dining Table Set", "Table and four chairs", ["tables", "seating"], ["restaurant", "bar", "other"],
+    "A solid wood top on a black steel frame, with four woven chairs.",
+    "images/real/dining-set.jpg", { w: 115, x: -7.5, y: -2.3 },
+    ["images/real/dining-set.jpg", "images/real/dining-set-above.jpg"]),
+  R("04", "high-table-set", "RIO High Table Set", "High table and bar chairs", ["tables", "seating"], ["bar", "restaurant", "office"],
+    "A long high table with a wood-finish top on a white steel frame, with rope bar chairs and brown cushions.",
+    "images/real/high-table-set.jpg", { w: 125, x: -25, y: -76.7 }),
+  R("05", "metal-bench-set", "RIO Metal Bench Set", "Bench, two chairs and a table", ["seating", "tables"], ["bar", "outdoor", "restaurant"],
+    "A white steel bench and tub chairs with cut-pattern backs and green cushions, around a painted table.",
+    "images/real/metal-bench-set.jpg", { w: 110, x: -5.5, y: -9.4 }),
+  R("06", "metal-bar-stool-set", "RIO Metal Bar Stool Set", "Bar stools and a high table", ["seating", "tables"], ["bar", "outdoor"],
+    "White steel bar stools with cut-pattern backs and green seats, around a round high table.",
+    "images/real/metal-bar-stools.jpg", { w: 110, x: -5.5, y: -9.9 }),
+
   /* The Rope Sofa — real photo. Offered as shown: beige seat, black frame.
      TODO: replace the name when the real one is confirmed. */
   Object.assign(P("rope-sofa", "RIO Rope Sofa", "lounger", "Sofa · lounge seating", ["seating"], ["hospitality", "outdoor", "bar", "restaurant"],
     "Rope-woven arms on a slim black steel frame, with a soft beige cushioned seat. Designed and made in Nairobi.", ["beige"]),
-    { image: "images/real/featured-sofa.jpg" }),
+    { no: "07", image: "images/real/featured-sofa.jpg", crop: { w: 111, x: -5.55, y: -54.7 } }),
 
   P("chair-04", "RIO Chair 04", "chair", "Dining chair", ["seating"], ["restaurant", "bar", "church", "outdoor", "other"],
     "A clean dining chair built to be ordered by the room. At home in cafés, dining rooms and event spaces.", ["black", "white", "orange", "natural"]),
@@ -200,6 +228,10 @@ const PF = (no, space, title) => ({ no, space, title, headline: null, building: 
 /* Real project: same fields as PF, filled in. Add building / supplied / materials / finishes when known. */
 const RP = (no, space, headline, story, photos, video) => ({ ...PF(no, space, headline), headline, story, photos, video: video || null, placeholder: false });
 RIO.PORTFOLIO = [
+  RP("008", "restaurant", "Bar stools and high tables for a restaurant", null,
+    [{ src: "images/real/orange-restaurant.jpg", alt: "Orange bar stools and high tables along the windows of a restaurant", pos: "50% 64%" }]),
+  RP("009", "bar", "Bar seating for an outdoor terrace", null,
+    ["images/real/metal-bar-stools.jpg", "images/real/metal-bench-set.jpg"]),
   RP("001", "outdoor", "Rope dining sets on a rooftop terrace",
     "Rope-woven armchairs with cushioned seats around round glass-top tables, built for an open-air rooftop.",
     ["images/real/rooftop-dining.jpg", "images/real/terrace-stools.jpg"]),
@@ -219,6 +251,10 @@ RIO.PORTFOLIO = [
 
 /* The Rope Sofa used to be offered with other frame colours. These hidden
    entries keep any project a visitor saved back then readable. */
+/* Pieces that only have a line drawing are hidden until they have a photo.
+   Give one an `image:` and it shows up again. */
+RIO.PRODUCTS.forEach((p) => { if (!p.image) p.hidden = true; });
+
 ["rope-sofa-wf", "rope-sofa-gf"].forEach((id) =>
   RIO.PRODUCTS.push(Object.assign({}, RIO.PRODUCTS.find((p) => p.id === "rope-sofa"), { id, hidden: true })));
 
