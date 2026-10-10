@@ -59,7 +59,8 @@ RIO.FINISHES = {
   grey:    { name: "Grey",    hex: "#8b8a85" },
   beige:   { name: "Beige",   hex: "#c9a37a" },
   red:     { name: "Red",     hex: "#9c2f27" },
-  shown:   { name: "As shown", hex: "#b79a72" }   /* for pieces photographed in one finish */
+  gold:    { name: "Gold",    hex: "#b08d3c" },
+  shown:   { name: "As shown", hex: "#b79a72" }   /* the colours in the photo */
 };
 
 /* ---------- Furniture categories (WHAT the furniture is) ----------
@@ -131,8 +132,12 @@ const P = (id, name, icon, type, cats, spaces, desc, finishes) =>
    { w: photo width as % of the frame, x: left offset %, y: top offset % }.
    Leave crop out and the photo simply fills the frame.
    Names here describe what is in the photo until RIO confirms the real ones. */
+/* The colours a customer can pick for a photographed piece. "As shown" comes first.
+   Change this list to match what RIO offers; to give one piece its own list,
+   add  finishes: ["shown", "black"]  to that piece. */
+RIO.PIECE_COLOURS = ["shown", "black", "white", "gold", "grey", "red", "orange"];
 const R = (no, id, name, type, cats, spaces, desc, image, crop, gallery) =>
-  Object.assign(P(id, name, "custom", type, cats, spaces, desc, ["shown"]), { no, image, crop: crop || null, gallery: gallery || null });
+  Object.assign(P(id, name, "custom", type, cats, spaces, desc, RIO.PIECE_COLOURS.slice()), { no, image, crop: crop || null, gallery: gallery || null });
 
 RIO.PRODUCTS = [
   R("01", "rope-armchair-set", "RIO Rope Armchair Set", "Two armchairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor", "hospitality"],
