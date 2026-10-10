@@ -747,11 +747,11 @@ a:hover .media > img, a:hover .media > video { transform: scale(1.025); }
 .reveal .media > img, .reveal.media > img { transition: transform 1.3s var(--ease); }
 .reveal:not(.in) .media > img, .reveal.media:not(.in) > img { transform: scale(1.07); }
 
-.ticker { background: var(--brand); color: var(--on-brand); overflow: hidden; white-space: nowrap; padding: 13px 0; }
-.ticker-track { display: inline-flex; animation: tick 60s linear infinite; will-change: transform; }
+.ticker { background: var(--night); color: var(--on-night-soft); border-top: 1px solid rgba(242, 239, 233, .14); overflow: hidden; white-space: nowrap; padding: 13px 0; }
+.ticker-track { display: inline-flex; animation: tick 80s linear infinite; will-change: transform; }
 .ticker:hover .ticker-track { animation-play-state: paused; }
 .ticker span { font-family: var(--display); font-weight: 600; font-size: 18px; letter-spacing: .14em; text-transform: uppercase; padding: 0 22px; display: inline-flex; align-items: center; gap: 44px; }
-.ticker span::after { content: ""; width: 7px; height: 7px; background: currentColor; transform: rotate(45deg); }
+.ticker span::after { content: ""; width: 7px; height: 7px; background: var(--brand); transform: rotate(45deg); }   /* the only orange in the strip */
 
 .space .go { transition: background .25s var(--ease), color .25s var(--ease); }
 .space:hover .go { background: var(--brand); color: var(--on-brand); }
