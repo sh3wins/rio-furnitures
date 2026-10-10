@@ -161,7 +161,10 @@ RIO.PRODUCTS = [
      TODO: replace the name when the real one is confirmed. */
   Object.assign(P("rope-sofa", "RIO Rope Sofa", "lounger", "Sofa · lounge seating", ["seating"], ["hospitality", "outdoor", "bar", "restaurant"],
     "Rope-woven arms on a slim black steel frame, with a soft beige cushioned seat. Designed and made in Nairobi.", ["beige"]),
-    { no: "07", image: "images/real/featured-sofa.jpg", crop: { w: 111, x: -5.55, y: -54.7 } }),
+    { no: "07", image: "images/real/rope-sofa-studio.jpg", crop: { w: 106.4, x: -4.26, y: -49.7 } }),
+  R("08", "church-chair", "RIO Church Chair", "Hall and church seating", ["seating"], ["church", "other"],
+    "Padded chairs on a gold-finish steel frame, made in rows for churches and halls. Shown with a customer's logo on the back.",
+    "images/real/church-chair-studio.jpg", { w: 100, x: 0, y: -35.2 }),
 
   P("chair-04", "RIO Chair 04", "chair", "Dining chair", ["seating"], ["restaurant", "bar", "church", "outdoor", "other"],
     "A clean dining chair built to be ordered by the room. At home in cafés, dining rooms and event spaces.", ["black", "white", "orange", "natural"]),
