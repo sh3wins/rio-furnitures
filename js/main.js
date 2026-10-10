@@ -98,6 +98,18 @@
       </div>`;
   }
 
+  /* ---------- "Start a Project" always within reach on phones ----------
+     A bar fixed to the bottom of the screen. Left off the pages where the
+     visitor is already filling something in. */
+  if (footer && !["start", "visit", "project"].includes(page)) {
+    const bar = document.createElement("div");
+    bar.className = "cta-bar";
+    bar.innerHTML = `<a class="btn" href="start.html">Start a Project ${ARR}</a>
+      <a class="btn btn-line" href="https://wa.me/${C.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>`;
+    document.body.appendChild(bar);
+    document.body.classList.add("has-cta-bar");
+  }
+
   /* ---------- Gentle fade-in as content enters the screen ---------- */
   RIO.observeReveal = function (root) {
     const els = (root || document).querySelectorAll(".reveal:not(.in)");

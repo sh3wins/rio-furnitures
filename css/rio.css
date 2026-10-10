@@ -763,3 +763,29 @@ a:hover .media > img, a:hover .media > video { transform: scale(1.025); }
   .hero-text > *, .hero-photo, .hero-photo .media > img, .ticker-track { animation: none !important; }
   .reveal:not(.in) .media > img, .reveal.media:not(.in) > img { transform: none; }
 }
+
+/* ---------- Start a Project, front and centre ----------
+   The main button at the top of the home page, an orange band half way
+   down, and on phones a bar that stays at the bottom of every page. */
+.hero-note { margin-top: 14px; font-size: 14.5px; color: var(--on-night-muted); }
+.hero-text > :nth-child(5) { animation-delay: .52s; }
+.hero .btn:not(.btn-line) { min-height: 54px; padding: 14px 28px; font-size: 16px; }
+
+.cta-band { background: var(--brand); color: var(--on-brand); padding: clamp(40px, 5vw, 68px) 0; }
+.cta-band .wrap { display: flex; justify-content: space-between; align-items: center; gap: 24px 48px; flex-wrap: wrap; }
+.cta-band .h-l, .cta-band .lead, .cta-band .link { color: var(--on-brand); }
+.cta-band .lead { margin-top: 10px; max-width: 46ch; }
+.cta-band .link { text-decoration-color: rgba(27, 26, 24, .45); }
+.cta-band .btn { min-height: 54px; padding: 14px 28px; font-size: 16px; background: var(--on-brand); border-color: var(--on-brand); color: #f2efe9; }
+.cta-band .btn:hover { background: transparent; color: var(--on-brand); }
+
+.cta-bar { display: none; }
+@media (max-width: 760px) {
+  .cta-bar { display: flex; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 55;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--night); border-top: 1px solid rgba(242, 239, 233, .16); }
+  .cta-bar .btn { flex: 1 1 auto; min-height: 48px; background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+  .cta-bar .btn-line { flex: 0 0 auto; background: transparent; color: var(--on-night); border-color: rgba(242, 239, 233, .45); }
+  body.has-cta-bar { padding-bottom: calc(69px + env(safe-area-inset-bottom, 0px)); }
+  body.has-cta-bar .toast { bottom: 88px; }
+  body.menu-open .cta-bar { display: none; }
+}
