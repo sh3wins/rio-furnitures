@@ -42,7 +42,7 @@ RIO.IMAGES = {
   restaurant:  { src: "images/real/orange-restaurant.jpg", alt: "Orange bar stools and high tables along the windows of a restaurant", pos: "50% 62%" },
   bar:         { src: "images/real/metal-bar-stools.jpg",  alt: "White metal bar stools with green seats around high tables", pos: "42% 50%" },
   church:      { src: "images/real/church-chairs.jpg",     alt: "Rows of red upholstered church chairs made by RIO", pos: "42% 12%" },
-  outdoor:     { src: "images/real/rooftop-dining.jpg",    alt: "Rope dining chairs and round tables on a rooftop terrace" },
+  outdoor:     { src: "images/real/lounge-set-poster.jpg", alt: "Strap-weave sofas with blue patterned cushions and a low table on a garden terrace at night", pos: "66% 70%" },
   about:       { src: "images/real/workshop-assembly.jpg", alt: "Furniture being assembled in the RIO workshop" }
   /* Offices, Schools and Hospitality have no photo yet. Add a line here when there is one, e.g.
      office: { src: "images/real/office.jpg", alt: "Office desks and chairs" },

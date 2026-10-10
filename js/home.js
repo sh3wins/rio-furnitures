@@ -22,6 +22,11 @@ RIO.whenReady(function () {
       </a>`;
   }).join("");
 
+  /* ---------- The moving strip under the top of the page ---------- */
+  const WORDS = ["Made in Nairobi", "Steel frames", "Rope weave", "Made to order", "Restaurants", "Bars & cafés", "Churches", "Outdoor"];
+  const run = WORDS.map((w) => `<span>${w}</span>`).join("");
+  $("#ticker").innerHTML = run + run + run + run;   // repeated so the loop has no gap
+
   /* ---------- A few pieces ---------- */
   const PICK = ["rope-armchair-set", "woven-chair-set", "dining-table-set", "high-table-set"];
   $("#pieces").innerHTML = PICK.map((id) => RIO.piece(RIO.product(id))).join("");

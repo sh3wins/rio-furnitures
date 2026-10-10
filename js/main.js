@@ -102,7 +102,12 @@
   RIO.observeReveal = function (root) {
     const els = (root || document).querySelectorAll(".reveal:not(.in)");
     if (!("IntersectionObserver" in window)) { els.forEach((e) => e.classList.add("in")); return; }
-    const io = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.08 });
+    const io = new IntersectionObserver((en) => en.filter((e) => e.isIntersecting).forEach((e, i) => {
+      const el = e.target;
+      el.style.transitionDelay = Math.min(i, 5) * 90 + "ms";   // a short stagger across a row
+      el.classList.add("in"); io.unobserve(el);
+      setTimeout(() => { el.style.transitionDelay = ""; }, 1400);
+    }), { threshold: 0.08 });
     els.forEach((e) => io.observe(e));
   };
 
