@@ -12,7 +12,7 @@
   if (custom) {
     $("#s-kicker").textContent = "Custom furniture";
     $("#s-title").textContent = "Tell us what you need made.";
-    document.title = "Custom Project — RIO Furnitures";
+    document.title = "Custom Project | RIO Furnitures, Nairobi, Kenya";
   }
   $("#s-steps").innerHTML = STEPS.map((s, i) => `<li data-go="${i}">${i + 1}. ${s}</li>`).join("");
 

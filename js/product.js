@@ -3,7 +3,7 @@
 RIO.whenReady(function () {
   const F = RIO.FINISHES, ARR = RIO.ARR;
   const p = RIO.product(RIO.qs("id")) || RIO.PRODUCTS[0];
-  document.title = RIO.shortName(p) + " — RIO Furnitures";
+  document.title = RIO.shortName(p) + " | RIO Furnitures, Nairobi, Kenya";
 
   // Extra photo views, if the product has them: photos: { front, back, side, detail, material }
   const PH = Object.assign({}, p.photos || {});
