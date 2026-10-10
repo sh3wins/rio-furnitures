@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("rio-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reviews — RIO Furnitures</title>
+  <meta name="description" content="What customers say about RIO Furnitures, with photos of their furniture in place.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23ff5a1f%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27Arial Narrow,Arial,sans-serif%27 font-size=%2720%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%231b1a18%27%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/barlow-condensed-latin-600-normal.woff2" crossorigin>
+  <link rel="stylesheet" href="css/rio.css?v=7">
+</head>
+<body data-page="reviews">
+<header id="site-header"></header>
+
+<main id="main">
+  <section class="intro" style="padding-bottom:32px">
+    <div class="wrap">
+      <span class="eyebrow">Reviews</span>
+      <h1 class="h-xl">What customers say.</h1>
+      <p class="lead" id="rv-summary"></p>
+      <div class="row mt-m"><a class="btn" href="#write">Leave a review</a></div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="reviews" id="rv-list" aria-live="polite"></div></div>
+
+  <section class="section band" id="write" style="margin-top:var(--space-section)">
+    <div class="wrap narrow">
+      <h2 class="h-l">Leave a review.</h2>
+      <p class="lead mt-s">Bought from RIO? Tell others how it went. A photo of the furniture in your space helps a lot.</p>
+      <form id="rv-form" class="mt-m" novalidate>
+        <div class="f-fields" style="max-width:720px">
+          <div class="field"><span class="lbl" id="rv-rate-lbl">Your rating</span>
+            <div class="rate" id="rv-rate" role="radiogroup" aria-labelledby="rv-rate-lbl">
+              <button type="button" role="radio" aria-checked="false" data-n="1" aria-label="1 star">★</button>
+              <button type="button" role="radio" aria-checked="false" data-n="2" aria-label="2 stars">★</button>
+              <button type="button" role="radio" aria-checked="false" data-n="3" aria-label="3 stars">★</button>
+              <button type="button" role="radio" aria-checked="false" data-n="4" aria-label="4 stars">★</button>
+              <button type="button" role="radio" aria-checked="false" data-n="5" aria-label="5 stars">★</button>
+            </div></div>
+          <div class="f-grid2">
+            <div class="field"><label for="rv-name">Your name</label><input class="input" id="rv-name" maxlength="80" autocomplete="name"></div>
+            <div class="field"><label for="rv-context">What did we make for you? (optional)</label><input class="input" id="rv-context" maxlength="120" placeholder="40 chairs for a restaurant"></div>
+          </div>
+          <div class="field"><label for="rv-body">Your review</label>
+            <textarea class="textarea" id="rv-body" maxlength="1200" placeholder="How was the furniture, the finish, the delivery?"></textarea></div>
+          <div class="field"><span class="lbl">Photos (optional, up to 3)</span>
+            <label class="dropzone" id="rv-drop">Add photos of the furniture in your space<span class="meta">drop here or tap to choose</span>
+              <input type="file" id="rv-files" accept="image/*" multiple aria-label="Add photos"></label>
+            <ul class="rv-thumbs" id="rv-thumbs"></ul></div>
+          <div class="hp" aria-hidden="true"><label for="rv-site">Leave this empty</label><input id="rv-site" tabindex="-1" autocomplete="off"></div>
+        </div>
+        <div class="f-foot" style="max-width:720px">
+          <span class="msg" id="rv-msg" role="alert"></span>
+          <button type="submit" class="btn" id="rv-send">Send Review <span class="arr" aria-hidden="true">→</span></button>
+        </div>
+        <p class="meta mt-m">Reviews appear on this page once RIO has checked them. Your name and photos will be public.</p>
+      </form>
+      <div id="rv-done" hidden>
+        <h3 class="h-m mt-m">Thank you. We've got your review.</h3>
+        <p class="lead mt-s">It will appear on this page once RIO has checked it.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="js/data.js?v=17"></script>
+<script src="js/store.js?v=17"></script>
+<script src="js/supabase-config.js?v=17"></script>
+<script src="js/main.js?v=17"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/backend.js?v=17"></script>
+<script src="js/reviews.js?v=17"></script>
+</body>
+</html>

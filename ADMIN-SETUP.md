@@ -94,3 +94,19 @@ One-time setup:
 3. Open the dashboard and press **Refresh**. The Prices page is ready.
 
 Until a piece has a price, the website shows none for it.
+
+## Customer reviews
+
+Customers can leave a review at **riofurniturekenya.com/reviews.html**: a star
+rating, a few words and up to three photos. A new review is **not public** until
+someone presses **Show on website** in the dashboard (**Website → Reviews**).
+The three newest approved reviews also show on the home page.
+
+One-time setup:
+
+1. In Supabase, open **SQL Editor → New query**.
+2. Paste in the whole of `supabase/update-4-reviews.sql` and press **Run**.
+3. Open the dashboard and press **Refresh**. The Reviews page is ready.
+
+When an order is marked **Delivered**, the ready-written customer message now
+includes the link to leave a review.

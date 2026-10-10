@@ -10,7 +10,7 @@
   <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="fonts/barlow-condensed-latin-600-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="images/real/orange-restaurant.jpg">
-  <link rel="stylesheet" href="css/rio.css?v=5">
+  <link rel="stylesheet" href="css/rio.css?v=7">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
@@ -52,7 +52,7 @@
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <h2 class="h-l">Spaces</h2>
+        <div><h2 class="h-l">Browse by space</h2><p class="lead">Tap a space to see the furniture we make for it.</p></div>
         <a class="link" href="spaces.html">All spaces <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="walk" id="walk"></div>
@@ -63,10 +63,11 @@
   <section class="section" style="padding-top:0">
     <div class="wrap">
       <div class="head">
-        <div><span class="eyebrow">Straight off the workshop floor</span><h2 class="h-l">Furniture</h2></div>
+        <div><span class="eyebrow">Straight off the workshop floor</span><h2 class="h-l">Furniture</h2><p class="lead" id="pieces-count"></p></div>
         <a class="link" href="furniture.html">All furniture <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="cards four" id="pieces"></div>
+      <div class="more-row"><a class="btn" id="pieces-more" href="furniture.html">See all furniture <span class="arr" aria-hidden="true">→</span></a></div>
       <p class="shot-note">Photographed as made, in our Nairobi workshop.</p>
     </div>
   </section>
@@ -101,6 +102,17 @@
     </div>
   </section>
 
+  <!-- REVIEWS: stays hidden until RIO has approved at least one review -->
+  <section class="section band" id="home-reviews" hidden>
+    <div class="wrap">
+      <div class="head">
+        <h2 class="h-l">What customers say</h2>
+        <a class="link" href="reviews.html">All reviews <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <div class="reviews" id="rv-home"></div>
+    </div>
+  </section>
+
   <!-- START A PROJECT -->
   <section class="section">
     <div class="wrap ask">
@@ -125,11 +137,11 @@
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=15"></script>
-<script src="js/store.js?v=15"></script>
-<script src="js/supabase-config.js?v=15"></script>
-<script src="js/live.js?v=15"></script>
-<script src="js/main.js?v=15"></script>
-<script src="js/home.js?v=15"></script>
+<script src="js/data.js?v=17"></script>
+<script src="js/store.js?v=17"></script>
+<script src="js/supabase-config.js?v=17"></script>
+<script src="js/live.js?v=17"></script>
+<script src="js/main.js?v=17"></script>
+<script src="js/home.js?v=17"></script>
 </body>
 </html>

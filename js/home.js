@@ -8,21 +8,27 @@ RIO.whenReady(function () {
      at the end, it is shown large too. */
   const shown = RIO.HOME_SPACES.filter((id) => RIO.IMAGES[id]);
   $("#walk").innerHTML = shown.map((id, i) => {
-    const s = RIO.space(id), wide = i === 0 || (i === shown.length - 1 && shown.length % 2 === 0);
+    const s = RIO.space(id);
+    // Each space is a category: the bar at the bottom says how many pieces are inside
+    const n = RIO.PRODUCTS.filter((p) => !p.hidden && p.spaces.includes(s.id)).length;
     return `
-      <a class="space reveal ${wide ? "wide" : ""}" href="spaces.html?space=${s.id}">
-        ${RIO.media(RIO.IMAGES[s.id], { sizes: wide ? "100vw" : undefined })}
+      <a class="space reveal" href="${n ? "furniture.html?space=" + s.id : "spaces.html?space=" + s.id}">
+        ${RIO.media(RIO.IMAGES[s.id])}
         <div class="space-cap">
           <h3 class="h-m">${s.plural}</h3>
           <p>${s.short}</p>
-          <span class="link">Explore ${ARR}</span>
         </div>
+        <span class="go">${n ? `See ${n} ${n === 1 ? "piece" : "pieces"}` : "See this space"} ${ARR}</span>
       </a>`;
   }).join("");
 
   /* ---------- A few pieces ---------- */
   const PICK = ["rope-armchair-set", "woven-chair-set", "dining-table-set", "high-table-set"];
   $("#pieces").innerHTML = PICK.map((id) => RIO.piece(RIO.product(id))).join("");
+  // Say plainly that these four are not everything
+  const total = RIO.PRODUCTS.filter((p) => !p.hidden).length;
+  $("#pieces-count").textContent = `Showing ${PICK.length} of ${total} pieces`;
+  $("#pieces-more").innerHTML = `See all ${total} pieces ${ARR}`;
 
   /* ---------- Example order (shows how ordering in quantity works) ---------- */
   const SAMPLE = [["black", 15], ["natural", 10], ["white", 5]];
@@ -42,6 +48,14 @@ RIO.whenReady(function () {
 
   /* ---------- Workshop ---------- */
   $("#steps").innerHTML = RIO.workshopSteps({ Build: "images/real/clip-welding.mp4" });   // the welding clip plays; the rest are stills
+
+  /* ---------- Reviews: the latest three that RIO has approved ---------- */
+  RIO.fetchReviews(3).then((rows) => {
+    if (!rows.length) return;
+    $("#rv-home").innerHTML = rows.map(RIO.reviewCard).join("");
+    $("#home-reviews").hidden = false;
+    RIO.observeReveal($("#home-reviews"));
+  });
 
   $("#ask-wa").href = "https://wa.me/" + RIO.CONTACT.whatsapp;
   RIO.observeReveal();

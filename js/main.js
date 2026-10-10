@@ -79,7 +79,7 @@
           <div class="foot-brand"><a href="index.html" class="foot-plate" aria-label="RIO Furnitures — home"><img src="images/logo/rio-logo-orange.svg" alt="RIO Furnitures, Nairobi" width="132" height="132" loading="lazy"></a><p>Furniture for real spaces.</p></div>
           <ul>
             <li><a href="spaces.html">Spaces</a></li><li><a href="furniture.html">Furniture</a></li>
-            <li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li>
+            <li><a href="projects.html">Projects</a></li><li><a href="reviews.html">Reviews</a></li><li><a href="about.html">About</a></li>
             <li><a href="start.html">Start a project</a></li>
             <li><a href="visit.html">Schedule a site visit</a></li>
           </ul>
@@ -337,6 +337,31 @@
     });
     m.querySelector(".modal-close").focus();
     document.addEventListener("keydown", function esc(e) { if (e.key === "Escape") { m.classList.remove("open"); document.removeEventListener("keydown", esc); } });
+  };
+
+  /* ---------- Reviews (approved ones only) ----------
+     RIO.fetchReviews(3) resolves to a list, newest first; an empty list if
+     there are none, the database is not set up, or it cannot be reached. */
+  RIO.fetchReviews = function (limit) {
+    const cfg = RIO.SUPABASE || {};
+    if (!cfg.url || !cfg.anonKey || !window.fetch) return Promise.resolve([]);
+    return fetch(`${cfg.url}/rest/v1/site_reviews?select=id,created_at,name,context,rating,body,photos&published=eq.true&order=created_at.desc${limit ? "&limit=" + limit : ""}`,
+      { headers: { apikey: cfg.anonKey, Authorization: "Bearer " + cfg.anonKey } })
+      .then((res) => (res.ok ? res.json() : [])).then((rows) => (Array.isArray(rows) ? rows : [])).catch(() => []);
+  };
+  RIO.stars = (n) => `<span class="stars" role="img" aria-label="${n} out of 5 stars"><span aria-hidden="true">${"★".repeat(n)}<i>${"★".repeat(5 - n)}</i></span></span>`;
+  RIO.reviewCard = function (r) {
+    const cfg = RIO.SUPABASE || {};
+    const url = (p) => cfg.url + "/storage/v1/object/public/review-photos/" + String(p).split("/").map(encodeURIComponent).join("/");
+    const when = new Date(r.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+    const n = Math.max(1, Math.min(5, r.rating | 0));
+    return `
+      <article class="review reveal">
+        ${RIO.stars(n)}
+        <p class="review-body">${RIO.esc(r.body)}</p>
+        ${r.photos && r.photos.length ? `<div class="review-photos">${r.photos.slice(0, 3).map((p) => `<a href="${url(p)}" target="_blank" rel="noopener"><img src="${url(p)}" alt="Photo from ${RIO.esc(r.name)}" loading="lazy" decoding="async"></a>`).join("")}</div>` : ""}
+        <p class="review-by"><span class="ink">${RIO.esc(r.name)}</span>${r.context ? ` · ${RIO.esc(r.context)}` : ""}<span class="meta">${when}</span></p>
+      </article>`;
   };
 
   /* ---------- Shared file drop helper ---------- */

@@ -1,6 +1,6 @@
 /* =========================================================
    RIO — Admin dashboard
-   Overview · Quote requests · Orders · Customers · Website (projects, furniture, prices) · Staff
+   Overview · Quote requests · Orders · Customers · Website (projects, furniture, prices, reviews) · Staff
    Data lives in Supabase (see supabase/schema.sql).
    ========================================================= */
 (function () {
@@ -38,6 +38,7 @@
   let sb = null, user = null, me = null, Q = [], O = [], S = [];
   let WP = [], WF = [], siteReady = true; // website projects, website furniture, are the tables there?
   let SP = [], pricesReady = true;        // prices set by staff, is the prices table there?
+  let RV = [], reviewsReady = true;       // customer reviews (waiting and live), is the reviews table there?
   const ui = { quoteFilter: "new", orderFilter: "active", search: "" };
 
   /* ================= Boot ================= */
@@ -100,30 +101,32 @@
   }
 
   async function load() {
-    const [q, o, s, wp, wf, sp] = await Promise.all([
+    const [q, o, s, wp, wf, sp, rv] = await Promise.all([
       sb.from("quotes").select("*").order("created_at", { ascending: false }),
       sb.from("orders").select("*").order("updated_at", { ascending: false }),
       sb.from("staff").select("*"),
       sb.from("site_projects").select("*").order("created_at", { ascending: false }),
       sb.from("site_products").select("*").order("created_at", { ascending: false }),
-      sb.from("site_prices").select("*")
+      sb.from("site_prices").select("*"),
+      sb.from("site_reviews").select("*").order("created_at", { ascending: false })
     ]);
     Q = (q && q.data) || []; O = (o && o.data) || []; S = (s && s.data) || [];
     WP = (wp && wp.data) || []; WF = (wf && wf.data) || [];
     siteReady = !(wp && wp.error) && !(wf && wf.error);
     SP = (sp && sp.data) || []; pricesReady = !(sp && sp.error);
+    RV = (rv && rv.data) || []; reviewsReady = !(rv && rv.error);
   }
 
   /* ================= Shell ================= */
   const PAGES = [["overview", "Overview"], ["quotes", "Quote requests"], ["orders", "Orders"], ["customers", "Customers"]];
-  const SITE_PAGES = [["projects", "Projects"], ["furniture", "Furniture"], ["prices", "Prices"]];
+  const SITE_PAGES = [["projects", "Projects"], ["furniture", "Furniture"], ["prices", "Prices"], ["reviews", "Reviews"]];
   function navHTML(active) {
     const newQ = Q.filter((q) => q.status === "new").length;
     return `${logo}
           <span class="grp">Workspace</span>
           ${PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span>${k === "quotes" && newQ ? `<span class="count">${newQ}</span>` : ""}</a>`).join("")}
           <span class="grp">Website</span>
-          ${SITE_PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span></a>`).join("")}
+          ${SITE_PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span>${k === "reviews" && RV.some((r) => !r.published) ? `<span class="count">${RV.filter((r) => !r.published).length}</span>` : ""}</a>`).join("")}
           <span class="grp">Settings</span>
           <a class="snav ${active === "staff" ? "on" : ""}" href="#staff"><span class="t">Staff</span></a>
           <div class="foot">
@@ -150,7 +153,7 @@
           <span class="grp">Workspace</span>
           ${PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span>${k === "quotes" && newQ ? `<span class="count">${newQ}</span>` : ""}</a>`).join("")}
           <span class="grp">Website</span>
-          ${SITE_PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span></a>`).join("")}
+          ${SITE_PAGES.map(([k, t]) => `<a class="snav ${active === k ? "on" : ""}" href="#${k}" ${active === k ? 'aria-current="page"' : ""}><span class="t">${t}</span>${k === "reviews" && RV.some((r) => !r.published) ? `<span class="count">${RV.filter((r) => !r.published).length}</span>` : ""}</a>`).join("")}
           <span class="grp">Settings</span>
           <a class="snav ${active === "staff" ? "on" : ""}" href="#staff"><span class="t">Staff</span></a>
           <div class="foot">
@@ -187,7 +190,7 @@
   function route(keep) {
     const h = (location.hash || "#overview").slice(1);
     const [page, id] = h.split("/");
-    ({ overview, quotes, orders, customers, projects, furniture, prices, staff }[page] || overview)();
+    ({ overview, quotes, orders, customers, projects, furniture, prices, reviews, staff }[page] || overview)();
     bindRefresh();
     if (id && !keep) {
       if (page === "quotes") { const q = Q.find((x) => x.ref === id || x.id === id); if (q) quoteDrawer(q); }
@@ -400,7 +403,7 @@
       const link = "\n\nTrack it here: " + trackUrl(o.code) + "\n\n— RIO Furnitures";
       const n = o.stage;
       let t;
-      if (n === 9) t = "your RIO order " + o.code + " has been delivered. Thank you for choosing RIO! We'd love to hear how everything looks.";
+      if (n === 9) t = "your RIO order " + o.code + " has been delivered. Thank you for choosing RIO! We'd love to hear how everything looks. Leave a review here: " + SITE + "/reviews.html";
       else if (n === 8) t = "good news! Your RIO order " + o.code + " is out for delivery.";
       else if (n === 7) t = "your RIO order " + o.code + " is finished and being packed for delivery.";
       else if (n === 0) t = "your RIO order " + o.code + " is confirmed. We'll keep you updated as it moves through the workshop.";
@@ -517,7 +520,7 @@
   // re-draw the page behind the drawer without closing it
   function refreshBehind() {
     const page = (location.hash || "#overview").slice(1).split("/")[0];
-    ({ overview, quotes, orders, customers, projects, furniture, prices, staff }[page] || overview)();
+    ({ overview, quotes, orders, customers, projects, furniture, prices, reviews, staff }[page] || overview)();
     bindRefresh();
   }
 
@@ -649,6 +652,54 @@
         clearSiteCopy();
         msg.className = "saved ok"; msg.textContent = n ? "Saved. Live on the website." : "Price removed.";
       };
+    });
+  }
+
+  /* Reviews: customers send them from the website. Nothing is public until
+     someone here presses "Show on website". Kept in the site_reviews table;
+     photos are in the public "review-photos" storage bucket. */
+  function reviews() {
+    const rUrl = (p) => cfg.url + "/storage/v1/object/public/review-photos/" + String(p).split("/").map(encodeURIComponent).join("/");
+    const waiting = RV.filter((r) => !r.published).length;
+    shell("reviews", `
+      ${head("Website", "<em>Reviews.</em>")}
+      ${!reviewsReady ? `<p class="notice">Reviews need one more database step. In Supabase, open <b>SQL Editor</b>, paste in the whole of <code>supabase/update-4-reviews.sql</code> from the project folder and press <b>Run</b>. Then press Refresh here.</p>`
+      : !RV.length ? `<p class="empty">No reviews yet. When a customer sends one from the website it waits here for you to check.</p>` : `
+      <p class="notice" style="max-width:720px">${waiting ? `<b>${waiting} waiting.</b> ` : ""}A review is only public after you press <b>Show on website</b>. Hide or delete anything that isn't a real customer.</p>
+      <div style="display:grid;gap:14px;max-width:760px;margin-top:20px">
+        ${RV.map((r) => `<section class="block" data-rid="${esc(r.id)}" style="margin:0">
+          <div class="row" style="justify-content:space-between;align-items:baseline;gap:8px 16px">
+            <span><b>${esc(r.name)}</b>${r.context ? ` <span class="muted">· ${esc(r.context)}</span>` : ""}</span>
+            <span class="pill ${r.published ? "won" : "new"}">${r.published ? "Live" : "Waiting"}</span>
+          </div>
+          <p style="margin:6px 0 0;letter-spacing:2px" aria-label="${r.rating} out of 5 stars">${"★".repeat(r.rating)}<span class="muted">${"★".repeat(5 - r.rating)}</span> <span class="mono muted" style="letter-spacing:0">${fmtDate(r.created_at)}</span></p>
+          <p style="margin:10px 0 0;white-space:pre-line;overflow-wrap:anywhere">${esc(r.body)}</p>
+          ${r.photos && r.photos.length ? `<div class="row" style="gap:8px;margin-top:12px">${r.photos.map((p) => `<a href="${esc(rUrl(p))}" target="_blank" rel="noopener"><img src="${esc(rUrl(p))}" alt="Customer photo" loading="lazy" style="width:96px;height:96px;object-fit:cover;display:block"></a>`).join("")}</div>` : ""}
+          <div class="row" style="margin-top:14px;gap:10px 18px">
+            <button class="btn btn-sm ${r.published ? "" : "btn-o"}" data-pub="${r.published ? "0" : "1"}">${r.published ? "Hide from website" : "Show on website"}</button>
+            <button class="link" data-del>Delete</button>
+            <span class="saved" data-rmsg role="status"></span>
+          </div>
+        </section>`).join("")}
+      </div>`}`);
+    document.getElementById("main").addEventListener("click", async (e) => {
+      const box = e.target.closest("[data-rid]"); if (!box) return;
+      const r = RV.find((x) => x.id === box.dataset.rid), msg = box.querySelector("[data-rmsg]"); if (!r) return;
+      const pub = e.target.closest("[data-pub]"), del = e.target.closest("[data-del]");
+      if (pub) {
+        pub.disabled = true; msg.className = "saved"; msg.textContent = "Saving…";
+        const res = await sb.from("site_reviews").update({ published: pub.dataset.pub === "1" }).eq("id", r.id);
+        if (res.error) { pub.disabled = false; msg.className = "saved err"; msg.textContent = "Couldn't save. Try again."; return; }
+        r.published = pub.dataset.pub === "1"; reviews(); bindRefresh();
+      }
+      if (del) {
+        if (!del.dataset.sure) { del.dataset.sure = "1"; del.textContent = "Tap again to delete for good"; setTimeout(() => { del.textContent = "Delete"; delete del.dataset.sure; }, 3500); return; }
+        del.disabled = true; msg.className = "saved"; msg.textContent = "Deleting…";
+        const res = await sb.from("site_reviews").delete().eq("id", r.id);
+        if (res.error) { del.disabled = false; msg.className = "saved err"; msg.textContent = "Couldn't delete."; return; }
+        if (r.photos && r.photos.length) await sb.storage.from("review-photos").remove(r.photos);
+        RV = RV.filter((x) => x.id !== r.id); reviews(); bindRefresh();
+      }
     });
   }
 
