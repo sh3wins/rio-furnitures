@@ -138,7 +138,7 @@ RIO.PRODUCTS = [
   R("01", "rope-armchair-set", "RIO Rope Armchair Set", "Two armchairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor", "hospitality"],
     "Rope-woven armchairs with cream seat and back cushions on a gold-finish steel frame, with a round table to match.",
     "images/real/rope-armchair-set.jpg", { w: 130, x: -16.9, y: -13 },
-    ["images/real/rope-armchair-set.jpg", "images/real/rope-armchair-set-top.jpg", "images/real/rope-armchair.jpg"]),
+    ["images/real/rope-armchair-set.jpg", "images/real/rope-armchair-set-top.jpg", "images/real/rope-armchair-studio.jpg"]),
   R("02", "woven-chair-set", "RIO Woven Chair Set", "Two chairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor"],
     "Woven tub chairs on white steel legs with padded seats, and a round table with a rope-woven apron.",
     "images/real/woven-set.jpg", { w: 130, x: -9.75, y: -9.1 },
