@@ -19,8 +19,9 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-sans-latin-500-normal.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="fonts/barlow-condensed-latin-600-normal.woff2" crossorigin>
-  <link rel="preload" as="image" href="images/real/orange-restaurant.jpg">
-  <link rel="stylesheet" href="css/rio.css?v=10">
+  
+    <link rel="preload" as="image" href="images/real/orange-restaurant.jpg">
+  <link rel="stylesheet" href="css/rio.css?v=12">
 </head>
 <body data-page="home">
 <header id="site-header"></header>
@@ -73,13 +74,14 @@
     </div>
   </section>
 
-  <!-- FURNITURE -->
-  <section class="section" style="padding-top:0">
+  <!-- FURNITURE: all pieces, with tabs that filter right here -->
+  <section class="section" id="furniture" style="padding-top:0">
     <div class="wrap">
       <div class="head">
         <div><span class="eyebrow">Straight off the workshop floor</span><h2 class="h-l">Furniture</h2><p class="lead" id="pieces-count"></p></div>
         <a class="link" href="furniture.html">All furniture <span class="arr" aria-hidden="true">→</span></a>
       </div>
+      <div class="tabs home-tabs" id="piece-tabs" role="tablist" aria-label="Filter furniture by space"></div>
       <div class="cards four" id="pieces"></div>
       <div class="more-row"><a class="btn" id="pieces-more" href="furniture.html">See all furniture <span class="arr" aria-hidden="true">→</span></a></div>
       <p class="shot-note">Photographed as made, in our Nairobi workshop.</p>
@@ -104,7 +106,7 @@
   <section class="section band">
     <div class="wrap split">
       <div class="media" data-label="Photo to come: rope armchair">
-        <img class="crop" src="images/real/rope-armchair-studio.jpg" alt="A rope armchair with a gold frame and cream cushions" style="width:108.7%;left:-8.7%;top:-37.4%" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('is-empty')">
+        <img class="fit" src="images/pieces/rope-armchair-studio.jpg" alt="A rope armchair with a gold frame and cream cushions" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('is-empty')">
       </div>
       <div>
         <h2 class="h-l">Order one piece, or furnish the whole room.</h2>
@@ -165,11 +167,11 @@
 </main>
 
 <footer id="site-footer"></footer>
-<script src="js/data.js?v=20"></script>
-<script src="js/store.js?v=20"></script>
-<script src="js/supabase-config.js?v=20"></script>
-<script src="js/live.js?v=20"></script>
-<script src="js/main.js?v=20"></script>
-<script src="js/home.js?v=20"></script>
+<script src="js/data.js?v=22"></script>
+<script src="js/store.js?v=22"></script>
+<script src="js/supabase-config.js?v=22"></script>
+<script src="js/live.js?v=22"></script>
+<script src="js/main.js?v=22"></script>
+<script src="js/home.js?v=22"></script>
 </body>
 </html>

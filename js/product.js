@@ -35,6 +35,7 @@ RIO.whenReady(function () {
       <span class="meta">${RIO.esc(p.type || "")}</span>
       <h1 class="h-l">${RIO.esc(RIO.shortName(p))}</h1>
       <p class="lead">${RIO.esc(p.desc)}</p>
+      ${p.image ? `<p class="made-note"><strong>Made to order.</strong> Shown as we made it for a client. Size, colours and fabric can be changed for yours.</p>` : ""}
 
       <div class="p-block" id="builder"></div>
 

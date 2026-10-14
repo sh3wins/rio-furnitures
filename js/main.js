@@ -170,7 +170,7 @@
   /* ---------- A product's picture: its photo if it has one, else its line drawing ---------- */
   RIO.visual = function (p, finishId, plain) {
     const c = !plain && p.crop;   // zoom in on the furniture where a crop is set
-    if (p.image) return `<img src="${p.image}" alt="${RIO.esc(RIO.shortName(p))}" loading="lazy" decoding="async"${c ? ` class="crop" style="width:${c.w}%;left:${c.x}%;top:${c.y}%"` : ""}>`;
+    if (p.image) return `<img src="${p.image}" alt="${RIO.esc(RIO.shortName(p))}" loading="lazy" decoding="async"${c ? ` class="crop" style="width:${c.w}%;left:${c.x}%;top:${c.y}%"` : !plain && p.fit ? ' class="fit"' : ""}>`;
     return RIO.icon(p.icon, (F[finishId] || F[p.finishes[0]]).hex);
   };
 

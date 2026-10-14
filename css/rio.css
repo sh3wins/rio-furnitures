@@ -789,3 +789,31 @@ a:hover .media > img, a:hover .media > video { transform: scale(1.025); }
   body.has-cta-bar .toast { bottom: 88px; }
   body.menu-open .cta-bar { display: none; }
 }
+
+/* ===== PREVIEW: full-screen hero + furniture tabs on the home page ===== */
+.hero.hero-full { position: relative; display: flex; align-items: flex-end; min-height: min(100svh, 980px); background: var(--night); color: #fff; overflow: hidden; }
+.hero-bg, .hero-bg img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-bg img { object-fit: cover; object-position: 50% 55%; }
+.hero.hero-full::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(20,18,16,.55) 0%, rgba(20,18,16,.15) 32%, rgba(20,18,16,.55) 62%, rgba(20,18,16,.92) 100%); }
+.hero-full-text { position: relative; z-index: 2; width: 100%; padding-top: calc(var(--nav-h, 64px) + 120px); padding-bottom: clamp(48px, 7vw, 96px); }
+.hero-full-text h1 { color: #fff; max-width: 13ch; margin-top: 16px; }
+.hero-full-text .lead { color: rgba(255,255,255,.88); max-width: 40ch; margin-top: 18px; }
+.hero-full-text .hero-note { color: rgba(255,255,255,.7); }
+.hero.hero-full .btn-line { color: #fff; border-color: rgba(255,255,255,.6); background: transparent; }
+.hero.hero-full .btn-line:hover { border-color: #fff; }
+@media (max-width: 860px) { .hero-bg img { object-position: 50% 62%; } .hero-full-text { padding-top: calc(var(--nav-h, 64px) + 220px); } }
+.home-tabs { gap: 8px; margin: 0 0 28px; padding: 0; flex-wrap: wrap; overflow: visible; }
+.home-tabs button { border: 1px solid var(--line-2); padding: 10px 16px; min-height: 44px; color: var(--ink); font-weight: 500; background: transparent; }
+.home-tabs button:hover { border-color: var(--ink); }
+.home-tabs .on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.hero-full-text .eyebrow { color: #fff; opacity: .85; }
+@media (min-width: 861px) {
+  .hero.hero-full::after { background:
+    linear-gradient(90deg, rgba(20,18,16,.82) 0%, rgba(20,18,16,.55) 40%, rgba(20,18,16,.1) 75%),
+    linear-gradient(180deg, rgba(20,18,16,.5) 0%, rgba(20,18,16,0) 30%, rgba(20,18,16,.55) 100%); }
+}
+#furniture .head { margin-bottom: 28px; }
+/* A single piece shown whole in its card (cropped close in images/pieces/) */
+.media > img.fit { object-fit: contain; background: var(--paper-2); }
+.made-note { margin-top: 14px; padding: 12px 14px; border-left: 3px solid var(--brand); background: var(--paper-2); font-size: 15px; line-height: 1.5; color: var(--ink); }

@@ -138,12 +138,16 @@ const P = (id, name, icon, type, cats, spaces, desc, finishes) =>
 RIO.PIECE_COLOURS = ["shown", "black", "white", "gold", "grey", "red", "orange"];
 const R = (no, id, name, type, cats, spaces, desc, image, crop, gallery) =>
   Object.assign(P(id, name, "custom", type, cats, spaces, desc, RIO.PIECE_COLOURS.slice()), { no, image, crop: crop || null, gallery: gallery || null });
+/* A single piece photographed on its own: shown whole in its card instead of filling the frame. */
+const F9 = (no, id, name, type, cats, spaces, desc, image, gallery) =>
+  Object.assign(R(no, id, name, type, cats, spaces, desc, image, null, gallery), { fit: true });
 
 RIO.PRODUCTS = [
-  R("01", "rope-armchair-set", "RIO Rope Armchair Set", "Two armchairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor", "hospitality"],
+  /* Photo 1 is the studio version made from Lewis's photo; the rest are the real set as made. */
+  Object.assign(R("01", "rope-armchair-set", "RIO Rope Armchair Set", "Two armchairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor", "hospitality"],
     "Rope-woven armchairs with cream seat and back cushions on a gold-finish steel frame, with a round table to match.",
-    "images/real/rope-armchair-set.jpg", { w: 130, x: -16.9, y: -13 },
-    ["images/real/rope-armchair-set.jpg", "images/real/rope-armchair-set-top.jpg", "images/real/rope-armchair-studio.jpg"]),
+    "images/pieces/rope-armchair-studio.jpg", null,
+    ["images/pieces/rope-armchair-studio.jpg", "images/real/rope-armchair-set.jpg", "images/real/rope-armchair-set-top.jpg", "images/pieces/rope-armchair-real.jpg"]), { fit: true }),
   R("02", "woven-chair-set", "RIO Woven Chair Set", "Two chairs and a round table", ["seating", "tables"], ["restaurant", "bar", "outdoor"],
     "Woven tub chairs on white steel legs with padded seats, and a round table with a rope-woven apron.",
     "images/real/woven-set.jpg", { w: 130, x: -9.75, y: -9.1 },
@@ -170,6 +174,48 @@ RIO.PRODUCTS = [
   R("08", "church-chair", "RIO Church Chair", "Hall and church seating", ["seating"], ["church", "other"],
     "Padded chairs on a gold-finish steel frame, made in rows for churches and halls. Shown with a customer's logo on the back.",
     "images/real/church-chair-studio.jpg", { w: 100, x: 0, y: -35.2 }),
+
+  /* ---------- Added Oct 2026: Lewis's new photos, and pieces taken from real project photos.
+     Photos in images/pieces/ are cropped close to the furniture. `fit: true` shows the whole
+     piece in the card instead of filling the frame. Names describe the photo until RIO confirms them. */
+  F9("09", "arch-bar-stool", "RIO Arch Bar Stool", "Bar stool", ["seating"], ["bar", "restaurant"],
+    "A tall bar stool with a double-arch back, footrest rails and a padded seat, on a bronze-finish steel frame.",
+    "images/pieces/arch-bar-stool.jpg"),
+  F9("10", "button-back-bar-stool", "RIO Button-Back Bar Stool", "Bar stool", ["seating"], ["bar", "restaurant", "hospitality"],
+    "Bar stools with a buttoned, padded back panel and a thick white seat, on a bronze-finish frame with a curved footrest.",
+    "images/pieces/button-back-bar-stool-single.jpg", ["images/pieces/button-back-bar-stool-single.jpg", "images/pieces/button-back-bar-stool.jpg"]),
+  F9("11", "armrest-bar-stool", "RIO Custom Armrest Bar Stool", "Bar stool with arms", ["seating", "custom"], ["bar", "restaurant"],
+    "A bar stool with padded arms and a cut-steel back. Shown with a customer's name cut into the back: yours can carry your name or logo.",
+    "images/pieces/armrest-bar-stool-single.jpg", ["images/pieces/armrest-bar-stool-single.jpg", "images/pieces/armrest-bar-stool.jpg"]),
+  /* Photo 1: single chair cut out from the real photo. Photo 2: the real pair as delivered. */
+  F9("12", "white-gold-dining-chair", "RIO White & Gold Dining Chair", "Dining chair", ["seating"], ["restaurant", "hospitality", "church", "other"],
+    "A tall padded dining chair on a gold-finish frame. Made in quantity for restaurants, events and halls.",
+    "images/pieces/white-gold-dining-chair-single.jpg", ["images/pieces/white-gold-dining-chair-single.jpg", "images/pieces/white-gold-dining-chair.jpg"]),
+  F9("13", "rope-loveseat", "RIO Rope Loveseat", "Two-seater sofa", ["seating"], ["hospitality", "restaurant", "bar", "outdoor"],
+    "A two-seater with rope-woven sides on a black steel frame, with a padded seat and three cushions.",
+    "images/pieces/rope-loveseat.jpg"),
+  R("14", "rope-lounge-set", "RIO Rope Lounge Set", "Sofas and coffee tables", ["seating", "tables"], ["hospitality", "bar", "outdoor", "restaurant"],
+    "Rope-woven sofas with patterned cushions and low coffee tables, as made for real lounges. Mix the number of seats and tables.",
+    "images/pieces/rope-lounge-set-green.jpg", null,
+    ["images/pieces/rope-lounge-set-green.jpg", "images/pieces/rope-lounge-set-blue.jpg"]),
+  R("15", "lounge-coffee-table", "RIO Lounge Coffee Table", "Coffee table", ["tables"], ["hospitality", "bar", "outdoor"],
+    "A low coffee table with a light top and a rope-woven apron on white steel legs. Sold on its own or with the Lounge Set.",
+    "images/pieces/lounge-coffee-table.jpg"),
+  R("16", "glass-table-set", "RIO Glass Table Set", "Round table and four chairs", ["tables", "seating"], ["outdoor", "restaurant", "bar"],
+    "A round glass-top table with rope-woven armchairs on grey steel frames, as made for a rooftop terrace.",
+    "images/pieces/glass-table-set.jpg"),
+  R("17", "barrel-table-set", "RIO Barrel Table Set", "High barrel table and stools", ["tables", "seating"], ["bar", "restaurant"],
+    "A barrel-style high table with a resin top, and bar stools with woven backs and padded seats.",
+    "images/pieces/barrel-table-set.jpg"),
+  R("18", "restaurant-high-table-set", "RIO Restaurant High Table Set", "High tables and bar chairs", ["tables", "seating"], ["restaurant", "bar"],
+    "White high tables with padded bar chairs, made for a full restaurant floor. Shown in orange.",
+    "images/pieces/restaurant-high-table-set.jpg"),
+  R("19", "wood-high-table-set", "RIO Wood-Top High Table Set", "High tables and stools", ["tables", "seating"], ["bar", "restaurant", "outdoor"],
+    "Wood-top high tables on a steel pedestal with a footrest ring, with matching round-seat bar stools.",
+    "images/pieces/wood-high-table-set.jpg"),
+  R("20", "round-dining-set", "RIO Round Dining Set", "Round table and rope chairs", ["tables", "seating"], ["restaurant", "bar", "outdoor"],
+    "A round dark-top table with rope-woven tub chairs on slim steel frames.",
+    "images/pieces/round-dining-set.jpg"),
 
   P("chair-04", "RIO Chair 04", "chair", "Dining chair", ["seating"], ["restaurant", "bar", "church", "outdoor", "other"],
     "A clean dining chair built to be ordered by the room. At home in cafés, dining rooms and event spaces.", ["black", "white", "orange", "natural"]),
@@ -269,9 +315,9 @@ RIO.PRODUCTS.forEach((p) => { if (!p.image) p.hidden = true; });
 /* ---------- Workshop: material → build → finish → space ----------
    Photos are RIO's own. Replace a file or change its path here. */
 RIO.WORKSHOP = [
-  { name: "Material", text: "Cut for your full quantity.",        photo: "images/real/workshop-cutting.jpg" },
+  { name: "Material", text: "Cut for your full quantity.",        photo: "images/real/clip-grinding-video.jpg" },
   { name: "Build",    text: "Frames and parts made in our workshop.", photo: "images/real/clip-welding.jpg" },
-  { name: "Finish",   text: "In the colours you chose.",          photo: "images/real/clip-grinding.jpg" },
+  { name: "Finish",   text: "Seats fitted and finished in the colours you chose.", photo: "images/real/clip-assembly.jpg" },
   { name: "Space",    text: "Delivered to your space.",           photo: "images/real/rope-dining.jpg" }
 ];
 

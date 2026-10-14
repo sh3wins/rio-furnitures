@@ -27,13 +27,22 @@ RIO.whenReady(function () {
   const run = WORDS.map((w) => `<span>${w}</span>`).join("");
   $("#ticker").innerHTML = run + run + run + run;   // repeated so the loop has no gap
 
-  /* ---------- A few pieces ---------- */
-  const PICK = ["rope-armchair-set", "woven-chair-set", "dining-table-set", "high-table-set"];
-  $("#pieces").innerHTML = PICK.map((id) => RIO.piece(RIO.product(id))).join("");
-  // Say plainly that these four are not everything
-  const total = RIO.PRODUCTS.filter((p) => !p.hidden).length;
-  $("#pieces-count").textContent = `Showing ${PICK.length} of ${total} pieces`;
-  $("#pieces-more").innerHTML = `See all ${total} pieces ${ARR}`;
+  /* ---------- Furniture, with tabs that filter in place ---------- */
+  const ALL = RIO.PRODUCTS.filter((p) => !p.hidden);
+  const TABS = [["all", "All"]].concat(
+    RIO.HOME_SPACES.filter((id) => ALL.some((p) => p.spaces.includes(id))).map((id) => [id, RIO.space(id).plural]));
+  const tabsEl = $("#piece-tabs");
+  function showPieces(id) {
+    const list = id === "all" ? ALL : ALL.filter((p) => p.spaces.includes(id));
+    $("#pieces").innerHTML = list.map((p) => RIO.piece(p)).join("");
+    tabsEl.querySelectorAll("button").forEach((b) => { const on = b.dataset.s === id; b.classList.toggle("on", on); b.setAttribute("aria-selected", on); });
+    $("#pieces-count").textContent = id === "all" ? `All ${ALL.length} pieces` : `${list.length} ${list.length === 1 ? "piece" : "pieces"} for ${RIO.space(id).plural.toLowerCase()}`;
+    RIO.observeReveal($("#pieces"));
+  }
+  tabsEl.innerHTML = TABS.map(([id, label]) => `<button type="button" role="tab" data-s="${id}">${label}</button>`).join("");
+  tabsEl.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) showPieces(b.dataset.s); });
+  showPieces("all");
+  $("#pieces-more").innerHTML = `Open the full furniture page ${ARR}`;
 
   /* ---------- Example order (shows how ordering in quantity works) ---------- */
   const SAMPLE = [["black", 15], ["natural", 10], ["white", 5]];
@@ -52,7 +61,7 @@ RIO.whenReady(function () {
     </a>`).join("");
 
   /* ---------- Workshop ---------- */
-  $("#steps").innerHTML = RIO.workshopSteps({ Build: "images/real/clip-welding.mp4" });   // the welding clip plays; the rest are stills
+  $("#steps").innerHTML = RIO.workshopSteps({ Material: "images/real/clip-grinding-video.mp4", Build: "images/real/clip-welding.mp4", Finish: "images/real/clip-assembly.mp4" });   // the welding clip plays; the rest are stills
 
   /* ---------- Reviews: the latest three that RIO has approved ---------- */
   RIO.fetchReviews(3).then((rows) => {
