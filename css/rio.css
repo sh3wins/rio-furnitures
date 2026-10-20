@@ -847,3 +847,9 @@ a:hover .media > img, a:hover .media > video { transform: scale(1.025); }
   .feature .row .btn { flex: 1 1 auto; justify-content: center; }
 }
 #all { scroll-margin-top: 60px; }
+/* Home: the Rope Sofa as the first screen */
+.feature-home h1 { max-width: 13ch; }
+.feature-home .btn:first-child { background: var(--brand); border-color: var(--brand); color: #1b1a18; }
+.feature-home .btn:first-child:hover { background: #1b1a18; border-color: #1b1a18; color: #fff; }
+.feature-photo figcaption { text-align: center; font-size: 14px; color: #2a1d12; margin-top: -8px; }
+.feature-photo a { display: block; }
